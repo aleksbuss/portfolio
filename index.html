@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleksejs Buss — AI Engineer · Live agent · Production systems shipped solo</title>
+<meta name="description" content="AI engineer for early-stage teams. Seven production systems shipped solo in ten months. Cloudflare Workers, n8n, Whisper, Gemini, Ollama.">
+<meta name="author" content="Aleksejs Buss">
+<meta name="theme-color" content="#05060a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)">
+<link rel="canonical" href="https://aleksbuss.dev/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+<!-- Open Graph / social cards -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="aleksbuss.dev">
+<meta property="og:url" content="https://aleksbuss.dev/">
+<meta property="og:title" content="Aleksejs Buss — AI Engineer">
+<meta property="og:description" content="AI engineer for early-stage teams. Seven production systems shipped solo in ten months.">
+<meta property="og:image" content="https://aleksbuss.dev/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aleksejs Buss — AI Engineer">
+<meta name="twitter:description" content="Seven production AI systems, shipped solo. Open to AI/Founding Engineer roles.">
+<meta name="twitter:image" content="https://aleksbuss.dev/og-image.png">
+
+<!-- JSON-LD: Person schema for rich Google results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Aleksejs Buss",
+  "jobTitle": "AI Engineer",
+  "url": "https://aleksbuss.dev",
+  "email": "mailto:aleksbuss@gmail.com",
+  "telephone": "+4917673503486",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Hof",
+    "addressRegion": "Bavaria",
+    "addressCountry": "DE"
+  },
+  "sameAs": [
+    "https://github.com/aleksbuss"
+  ],
+  "knowsAbout": [
+    "Cloudflare Workers", "n8n", "OpenAI GPT-4", "Google Gemini", "Groq Whisper",
+    "Ollama", "LLaMA", "Telegram Bot API", "Telegram Mini-Apps", "FastAPI",
+    "Docker", "systemd", "HMAC-SHA256", "Edge computing", "RAG"
+  ],
+  "alumniOf": {
+    "@type": "EducationalOrganization",
+    "name": "Tel-Ran Berlin",
+    "description": "Frontend Developer course, 960h, DEKRA-certified"
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/portfolio.css">
+
+<!-- Cloudflare Web Analytics — privacy-first, no cookies. Replace TOKEN after enabling in CF dashboard. -->
+<!-- <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_CF_BEACON_TOKEN"}'></script> -->
+</head>
+<body>
+
+<!-- ───── BOOT SEQUENCE (preloader) ───── -->
+<div class="boot" id="boot">
+  <div class="boot-top">
+    <span>AGENT.RUNTIME · v3.0.0 · build #2026.04.27</span>
+    <span class="br-sig">aleksejs.ai/portfolio</span>
+  </div>
+  <div class="boot-mid" id="bootMid"></div>
+  <div class="boot-bottom">
+    <div class="boot-name">
+      <span class="typed" id="bootName"></span><span class="caret"></span>
+    </div>
+    <div class="boot-progress">
+      <span class="pct" id="bootPct">0</span>%<br>
+      <span style="color:var(--ink-3);font-size:0.7rem">handshake</span>
+    </div>
+    <div class="boot-bar" id="bootBar" style="--p:0%"></div>
+  </div>
+</div>
+
+<!-- ───── BACKDROP LAYERS ───── -->
+<div class="aurora">
+  <div class="blob b1" id="blob1"></div>
+  <div class="blob b2" id="blob2"></div>
+  <div class="blob b3" id="blob3"></div>
+</div>
+<div class="grid-bg" id="gridBg"></div>
+<div class="grain"></div>
+<div class="scan"></div>
+
+<div class="cursor-ring" id="cring"></div>
+<div class="cursor-dot" id="cdot"></div>
+<div class="progress" id="progress"></div>
+
+<!-- ───── SYSBAR (top status bar) ───── -->
+<div class="sysbar">
+  <div class="brand-mono">
+    <span class="dot"></span>
+    <span class="name">aleksejs.ai</span>
+    <span class="ver">v3.0</span>
+  </div>
+  <div class="runtime">
+    <span class="field"><span class="k">cpu</span><span class="v" id="sysCpu">0.40ms</span></span>
+    <span class="field"><span class="k">tz</span><span class="v" id="sysTz">— CET</span></span>
+    <span class="field"><span class="k">lang</span><span class="v">en/ru/lv/de</span></span>
+    <span class="field"><span class="k" id="sysbarStatusLbl">status</span><span class="v sig">ONLINE</span></span>
+    <span class="field"><span class="k">live</span><span class="v">7 systems</span></span>
+  </div>
+  <div class="ctrls">
+    <button type="button" id="themeBtn" class="sysbtn" aria-label="Toggle dark/light theme"><span class="lbl">Light</span> <span class="kbd">T</span></button>
+    <button type="button" id="langBtn" class="sysbtn" aria-label="Toggle EN/DE"><span class="lbl">DE</span> <span class="kbd">L</span></button>
+    <a href="#contact" class="sysbtn" data-key="contact"><span class="lbl">Contact</span> <span class="kbd">C</span></a>
+    <a href="mailto:aleksbuss@gmail.com?subject=Interview%20request" class="sysbtn on" data-key="hire"><span class="lbl">Hire →</span> <span class="kbd">H</span></a>
+  </div>
+</div>
+
+<!-- ───── HERO ───── -->
+<section id="hero">
+  <div class="hero-marker">
+    <div class="left">№ 2026 / FOLIO</div>
+    <div class="ln"></div>
+    <div class="right">Available · Q2 ’26</div>
+  </div>
+
+  <div class="agent-card">
+    <div class="agent-card-main">
+      <div class="agent-handshake">
+        <span class="role">Agent</span>
+        <span class="ts">[00:00.812]</span>
+        <span>handshake authenticated · session opened · greeting human</span>
+      </div>
+
+      <h1 class="hero-name" id="heroName">
+        <span class="first"><span class="typed-name" data-type="Aleksejs"></span></span>
+        <span class="last"><span class="typed-name it" data-type="Buss"></span></span>
+        <span class="underline"></span>
+      </h1>
+
+      <div class="hero-tagline">
+        AI engineer for early-stage teams.<br>
+        <em>Production systems</em>, shipped solo.
+      </div>
+
+      <div class="hero-tokens" id="heroTokens"></div>
+    </div>
+
+    <aside class="hero-viz" id="heroViz" aria-hidden="true">
+      <div class="hero-viz-frame">
+        <div class="hero-viz-corner tl"></div>
+        <div class="hero-viz-corner tr"></div>
+        <div class="hero-viz-corner bl"></div>
+        <div class="hero-viz-corner br"></div>
+        <div class="hero-viz-label"><span class="dot"></span><span class="lbl">live · agent.stream</span></div>
+        <canvas class="hero-viz-canvas" id="heroVizCanvas"></canvas>
+        <svg class="hero-viz-fallback" viewBox="0 0 480 220" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="vfg" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="currentColor" stop-opacity="0"/>
+              <stop offset="50%" stop-color="currentColor" stop-opacity="1"/>
+              <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,110 Q24,60 48,110 T96,110 T144,110 T192,110 T240,110 T288,110 T336,110 T384,110 T432,110 T480,110" fill="none" stroke="url(#vfg)" stroke-width="1.4"/>
+          <path d="M0,110 Q24,140 48,110 T96,110 T144,110 T192,110 T240,110 T288,110 T336,110 T384,110 T432,110 T480,110" fill="none" stroke="url(#vfg)" stroke-width="0.9" opacity="0.5"/>
+          <path d="M0,110 Q24,90 48,110 T96,110 T144,110 T192,110 T240,110 T288,110 T336,110 T384,110 T432,110 T480,110" fill="none" stroke="url(#vfg)" stroke-width="0.6" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="hero-viz-transcript" id="heroVizTranscript">
+        <span class="vt-meta">[system · pulse]</span>
+        <span class="vt-text"></span><span class="vt-caret">_</span>
+      </div>
+    </aside>
+  </div>
+
+  <div class="hero-foot">
+    <div class="meta-col">
+      <span class="lbl">Based</span>
+      <span class="val">Hof / Saale, DE</span><br><br>
+      <span class="lbl">Status</span>
+      <span class="val">EU citizen · remote-first</span>
+    </div>
+    <div class="meta-col">
+      <span class="lbl">Credentials</span>
+      <span class="val">DEKRA №2023337</span><br>
+      <span style="color:var(--ink-3)">Tel-Ran Berlin · 960h</span>
+    </div>
+    <div class="meta-col">
+      <span class="lbl">Stack</span>
+      <span class="val">CF Workers · n8n · LLMs</span><br>
+      <span style="color:var(--ink-3)">Whisper · Gemini · Ollama</span>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">View work <span class="arrow">→</span></a>
+      <a href="CV.html" target="_blank" class="btn btn-ghost">CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- ───── TICKER ───── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span><span class="key">cloudflare workers</span> <span class="dot">●</span> n8n agents <span class="dot">●</span> <span class="key">whisper · llama · gemini</span> <span class="dot">●</span> telegram mini-apps <span class="dot">●</span> fastapi <span class="dot">●</span> <span class="key">docker · systemd</span> <span class="dot">●</span> hmac-sha256 <span class="dot">●</span> ollama · local llm <span class="dot">●</span> <span class="key">telegram stars</span> <span class="dot">●</span> supabase · firebase <span class="dot">●</span></span>
+    <span aria-hidden="true"><span class="key">cloudflare workers</span> <span class="dot">●</span> n8n agents <span class="dot">●</span> <span class="key">whisper · llama · gemini</span> <span class="dot">●</span> telegram mini-apps <span class="dot">●</span> fastapi <span class="dot">●</span> <span class="key">docker · systemd</span> <span class="dot">●</span> hmac-sha256 <span class="dot">●</span> ollama · local llm <span class="dot">●</span> <span class="key">telegram stars</span> <span class="dot">●</span> supabase · firebase <span class="dot">●</span></span>
+  </div>
+</div>
+
+<!-- ───── METRICS ───── -->
+<section class="s" id="index" style="padding-top:6rem">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ I — At a glance</span>
+      <div class="num-big">01<span class="slash">/</span>06</div>
+    </div>
+    <div>
+      <h2 class="section-title">A short ledger of <em>what shipped</em>.</h2>
+      <p class="section-sub">Every figure points to live infrastructure — servers I own, deployed under my own name, serving real users today.</p>
+    </div>
+  </div>
+
+  <div class="metrics reveal-stagger">
+    <div class="metric">
+      <div class="ix">i.</div>
+      <div class="num"><span class="n" data-target="7">0</span></div>
+      <div class="lbl">Production systems</div>
+      <div class="det">All serving real users</div>
+    </div>
+    <div class="metric">
+      <div class="ix">ii.</div>
+      <div class="num"><span class="n" data-target="19">0</span><span class="unit">+</span></div>
+      <div class="lbl">GitHub repositories</div>
+      <div class="det">Public, actively growing</div>
+    </div>
+    <div class="metric">
+      <div class="ix">iii.</div>
+      <div class="num"><span class="n" data-target="10">0</span><span class="unit">mo</span></div>
+      <div class="lbl">Zero to seven live</div>
+      <div class="det">Solo delivery, since 07/2025</div>
+    </div>
+    <div class="metric">
+      <div class="ix">iv.</div>
+      <div class="num"><span class="n" data-target="4">0</span></div>
+      <div class="lbl">Languages spoken</div>
+      <div class="det">RU · LV · EN · DE</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── STORY ───── -->
+<section class="s" id="story">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ II — The route</span>
+      <div class="num-big">02<span class="slash">/</span>06</div>
+    </div>
+    <div>
+      <h2 class="section-title">Fourteen years moving freight.<br>Now I move <em>features into production</em>.</h2>
+    </div>
+  </div>
+
+  <div class="story-grid">
+    <div class="story-left reveal">
+      <p class="lede">I didn't take the conventional route. I took the <em>self-disciplined</em> one.</p>
+      <p>Fourteen years in multicultural logistics — Tesco Carlisle, long-haul freight across the UK and Europe — taught me systems, processes, and how to <strong>deliver under pressure</strong>.</p>
+      <p>In 2022 I retrained as a Frontend Developer at <strong>Tel-Ran Berlin</strong> (960h, DEKRA-certified). Then I went deeper: LLMs, prompt engineering, serverless, local AI. Nights and weekends, while driving part-time to pay the bills.</p>
+      <p>From mid-2025, <strong>I've been shipping</strong>. Not learning. Real systems, real users, real infrastructure — under my own name.</p>
+      <div class="story-pull">Self-discipline is the skill that transfers. Everything else I learn fast — and I have.</div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.15s">
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-year">2008 — 22</div>
+          <div class="tl-content">
+            <div class="ttl">Logistics, UK &amp; Germany</div>
+            <div class="desc">Tesco Carlisle (WMS, planograms), long-haul freight. Process, resilience, multicultural teams.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">10/22 — 10/23</div>
+          <div class="tl-content">
+            <div class="ttl">Frontend Developer · Tel-Ran Berlin</div>
+            <div class="desc">DEKRA-certified, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">2023 — 25</div>
+          <div class="tl-content">
+            <div class="ttl">Deep self-study in AI &amp; automation</div>
+            <div class="desc">n8n, Cloudflare Workers, Ollama, prompt engineering, local LLM, Docker.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">07/25 — now</div>
+          <div class="tl-content">
+            <div class="ttl">Production mode · 7 live systems</div>
+            <div class="desc">End-to-end: architecture → deployment → monitoring. Solo delivery, real users.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">Q2 / 26</div>
+          <div class="tl-content">
+            <div class="ttl">Open to your team</div>
+            <div class="desc">Immediate availability. Germany-based, EU citizen. Remote or on-site.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── VALUES ───── -->
+<section class="s" id="values">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ III — Approach</span>
+      <div class="num-big">03<span class="slash">/</span>06</div>
+    </div>
+    <div>
+      <h2 class="section-title">What an early-stage team needs<br>— in <em>one hire</em>.</h2>
+      <p class="section-sub">Startups don't need specialists. They need operators who ship features end-to-end without waiting for permission. Six things I bring on day one.</p>
+    </div>
+  </div>
+
+  <div class="values reveal-stagger">
+    <div class="value">
+      <div class="vix">i. Ship rate</div>
+      <h3>Founder-grade <em>ownership</em>.</h3>
+      <p>Spec → architecture → code → deploy → monitor → iterate. No hand-offs, no "not my job". Seven live systems in ten months — solo. The cadence your runway needs.</p>
+    </div>
+    <div class="value">
+      <div class="vix">ii. Full stack</div>
+      <h3>AI, backend &amp; <em>infra</em> in one.</h3>
+      <p>LLM pipelines, agent orchestration, RAG-ready patterns, FastAPI/Python, Cloudflare edge, Docker/systemd. One headcount, full stack — your seed runway stretches further.</p>
+    </div>
+    <div class="value">
+      <div class="vix">iii. AI-native</div>
+      <h3>LLM is native, <em>not a bolt-on</em>.</h3>
+      <p>Multi-provider failover (OpenAI / Gemini / Groq / Ollama). Structured outputs, prompt architectures, voice + vision pipelines, streaming APIs. I design with latency, cost &amp; failure modes in mind.</p>
+    </div>
+    <div class="value">
+      <div class="vix">iv. Production hygiene</div>
+      <h3>Defaults, <em>not afterthoughts</em>.</h3>
+      <p>HMAC-SHA256, zero-secrets architecture, rate limiting, systemd auto-restart, health checks, webhook verification, secrets via env. Built in from day one.</p>
+    </div>
+    <div class="value">
+      <div class="vix">v. Late-career grit</div>
+      <h3>Self-driven, <em>under pressure</em>.</h3>
+      <p>Career-switched at 35+ and shipped seven live systems in ten months while working part-time. Not talent — discipline. I don't need reminders to unblock myself.</p>
+    </div>
+    <div class="value">
+      <div class="vix">vi. Full product</div>
+      <h3>Beyond the <em>backend</em>.</h3>
+      <p>I can design, implement, and launch an AI product end to end — voice, visual generation (ComfyUI, Stable Diffusion), UI, copy, deployment. Useful when your team is three people and a deadline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───── PROJECTS ───── -->
+<section class="s" id="projects">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ IV — Work · Selected</span>
+      <div class="num-big">04<span class="slash">/</span>06</div>
+    </div>
+    <div>
+      <h2 class="section-title">Seven systems.<br>Shipped <em>solo</em>. All live.</h2>
+      <p class="section-sub">Every project below runs on infrastructure I own and operate. This is what "ships fast" looks like in practice — not side projects, real production.</p>
+    </div>
+  </div>
+
+  <div class="proj-list">
+
+    <article class="proj reveal" data-gh-repo="aleksbuss/trascribatorV2">
+      <div class="proj-meta">
+        <span class="num">01</span>
+        <span class="date">08 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Flagship</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Dictaphone <span class="it">v7.0</span></h3>
+        <div class="tagline">Edge voice pipeline · Whisper → LLM · sub-second latency.</div>
+        <div class="desc">Serverless voice-to-insight pipeline on Cloudflare edge. User voice note → Whisper transcription → LLM summarization → rich Mini-App UI. Zero cold-start, global edge latency, zero secrets leaked to client.</div>
+        <div class="arch"><span class="k">Telegram Mini-App</span><span class="arr">→</span>Cloudflare Workers<span class="arr">→</span><span class="k">Groq Whisper</span> + LLaMA 3.3 70B<span class="arr">→</span>response</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6a1a"/><stop offset="1" stop-color="#ffb878"/></linearGradient></defs><circle cx="100" cy="100" r="40" fill="none" stroke="url(#g1)" stroke-width="2"/><circle cx="100" cy="100" r="65" fill="none" stroke="url(#g1)" stroke-width="1" opacity="0.5"/><circle cx="100" cy="100" r="85" fill="none" stroke="url(#g1)" stroke-width="0.8" opacity="0.3"/><g stroke="#ff6a1a" stroke-width="2"><line x1="100" y1="60" x2="100" y2="80"/><line x1="100" y1="120" x2="100" y2="140"/><line x1="60" y1="100" x2="80" y2="100"/><line x1="120" y1="100" x2="140" y2="100"/></g></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">Live</span><span class="l">in production</span></div>
+          <div class="proj-stat"><span class="n">0 ms</span><span class="l">cold start</span></div>
+          <div class="proj-stat"><span class="n">HMAC</span><span class="l">webhook auth</span></div>
+          <div class="proj-stat"><span class="n">Edge</span><span class="l">global</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Cloudflare Workers</span>
+          <span class="tag p">Groq Whisper</span>
+          <span class="tag">LLaMA 3.3</span>
+          <span class="tag">JS ESM</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">02</span>
+        <span class="date">09 / 2025 — ongoing</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Moderation <span class="it">Bot</span></h3>
+        <div class="tagline">n8n workflow · dual-AI failover · auto-escalation.</div>
+        <div class="desc">Production AI agent workflow for Telegram moderation. 15+ node n8n pipeline classifies every message with structured JSON outputs, routes to action, escalates sanctions. Dual-provider failover keeps it running when any LLM API fails.</div>
+        <div class="arch">Message<span class="arr">→</span>Filter<span class="arr">→</span><span class="k">Nemotron</span><span class="arr">→</span>fallback <span class="k">GPT-4.1</span><span class="arr">→</span>Router<span class="arr">→</span>Telegram</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff6a1a" stroke-width="1.5"><circle cx="40" cy="100" r="14"/><circle cx="100" cy="60" r="14"/><circle cx="100" cy="140" r="14"/><circle cx="160" cy="100" r="14"/><line x1="54" y1="100" x2="86" y2="68"/><line x1="54" y1="100" x2="86" y2="132"/><line x1="114" y1="68" x2="146" y2="100"/><line x1="114" y1="132" x2="146" y2="100"/></g><g fill="#ff6a1a"><circle cx="40" cy="100" r="3"/><circle cx="100" cy="60" r="3"/><circle cx="100" cy="140" r="3"/><circle cx="160" cy="100" r="3"/></g></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">15+</span><span class="l">n8n nodes</span></div>
+          <div class="proj-stat"><span class="n">2</span><span class="l">AI providers</span></div>
+          <div class="proj-stat"><span class="n">3-tier</span><span class="l">sanctions</span></div>
+          <div class="proj-stat"><span class="n">JSON</span><span class="l">structured</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">n8n</span>
+          <span class="tag p">OpenRouter</span>
+          <span class="tag">GPT-4.1-mini</span>
+          <span class="tag">Telegram API</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal" data-gh-repo="aleksbuss/ai-psycho-bot">
+      <div class="proj-meta">
+        <span class="num">03</span>
+        <span class="date">10 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Monetized SaaS</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Psychology <span class="it">Bot</span></h3>
+        <div class="tagline">Full SaaS · payments · conversational agent.</div>
+        <div class="desc">End-to-end SaaS built solo: distributed serverless backend + auth + payments + referral program + AI failover. Real users, real revenue, real infrastructure — no team, no funding.</div>
+        <div class="arch"><span class="k">Mini-App</span><span class="arr">→</span>HMAC-SHA256<span class="arr">→</span>Apps Script<span class="arr">→</span>Firebase<span class="arr">→</span><span class="k">Gemini</span> + TTS</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff6a1a" stroke-width="1.2"><path d="M50 70 Q100 30 150 70 Q170 100 150 130 Q100 170 50 130 Q30 100 50 70 Z"/><circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="50" opacity="0.5"/></g><circle cx="100" cy="100" r="6" fill="#ff6a1a"/></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">7-skill</span><span class="l">protocol</span></div>
+          <div class="proj-stat"><span class="n">Stars</span><span class="l">payments</span></div>
+          <div class="proj-stat"><span class="n">Atomic</span><span class="l">credit ops</span></div>
+          <div class="proj-stat"><span class="n">Live</span><span class="l">revenue</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Gemini 2.5</span>
+          <span class="tag p">Telegram Stars</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">Apps Script</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">04</span>
+        <span class="date">10 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">bushmark.cc</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>Bushmark — <span class="it">Secure Clipboard</span></h3>
+        <div class="tagline">Self-hosted · cookie auth · one-click install.</div>
+        <div class="desc">Self-hosted secure clipboard solving a real daily problem: transferring text between servers and devices without USB or third-party services. Three persistent slots, 24h history, auto-rotation, Tailwind UI.</div>
+        <div class="arch">Client<span class="arr">→</span><span class="k">Nginx</span> reverse proxy<span class="arr">→</span><span class="k">FastAPI</span> (systemd)<span class="arr">→</span>disk + 30d rotation</div>
+        <a href="https://bushmark.cc" target="_blank" class="proj-cta">Visit bushmark.cc →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff6a1a" stroke-width="1.2"><rect x="60" y="50" width="80" height="100" rx="6"/><line x1="75" y1="75" x2="125" y2="75"/><line x1="75" y1="95" x2="125" y2="95"/><line x1="75" y1="115" x2="110" y2="115"/></g><circle cx="140" cy="60" r="6" fill="#6fe09f"/></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">1-click</span><span class="l">bash install</span></div>
+          <div class="proj-stat"><span class="n">24.04</span><span class="l">Ubuntu VPS</span></div>
+          <div class="proj-stat"><span class="n">24h</span><span class="l">history</span></div>
+          <div class="proj-stat"><span class="n">3</span><span class="l">slots</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">FastAPI</span>
+          <span class="tag p">Nginx</span>
+          <span class="tag">systemd</span>
+          <span class="tag">Tailwind</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">05</span>
+        <span class="date">07 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Open Source</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>CyberDed Ultra <span class="it">+ ComfyUI</span></h3>
+        <div class="tagline">Local AI infra · one-click installer · Android + Linux.</div>
+        <div class="desc">One-click installer for local AI infrastructure. Flask backend with Server-Sent Events streaming chat, real-time system monitoring, Docker-Compose ComfyUI stack with NVIDIA auto-config. Full bash automation.</div>
+        <div class="arch">Bash installer<span class="arr">→</span><span class="k">Ollama</span> + <span class="k">ComfyUI</span> Docker<span class="arr">→</span>Flask (SSE)<span class="arr">→</span>NVIDIA Toolkit</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff6a1a" stroke-width="1.2"><rect x="40" y="60" width="50" height="40" rx="3"/><rect x="110" y="60" width="50" height="40" rx="3"/><rect x="40" y="110" width="50" height="40" rx="3"/><rect x="110" y="110" width="50" height="40" rx="3"/><line x1="90" y1="80" x2="110" y2="80"/><line x1="65" y1="100" x2="65" y2="110"/><line x1="135" y1="100" x2="135" y2="110"/><line x1="90" y1="130" x2="110" y2="130"/></g></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">SSE</span><span class="l">streaming</span></div>
+          <div class="proj-stat"><span class="n">GPU</span><span class="l">auto-detect</span></div>
+          <div class="proj-stat"><span class="n">OSS</span><span class="l">MIT</span></div>
+          <div class="proj-stat"><span class="n">2 OS</span><span class="l">Linux + Android</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Docker</span>
+          <span class="tag p">Ollama</span>
+          <span class="tag">Flask</span>
+          <span class="tag">ComfyUI</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal" data-gh-repo="aleksbuss/Termux-SelfHosted-STT---TTS">
+      <div class="proj-meta">
+        <span class="num">06</span>
+        <span class="date">11 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Open Source</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>Termux <span class="it">AI Dictaphone</span></h3>
+        <div class="tagline">Android as offline AI server · zero cloud cost.</div>
+        <div class="desc">Local AI deployment product: complete offline AI stack on any Android phone — Whisper transcription + LLaMA/Gemma inference running on-device. Zero cloud cost, full privacy. Published OSS.</div>
+        <div class="arch">Termux (Android)<span class="arr">→</span><span class="k">faster-whisper</span> / whisper.cpp<span class="arr">→</span><span class="k">Ollama</span> (LLaMA, Gemma)</div>
+        <a href="https://github.com/aleksbuss/Termux-SelfHosted-STT---TTS" target="_blank" class="proj-cta">View on GitHub →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb">
+          <div class="live-overlay">live</div>
+          <div class="proj-thumb-inner">
+            <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff6a1a" stroke-width="1.2"><rect x="75" y="40" width="50" height="120" rx="8"/><rect x="83" y="55" width="34" height="70" rx="2"/><circle cx="100" cy="142" r="4"/></g><g fill="#ff6a1a"><rect x="92" y="65" width="3" height="50"/><rect x="98" y="75" width="3" height="40"/><rect x="104" y="60" width="3" height="55"/></g></svg>
+          </div>
+        </div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">100%</span><span class="l">offline</span></div>
+          <div class="proj-stat"><span class="n">$ 0</span><span class="l">API cost</span></div>
+          <div class="proj-stat"><span class="n">Dual</span><span class="l">mode</span></div>
+          <div class="proj-stat"><span class="n">On-device</span><span class="l">privacy</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Termux</span>
+          <span class="tag p">faster-whisper</span>
+          <span class="tag">Ollama</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div style="margin-top:3rem;text-align:center" class="reveal">
+    <a href="https://github.com/aleksbuss" target="_blank" class="btn btn-ghost">Explore all 19+ repos on GitHub <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- ───── STACK ───── -->
+<section class="s" id="stack">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ V — Toolkit</span>
+      <div class="num-big">05<span class="slash">/</span>06</div>
+    </div>
+    <div>
+      <h2 class="section-title">Full-stack AI automation,<br>top to <em>bottom</em>.</h2>
+      <p class="section-sub">From edge serverless to local LLM on Android — every tool here I've used in production.</p>
+    </div>
+  </div>
+
+  <div class="stack-rows">
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">i.</span>
+        <span class="ttl"><em>AI</em> · LLM · Agents</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">OpenAI GPT-4 / 4.1 / TTS</span>
+        <span class="stack-pill primary">Google Gemini 2.5</span>
+        <span class="stack-pill primary">Groq Whisper-large-v3</span>
+        <span class="stack-pill primary">Ollama · LLaMA · Gemma</span>
+        <span class="stack-pill">Agent workflows · n8n</span>
+        <span class="stack-pill">Prompt engineering</span>
+        <span class="stack-pill">Structured outputs</span>
+        <span class="stack-pill">Multi-provider failover</span>
+        <span class="stack-pill">RAG-ready patterns</span>
+        <span class="stack-pill">faster-whisper · whisper.cpp</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">ii.</span>
+        <span class="ttl"><em>Automation</em> &amp; No-code</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">n8n · workflows · agents</span>
+        <span class="stack-pill primary">Webhooks &amp; HTTP routing</span>
+        <span class="stack-pill">Code Nodes (JS/Python)</span>
+        <span class="stack-pill">Error handling &amp; retries</span>
+        <span class="stack-pill">Chain-of-Thought architecture</span>
+        <span class="stack-pill">Multi-protocol agents</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">iii.</span>
+        <span class="ttl"><em>Programming</em></span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">JavaScript · ESM · async</span>
+        <span class="stack-pill primary">Python · Flask · FastAPI</span>
+        <span class="stack-pill primary">Bash · systems scripting</span>
+        <span class="stack-pill">React (foundations)</span>
+        <span class="stack-pill">HTML5 · CSS3 · responsive</span>
+        <span class="stack-pill">Streaming APIs (SSE)</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">iv.</span>
+        <span class="ttl"><em>Cloud</em> &amp; Serverless</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">Cloudflare Workers · edge</span>
+        <span class="stack-pill primary">Google Apps Script</span>
+        <span class="stack-pill primary">Firebase Realtime DB</span>
+        <span class="stack-pill">GitHub Pages</span>
+        <span class="stack-pill">Supabase / PostgreSQL</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">v.</span>
+        <span class="ttl"><em>Production</em> &amp; Ops</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">Docker · Compose</span>
+        <span class="stack-pill primary">Nginx · reverse proxy</span>
+        <span class="stack-pill primary">Ubuntu VPS · systemd</span>
+        <span class="stack-pill">Health checks · auto-restart</span>
+        <span class="stack-pill">Secrets · env vars</span>
+        <span class="stack-pill">Git/GitHub · Wrangler</span>
+        <span class="stack-pill">NVIDIA Container Toolkit</span>
+        <span class="stack-pill">Background jobs · rotation</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">vi.</span>
+        <span class="ttl"><em>Security</em> &amp; Payments</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">HMAC-SHA256 · JWT</span>
+        <span class="stack-pill primary">Telegram Bot API · Mini-Apps</span>
+        <span class="stack-pill primary">Telegram Stars</span>
+        <span class="stack-pill">CORS · secrets mgmt</span>
+        <span class="stack-pill">Anti-fraud logic</span>
+        <span class="stack-pill">Rate limiting · webhook verify</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="langs reveal-stagger">
+    <div class="lang" style="--w:100%">
+      <div class="code">RU</div>
+      <div class="name">Russian</div>
+      <div class="bar"></div>
+      <div class="lvl">Native</div>
+    </div>
+    <div class="lang" style="--w:98%">
+      <div class="code">LV</div>
+      <div class="name">Latvian</div>
+      <div class="bar"></div>
+      <div class="lvl">C2 · Fluent</div>
+    </div>
+    <div class="lang" style="--w:82%">
+      <div class="code">EN</div>
+      <div class="name">English</div>
+      <div class="bar"></div>
+      <div class="lvl">C1 · Business</div>
+    </div>
+    <div class="lang" style="--w:45%">
+      <div class="code">DE</div>
+      <div class="name">German</div>
+      <div class="bar"></div>
+      <div class="lvl">A2/B1 · Improving</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CONTACT ───── -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-eye reveal">§ VI — Now hiring myself out</div>
+    <h2 class="contact-h reveal">Let's turn your backlog<br>into <em>shipped software</em>.</h2>
+    <p class="contact-lede reveal">I'm looking for AI Engineer or Founding Engineer roles at early-stage startups (Seed–Series C). I write production code, own features end-to-end, and ship fast. EU citizen, based in Germany, available immediately.</p>
+
+    <div class="contact-actions reveal">
+      <a href="mailto:aleksbuss@gmail.com?subject=Interview%20request" class="btn btn-primary">Request an interview <span class="arrow">→</span></a>
+      <a href="https://github.com/aleksbuss" target="_blank" class="btn btn-ghost">See the code</a>
+      <a href="CV.html" target="_blank" class="btn btn-ghost">Download CV</a>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div class="contact-cell">
+        <div class="lbl">Email</div>
+        <a href="mailto:aleksbuss@gmail.com">aleksbuss@gmail.com</a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">Phone</div>
+        <a href="tel:+4917673503486">+49 176 73503486</a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">GitHub</div>
+        <a href="https://github.com/aleksbuss" target="_blank">/aleksbuss</a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">Location</div>
+        <span>Hof / Saale · DE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div><span class="live">●</span> &nbsp;aleksbuss.dev — all systems operational</div>
+  <div>© Aleksejs Buss · 2026 · Set in Fraunces, Geist &amp; JetBrains Mono</div>
+</footer>
+
+<!-- ───── CMD DOCK (the wow moment) ───── -->
+<div class="cmd-dock" id="cmdDock" role="search" aria-label="Ask the agent">
+  <span class="glyph" aria-hidden="true">A</span>
+  <span class="placeholder">
+    <span>Ask the agent —</span>
+    <em>show me your stack</em>
+    <span class="kbd">⌘K</span>
+  </span>
+  <input type="text" id="cmdInput" placeholder="Ask the agent..." autocomplete="off" aria-label="Your question to the agent">
+  <button class="send" id="cmdSend" type="button" aria-label="Send message">SEND ↵</button>
+  <button class="cmd-close" id="cmdClose" type="button" aria-label="Close chat">×</button>
+</div>
+
+<div class="cmd-panel" id="cmdPanel" role="log">
+  <div id="cmdMsgs"></div>
+  <div class="cmd-suggestions" id="cmdSuggestions">
+    <button class="cmd-sug" type="button">Show projects</button>
+    <button class="cmd-sug" type="button">What's your stack?</button>
+    <button class="cmd-sug" type="button">Why hire you?</button>
+    <button class="cmd-sug" type="button">Hiring process?</button>
+  </div>
+</div>
+
+
+<!-- ───── CASE STUDY MODAL ───── -->
+<dialog id="caseModal" aria-label="Project case study"></dialog>
+
+<script type="module" src="/src/main.ts"></script>
+
+</body>
+</html>

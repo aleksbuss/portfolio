@@ -1,0 +1,23 @@
+name = "aleksejs-agent-proxy"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Rate-limit storage. Create with:
+#   npx wrangler kv:namespace create RATELIMIT
+# then paste the id below.
+[[kv_namespaces]]
+binding = "RATELIMIT"
+id = "2af25d05ddbf459fbe61c1c2d82e2a09"
+preview_id = "0e301002a41144b8b2ce4002c8d06e58"
+
+[vars]
+# Comma-separated list of allowed origins for CORS.
+ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:5193,http://127.0.0.1:5193,https://aleksejs-portfolio.pages.dev,https://aleksbuss.dev,https://www.aleksbuss.dev"
+# OpenRouter model. Llama 3.3 70B is the popular default but its free tier is
+# upstream-throttled most days; gpt-oss-120b is OpenAI's open-source 120B and
+# currently the most reliable free instruct model. Other live options as of
+# 2026-04: google/gemma-3-27b-it:free, z-ai/glm-4.5-air:free, openrouter/free.
+MODEL = "openai/gpt-oss-120b:free"
+# Rate limit: messages per IP per hour
+RATE_LIMIT_PER_HOUR = "30"

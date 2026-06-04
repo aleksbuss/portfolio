@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Secrets — NEVER commit
+.dev.vars
+.env
+.env.*
+*.local
+
+# Cloudflare Workers local state
+.wrangler/
+
+# Test artifacts
+test-results/
+playwright-report/
+blob-report/
+.last-run.json
+
+# OS / editor
+.DS_Store
+*.log
+ci.yml

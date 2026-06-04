@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleksejs Buss — AI Engineer · Production Systems, Shipped Solo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #06070a;
+  --bg-2:      #0b0d12;
+  --bg-3:      #12151c;
+  --surface:   rgba(255,255,255,0.04);
+  --surface-2: rgba(255,255,255,0.07);
+  --rule:      rgba(255,255,255,0.09);
+  --rule-2:    rgba(255,255,255,0.16);
+  --ink:       #f5f3ed;
+  --ink-2:     #c9c4b8;
+  --ink-3:     #8a8576;
+  --ink-mute:  #5a5648;
+  --accent:    #ff5b1f;     /* electric ember */
+  --accent-2:  #ffd29a;
+  --signal:    #7ee0a8;
+  --plasma:    #5b8cff;
+
+  --serif: 'Fraunces', 'Times New Roman', serif;
+  --sans:  'Geist', system-ui, -apple-system, sans-serif;
+  --mono:  'Geist Mono', ui-monospace, 'SF Mono', monospace;
+  --maxw:  1340px;
+  --gut:   clamp(1.25rem, 3.5vw, 2.75rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+  line-height: 1.5;
+  overflow-x: hidden;
+  cursor: none;
+}
+::selection { background: var(--accent); color: var(--bg); }
+
+/* ─── CUSTOM CURSOR ─── */
+.cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: difference; will-change: transform; }
+.cursor-dot { width: 6px; height: 6px; background: var(--ink); border-radius: 50%; transform: translate(-50%,-50%); }
+.cursor-ring { width: 36px; height: 36px; border: 1px solid var(--ink); border-radius: 50%; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s; }
+body.hov .cursor-ring { width: 64px; height: 64px; background: rgba(255,255,255,0.08); }
+@media (max-width: 900px), (pointer: coarse) { body { cursor: auto; } .cursor-dot, .cursor-ring { display: none; } }
+
+/* ─── NOISE + AURORA ─── */
+.aurora { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.aurora .blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+.aurora .b1 { width: 700px; height: 700px; background: radial-gradient(circle, #ff5b1f 0%, transparent 60%); top: -20%; right: -10%; }
+.aurora .b2 { width: 600px; height: 600px; background: radial-gradient(circle, #5b8cff 0%, transparent 60%); top: 35%; left: -10%; opacity: 0.4; }
+.aurora .b3 { width: 550px; height: 550px; background: radial-gradient(circle, #b85bff 0%, transparent 60%); bottom: -10%; right: 30%; opacity: 0.35; }
+.grain { position: fixed; inset: -50%; z-index: 1; pointer-events: none; mix-blend-mode: overlay; opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  animation: grainMove 8s steps(8) infinite;
+}
+@keyframes grainMove {
+  0%,100% { transform: translate(0,0); } 25% { transform: translate(-3%,2%); }
+  50% { transform: translate(2%,-3%); } 75% { transform: translate(-2%,-2%); }
+}
+
+/* fixed grid backdrop */
+.grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 80%);
+}
+
+/* ─── PROGRESS BAR ─── */
+.progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 200; width: 0; transition: width 0.1s linear; box-shadow: 0 0 12px var(--accent); }
+
+/* ─── TYPE ─── */
+.eyebrow { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 300; letter-spacing: -0.025em; line-height: 1; font-optical-sizing: auto; }
+em.it { font-family: var(--serif); font-style: italic; font-weight: 300; }
+
+/* ─── PRELOADER ─── */
+.preloader { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2rem; }
+.preloader.gone { animation: preExit 1s cubic-bezier(0.7,0,0.3,1) forwards; }
+@keyframes preExit { to { transform: translateY(-100%); } }
+.pre-mark { font-family: var(--serif); font-size: clamp(3rem, 8vw, 6rem); font-weight: 300; letter-spacing: -0.04em; }
+.pre-mark .it { font-style: italic; color: var(--accent); display: inline-block; animation: preChar 0.6s cubic-bezier(0.7,0,0.3,1) both; animation-delay: 0.3s; opacity: 0; }
+@keyframes preChar { from { opacity: 0; transform: translateY(40px) rotateZ(8deg); } to { opacity: 1; transform: translateY(0) rotateZ(0); } }
+.pre-bar { width: 240px; height: 1px; background: var(--rule); position: relative; overflow: hidden; }
+.pre-bar::after { content: ''; position: absolute; inset: 0; background: var(--accent); transform-origin: left; transform: scaleX(0); animation: preFill 1.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes preFill { to { transform: scaleX(1); } }
+.pre-meta { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-3); letter-spacing: 0.1em; }
+.pre-meta .pct { color: var(--accent); }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: grid; grid-template-columns: auto 1fr auto;
+  align-items: center; gap: 2rem;
+  padding: 1.1rem var(--gut);
+  background: rgba(6,7,10,0.6);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-brand { font-family: var(--serif); font-size: 1.05rem; letter-spacing: -0.01em; display: inline-flex; align-items: baseline; gap: 0.5rem; color: var(--ink); }
+.nav-brand .index { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); letter-spacing: 0.1em; }
+.nav-brand .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 12px var(--signal); animation: ping 2s infinite; margin-right: 0.4rem; vertical-align: 0.05em; }
+@keyframes ping { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.nav-links { display: flex; gap: 2rem; justify-self: center; list-style: none; }
+.nav-links a { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; color: var(--ink-2); text-decoration: none; text-transform: uppercase; position: relative; padding: 0.25rem 0; transition: color 0.2s; }
+.nav-links a::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { width: 100%; }
+.nav-right { display: flex; gap: 0.5rem; align-items: center; }
+.tinybtn { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.5rem 0.85rem; border: 1px solid var(--rule); background: transparent; color: var(--ink-2); cursor: none; border-radius: 999px; transition: all 0.2s; }
+.tinybtn:hover { border-color: var(--ink); color: var(--ink); }
+.tinybtn.on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+/* ─── HERO — cinematic ─── */
+#hero { padding: 9rem var(--gut) 4rem; max-width: var(--maxw); margin: 0 auto; min-height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; z-index: 2; }
+
+.hero-marker { display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem; align-items: center; margin-bottom: 2rem; }
+.hero-marker .ln { height: 1px; background: var(--rule); }
+.hero-marker .left, .hero-marker .right { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.hero-marker .right { color: var(--ink); display: inline-flex; align-items: center; gap: 0.5rem; }
+.hero-marker .right::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 4px rgba(126,224,168,0.15), 0 0 12px var(--signal); animation: ping 2s infinite; }
+
+.hero-headline {
+  font-size: clamp(3.2rem, 11vw, 11rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  font-weight: 300;
+  color: var(--ink);
+  margin-bottom: 2.5rem;
+  font-family: var(--serif);
+  perspective: 1000px;
+}
+.hero-headline .ln { display: block; overflow: hidden; }
+.hero-headline .word { display: inline-block; transform-origin: 50% 100%; }
+.hero-headline .it { font-style: italic; color: var(--accent); position: relative; }
+.hero-headline .it::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0.05em; height: 0.07em;
+  background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  animation: underline 1s cubic-bezier(0.7,0,0.3,1) 1.4s forwards;
+}
+@keyframes underline { to { transform: scaleX(1); } }
+.hero-headline .amp { font-style: italic; color: var(--ink-3); }
+
+/* split-text reveal */
+.reveal-line { opacity: 0; transform: translateY(100%) rotateX(-30deg); transition: transform 1s cubic-bezier(0.22,1,0.36,1), opacity 1s; }
+.reveal-line.in { opacity: 1; transform: translateY(0) rotateX(0); }
+
+.hero-foot {
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr 0.9fr;
+  gap: 3rem;
+  align-items: end;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+}
+.hero-foot .lede { font-family: var(--serif); font-size: clamp(1.15rem, 1.5vw, 1.4rem); line-height: 1.4; color: var(--ink-2); font-weight: 300; max-width: 38ch; letter-spacing: -0.005em; }
+.hero-foot .lede em { font-style: italic; color: var(--accent); }
+.hero-meta-col { font-family: var(--mono); font-size: 0.78rem; line-height: 1.7; color: var(--ink-2); }
+.hero-meta-col .lbl { color: var(--ink-3); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; display: block; margin-bottom: 0.3rem; }
+.hero-meta-col .val { color: var(--ink); font-size: 0.85rem; }
+.hero-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1rem; }
+
+.btn { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.95rem 1.4rem; border-radius: 999px; text-decoration: none; cursor: none; display: inline-flex; align-items: center; gap: 0.6rem; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); border: 1px solid transparent; position: relative; overflow: hidden; }
+.btn::before { content: ''; position: absolute; inset: 0; background: var(--accent); transform: translateY(101%); transition: transform 0.4s cubic-bezier(0.7,0,0.3,1); z-index: -1; }
+.btn:hover::before { transform: translateY(0); }
+.btn-primary { background: var(--ink); color: var(--bg); }
+.btn-primary:hover { color: var(--bg); }
+.btn-ghost { border-color: var(--rule-2); color: var(--ink); background: transparent; }
+.btn-ghost:hover { color: var(--bg); border-color: var(--accent); }
+.btn .arrow { display: inline-block; transition: transform 0.3s; }
+.btn:hover .arrow { transform: translateX(4px); }
+
+/* hero clock */
+.hero-clock { position: absolute; right: var(--gut); top: 5.5rem; font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); letter-spacing: 0.1em; text-align: right; line-height: 1.6; }
+.hero-clock .now { color: var(--ink); font-size: 0.78rem; }
+
+/* hero floating 3d shape */
+.hero-orb {
+  position: absolute;
+  right: 8%; top: 28%;
+  width: 320px; height: 320px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.85;
+}
+.hero-orb svg { width: 100%; height: 100%; }
+@media (max-width: 1100px) { .hero-orb { display: none; } }
+
+/* scroll cue */
+.scroll-cue { position: absolute; bottom: 2rem; left: var(--gut); font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; display: flex; align-items: center; gap: 0.7rem; }
+.scroll-cue .ln { display: inline-block; width: 28px; height: 1px; background: var(--accent); animation: scrollLn 2s infinite; }
+@keyframes scrollLn { 0% { transform: scaleX(0); transform-origin: left; } 50% { transform: scaleX(1); transform-origin: left; } 51% { transform-origin: right; } 100% { transform: scaleX(0); transform-origin: right; } }
+
+/* ─── MARQUEE ─── */
+.ticker { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 1.4rem 0; overflow: hidden; background: var(--bg-2); position: relative; z-index: 2; }
+.ticker-track { display: flex; gap: 3.5rem; white-space: nowrap; animation: marquee 50s linear infinite; font-family: var(--serif); font-size: clamp(1.4rem, 2.4vw, 2rem); font-style: italic; font-weight: 300; color: var(--ink); }
+.ticker-track span { display: inline-flex; align-items: center; gap: 3.5rem; }
+.ticker-track .dot { color: var(--accent); font-style: normal; font-size: 0.6em; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ─── SECTIONS ─── */
+section.s { max-width: var(--maxw); margin: 0 auto; padding: 8rem var(--gut) 5rem; position: relative; z-index: 2; }
+.section-head { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: end; margin-bottom: 5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule); }
+.section-head .left .eyebrow { display: block; margin-bottom: 0.8rem; }
+.section-head .num-big { font-family: var(--serif); font-size: clamp(3rem, 7vw, 6rem); color: var(--accent); font-weight: 300; line-height: 0.9; letter-spacing: -0.04em; font-style: italic; }
+.section-title { font-size: clamp(2.4rem, 5.5vw, 5rem); letter-spacing: -0.03em; line-height: 0.95; font-weight: 300; color: var(--ink); }
+.section-title em { font-style: italic; color: var(--accent); font-weight: 300; }
+.section-sub { font-family: var(--serif); font-size: 1.2rem; font-weight: 300; color: var(--ink-2); line-height: 1.5; max-width: 50ch; margin-top: 1.2rem; font-style: italic; }
+
+/* ─── METRICS — animated dial ─── */
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.metric { padding: 2.4rem 1.5rem 2rem 0; border-right: 1px dashed var(--rule); position: relative; overflow: hidden; transition: background 0.4s; }
+.metric:nth-child(n+2) { padding-left: 1.5rem; }
+.metric:last-child { border-right: none; }
+.metric::before { content: ''; position: absolute; left: 0; top: 0; height: 1px; width: 0; background: var(--accent); transition: width 0.6s cubic-bezier(0.7,0,0.3,1); }
+.metric:hover::before { width: 100%; }
+.metric:hover { background: rgba(255,91,31,0.04); }
+.metric .ix { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.14em; }
+.metric .num { font-family: var(--serif); font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 300; letter-spacing: -0.05em; line-height: 0.85; color: var(--ink); margin: 0.6rem 0 0.6rem; display: flex; align-items: baseline; gap: 0.15em; font-style: italic; }
+.metric .num .unit { font-size: 0.35em; color: var(--accent); font-style: italic; font-weight: 300; }
+.metric .lbl { font-family: var(--mono); font-size: 0.72rem; color: var(--ink); letter-spacing: 0.06em; text-transform: uppercase; }
+.metric .det { font-family: var(--serif); font-size: 0.95rem; color: var(--ink-3); margin-top: 0.5rem; font-style: italic; font-weight: 300; }
+
+/* ─── STORY ─── */
+.story-grid { display: grid; grid-template-columns: 5fr 4fr; gap: 5rem; align-items: start; }
+.story-left .lede { font-family: var(--serif); font-size: clamp(1.6rem, 2.4vw, 2.2rem); font-weight: 300; line-height: 1.25; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 2rem; }
+.story-left .lede em { font-style: italic; color: var(--accent); }
+.story-left p { font-size: 1.02rem; line-height: 1.7; color: var(--ink-2); margin-bottom: 1.2rem; max-width: 50ch; }
+.story-left p strong { color: var(--ink); font-weight: 600; }
+
+.story-pull { margin-top: 2rem; padding: 1.8rem 0 0.5rem; border-top: 1px solid var(--rule); font-family: var(--serif); font-style: italic; font-size: 1.4rem; font-weight: 300; line-height: 1.4; color: var(--ink); letter-spacing: -0.005em; max-width: 38ch; position: relative; }
+.story-pull::before { content: '“'; font-size: 4rem; line-height: 0; vertical-align: -0.4em; color: var(--accent); margin-right: 0.1em; font-family: var(--serif); }
+
+/* timeline */
+.timeline { display: flex; flex-direction: column; }
+.tl-row { display: grid; grid-template-columns: 7rem 1fr; gap: 1.5rem; padding: 1.8rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; transition: padding 0.4s cubic-bezier(0.7,0,0.3,1), background 0.3s; position: relative; }
+.tl-row:first-child { border-top: 1px solid var(--ink); }
+.tl-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); transform: scaleY(0); transform-origin: top; transition: transform 0.4s; }
+.tl-row:hover::before { transform: scaleY(1); }
+.tl-row:hover { padding-left: 1.5rem; background: rgba(255,255,255,0.02); }
+.tl-year { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); letter-spacing: 0.04em; }
+.tl-content .ttl { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--ink); margin-bottom: 0.3rem; letter-spacing: -0.01em; }
+.tl-content .desc { font-size: 0.92rem; color: var(--ink-2); line-height: 1.6; max-width: 52ch; }
+
+/* ─── VALUES — staggered grid w/ rules ─── */
+.values { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); }
+.value { padding: 2.8rem 2rem 2.8rem 0; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); position: relative; transition: background 0.4s; overflow: hidden; }
+.value:nth-child(n+2) { padding-left: 2rem; }
+.value:nth-child(3n) { border-right: none; }
+.value:nth-last-child(-n+3) { border-bottom: none; }
+.value::before { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(180deg, transparent, rgba(255,91,31,0.08)); transition: height 0.5s cubic-bezier(0.7,0,0.3,1); }
+.value:hover::before { height: 100%; }
+.value > * { position: relative; z-index: 1; }
+.value .vix { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); letter-spacing: 0.16em; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem; }
+.value .vix::before { content: ''; width: 18px; height: 1px; background: var(--accent); transition: width 0.3s; }
+.value:hover .vix::before { width: 36px; }
+.value h3 { font-family: var(--serif); font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; letter-spacing: -0.02em; color: var(--ink); }
+.value h3 em { font-style: italic; color: var(--accent); font-weight: 300; }
+.value p { font-size: 0.95rem; line-height: 1.65; color: var(--ink-2); }
+
+/* ─── PROJECTS ─── */
+.proj-list { display: flex; flex-direction: column; }
+.proj { display: grid; grid-template-columns: 0.55fr 2fr 1.2fr; gap: 3rem; padding: 3rem 0 3.2rem; border-bottom: 1px solid var(--rule); align-items: start; position: relative; transition: padding 0.6s cubic-bezier(0.22,1,0.36,1); }
+.proj:first-child { border-top: 1px solid var(--ink); }
+.proj::before { content: ''; position: absolute; left: -3rem; right: -3rem; top: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,91,31,0.04), rgba(91,140,255,0.03)); opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+.proj:hover::before { opacity: 1; }
+.proj:hover { padding-left: 1.5rem; padding-right: 1.5rem; }
+
+.proj-meta { font-family: var(--mono); font-size: 0.74rem; line-height: 1.7; color: var(--ink-3); position: relative; z-index: 1; }
+.proj-meta .num { font-family: var(--serif); font-size: 3.5rem; font-weight: 300; color: var(--accent); display: block; margin-bottom: 0.6rem; line-height: 1; letter-spacing: -0.03em; font-style: italic; }
+.proj-meta .date { display: block; color: var(--ink-2); }
+.proj-meta .badge { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.7rem; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+.proj-meta .badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 10px var(--signal); animation: ping 2s infinite; }
+
+.proj-body { position: relative; z-index: 1; }
+.proj-body h3 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; letter-spacing: -0.025em; line-height: 1; color: var(--ink); margin-bottom: 0.8rem; }
+.proj-body h3 .it { font-style: italic; color: var(--accent); }
+.proj-body .tagline { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 1.15rem; color: var(--ink-2); margin-bottom: 1.4rem; letter-spacing: -0.005em; }
+.proj-body .desc { font-size: 0.98rem; line-height: 1.7; color: var(--ink-2); margin-bottom: 1.4rem; max-width: 60ch; }
+.proj-body .arch { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-2); background: rgba(255,255,255,0.025); border: 1px solid var(--rule); padding: 0.85rem 1rem; border-radius: 6px; line-height: 1.8; margin-bottom: 1.2rem; word-spacing: 0.1em; backdrop-filter: blur(8px); }
+.proj-body .arch .arr { color: var(--accent); margin: 0 0.3em; }
+.proj-body .arch .k { color: var(--ink); font-weight: 500; }
+
+.proj-aside { display: flex; flex-direction: column; gap: 1.2rem; position: relative; z-index: 1; }
+.proj-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.1rem; border: 1px dashed var(--rule); border-radius: 6px; background: rgba(255,255,255,0.015); }
+.proj-stat .n { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--ink); display: block; line-height: 1; letter-spacing: -0.02em; font-style: italic; }
+.proj-stat .l { font-family: var(--mono); font-size: 0.66rem; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.35rem; display: block; }
+.proj-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.tag { font-family: var(--mono); font-size: 0.7rem; padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(255,255,255,0.03); color: var(--ink-2); border: 1px solid var(--rule); }
+.tag.p { color: var(--ink); border-color: var(--rule-2); background: rgba(255,255,255,0.06); }
+
+.proj-cta { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.74rem; color: var(--accent); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.5rem; transition: gap 0.2s; }
+.proj-cta:hover { gap: 1.2rem; }
+
+/* ─── 3D PROJECT TILT preview thumb ─── */
+.proj-thumb { width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; position: relative; transform-style: preserve-3d; perspective: 800px; background: linear-gradient(135deg, #1a1d27, #0e1118); border: 1px solid var(--rule); display: flex; align-items: center; justify-content: center; }
+.proj-thumb-inner { width: 100%; height: 100%; position: relative; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+.proj-thumb svg { width: 60%; height: 60%; opacity: 0.85; }
+
+/* ─── STACK ROWS ─── */
+.stack-rows { display: flex; flex-direction: column; }
+.stack-row { display: grid; grid-template-columns: 0.7fr 3fr; gap: 3rem; padding: 2.2rem 0; border-bottom: 1px solid var(--rule); align-items: start; transition: padding 0.4s; position: relative; }
+.stack-row:first-child { border-top: 1px solid var(--ink); }
+.stack-row::before { content: ''; position: absolute; left: 0; top: 50%; width: 0; height: 1px; background: var(--accent); transition: width 0.4s; }
+.stack-row:hover::before { width: 24px; }
+.stack-row:hover { padding-left: 2rem; }
+.stack-row .head { display: flex; flex-direction: column; gap: 0.35rem; }
+.stack-row .head .num { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-3); letter-spacing: 0.1em; }
+.stack-row .head .ttl { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; color: var(--ink); letter-spacing: -0.01em; }
+.stack-items { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.stack-pill { font-family: var(--mono); font-size: 0.78rem; padding: 0.45rem 0.9rem; border-radius: 999px; background: rgba(255,255,255,0.02); color: var(--ink-2); border: 1px solid var(--rule); transition: all 0.25s cubic-bezier(0.22,1,0.36,1); cursor: none; }
+.stack-pill.primary { color: var(--ink); border-color: var(--rule-2); background: rgba(255,255,255,0.05); }
+.stack-pill:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); background: rgba(255,91,31,0.06); }
+
+/* ─── LANGUAGES ─── */
+.langs { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); margin-top: 4rem; }
+.lang { padding: 1.8rem 1.5rem 1.6rem 0; border-right: 1px dashed var(--rule); transition: background 0.3s; }
+.lang:nth-child(n+2) { padding-left: 1.5rem; }
+.lang:last-child { border-right: none; }
+.lang:hover { background: rgba(255,91,31,0.03); }
+.lang .code { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; color: var(--accent); }
+.lang .name { font-family: var(--serif); font-size: 1.7rem; font-weight: 300; color: var(--ink); margin: 0.4rem 0 0.9rem; letter-spacing: -0.015em; font-style: italic; }
+.lang .bar { height: 2px; background: var(--rule); position: relative; overflow: hidden; }
+.lang .bar::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: var(--w); background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: left; transform: scaleX(0); transition: transform 1.4s cubic-bezier(0.22,1,0.36,1) 0.2s; }
+.lang.in .bar::after { transform: scaleX(1); }
+.lang .lvl { font-family: var(--mono); font-size: 0.72rem; color: var(--ink-3); margin-top: 0.7rem; letter-spacing: 0.05em; }
+
+/* ─── CONTACT ─── */
+#contact { background: linear-gradient(180deg, var(--bg), var(--bg-2)); margin-top: 6rem; padding: 9rem var(--gut) 5rem; position: relative; overflow: hidden; z-index: 2; }
+#contact::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 20%, rgba(255,91,31,0.18), transparent 50%), radial-gradient(ellipse at 20% 80%, rgba(91,140,255,0.1), transparent 50%); pointer-events: none; }
+.contact-inner { max-width: var(--maxw); margin: 0 auto; position: relative; }
+.contact-eye { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.8rem; }
+.contact-eye::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+.contact-h { font-family: var(--serif); font-size: clamp(2.8rem, 8vw, 8rem); font-weight: 300; line-height: 0.9; letter-spacing: -0.04em; margin-bottom: 2.5rem; max-width: 16ch; color: var(--ink); }
+.contact-h em { font-style: italic; color: var(--accent); }
+.contact-lede { font-family: var(--serif); font-size: clamp(1.15rem, 1.6vw, 1.4rem); font-weight: 300; line-height: 1.45; color: var(--ink-2); max-width: 50ch; margin-bottom: 3rem; font-style: italic; }
+.contact-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 4rem; }
+
+.contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding-top: 3rem; border-top: 1px solid var(--rule); }
+.contact-cell .lbl { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-3); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 0.7rem; }
+.contact-cell a, .contact-cell span { font-family: var(--serif); font-size: 1.2rem; font-weight: 300; color: var(--ink); text-decoration: none; letter-spacing: -0.005em; transition: color 0.2s; display: block; }
+.contact-cell a:hover { color: var(--accent); }
+
+footer { border-top: 1px solid var(--rule); padding: 1.8rem var(--gut); font-family: var(--mono); font-size: 0.72rem; color: var(--ink-3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; max-width: var(--maxw); margin: 0 auto; letter-spacing: 0.05em; }
+footer .live { color: var(--signal); }
+
+/* ─── REVEAL ─── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-stagger > * { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s; }
+.reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.in > *:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger.in > *:nth-child(2) { transition-delay: 0.13s; }
+.reveal-stagger.in > *:nth-child(3) { transition-delay: 0.21s; }
+.reveal-stagger.in > *:nth-child(4) { transition-delay: 0.29s; }
+.reveal-stagger.in > *:nth-child(5) { transition-delay: 0.37s; }
+.reveal-stagger.in > *:nth-child(6) { transition-delay: 0.45s; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1000px) {
+  .nav-links { display: none; }
+  .hero-clock { display: none; }
+  .hero-foot { grid-template-columns: 1fr; gap: 2rem; }
+  .section-head { grid-template-columns: 1fr; gap: 1.5rem; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .metric { border-bottom: 1px dashed var(--rule); }
+  .metric:nth-child(2n) { border-right: none; }
+  .metric:nth-last-child(-n+2) { border-bottom: none; }
+  .story-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .values { grid-template-columns: 1fr; }
+  .value { border-right: none; padding-left: 0 !important; padding-right: 0; }
+  .value:last-child { border-bottom: none; }
+  .proj { grid-template-columns: 1fr; gap: 1.4rem; padding: 2rem 0; }
+  .proj:hover { padding-left: 0; padding-right: 0; }
+  .stack-row { grid-template-columns: 1fr; gap: 1rem; }
+  .stack-row:hover { padding-left: 0; }
+  .langs { grid-template-columns: repeat(2, 1fr); }
+  .lang:nth-child(2n) { border-right: none; }
+  .contact-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--rule-2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- ───── PRELOADER ───── -->
+<div class="preloader" id="preloader">
+  <div class="pre-mark">A<span class="it">.</span>B<span class="it">.</span></div>
+  <div class="pre-bar"></div>
+  <div class="pre-meta">LOADING PORTFOLIO · <span class="pct" id="pct">0%</span></div>
+</div>
+
+<!-- ───── BACKDROP LAYERS ───── -->
+<div class="aurora">
+  <div class="blob b1" id="blob1"></div>
+  <div class="blob b2" id="blob2"></div>
+  <div class="blob b3" id="blob3"></div>
+</div>
+<div class="grid-bg" id="gridBg"></div>
+<div class="grain"></div>
+
+<div class="cursor-ring" id="cring"></div>
+<div class="cursor-dot" id="cdot"></div>
+<div class="progress" id="progress"></div>
+
+<!-- ───── NAV ───── -->
+<nav>
+  <div class="nav-brand">
+    <span><span class="dot"></span>Aleksejs Buss</span>
+    <span class="index">№ 01 / AI ENG.</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#index" data-i18n="nav.index">Index</a></li>
+    <li><a href="#story" data-i18n="nav.story">Story</a></li>
+    <li><a href="#values" data-i18n="nav.values">Approach</a></li>
+    <li><a href="#projects" data-i18n="nav.work">Work</a></li>
+    <li><a href="#stack" data-i18n="nav.stack">Stack</a></li>
+    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button id="langBtn" class="tinybtn">EN / DE</button>
+    <button id="modeBtn" class="tinybtn" data-i18n="nav.mode.bold">Recruiter</button>
+    <a href="/cdn-cgi/l/email-protection#0d6c6168667e6f787e7e4d6a606c6461236e6260" id="hireBtn" class="tinybtn on">Hire →</a>
+  </div>
+</nav>
+
+<!-- ───── HERO ───── -->
+<section id="hero">
+  <div class="hero-clock">
+    <div class="lbl" data-i18n="hero.clock.loc">HOF / SAALE · DE</div>
+    <div class="now" id="clock">—</div>
+    <div class="lbl" style="margin-top:0.4rem" data-i18n="hero.clock.est">EST. 2025</div>
+  </div>
+
+  <div class="hero-orb" id="heroOrb">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="orbg" cx="35%" cy="35%">
+          <stop offset="0%" stop-color="#ff8a4f" stop-opacity="1"/>
+          <stop offset="40%" stop-color="#ff5b1f" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#481400" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="orbblur"><feGaussianBlur stdDeviation="1"/></filter>
+      </defs>
+      <circle cx="200" cy="200" r="160" fill="url(#orbg)"/>
+      <g stroke="#ff5b1f" stroke-opacity="0.4" fill="none" stroke-width="0.8">
+        <ellipse cx="200" cy="200" rx="180" ry="60" transform="rotate(-20 200 200)"/>
+        <ellipse cx="200" cy="200" rx="180" ry="60" transform="rotate(20 200 200)"/>
+        <ellipse cx="200" cy="200" rx="180" ry="60" transform="rotate(70 200 200)"/>
+      </g>
+      <g stroke="#ffd29a" stroke-opacity="0.5" fill="none" stroke-width="0.5" filter="url(#orbblur)">
+        <circle cx="200" cy="200" r="100"/>
+        <circle cx="200" cy="200" r="130"/>
+        <circle cx="200" cy="200" r="160"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-marker reveal">
+    <div class="left" data-i18n="hero.marker.left">№ 2026 / FOLIO</div>
+    <div class="ln"></div>
+    <div class="right" data-i18n="hero.marker.right">Available · Q2 ’26</div>
+  </div>
+
+  <h1 class="hero-headline" data-i18n-html="hero.headline">
+    <span class="ln"><span class="reveal-line">Production AI,</span></span>
+    <span class="ln"><span class="reveal-line"><span class="it">shipped</span> <span class="amp">solo.</span></span></span>
+  </h1>
+
+  <div class="hero-foot reveal">
+    <div class="lede" data-i18n-html="hero.lede">An AI engineer for early-stage teams. I take features from spec to live infrastructure — <em>seven production systems in ten months</em>, end to end, no hand-holding.</div>
+
+    <div class="hero-meta-col">
+      <span class="lbl hm-based">Based</span>
+      <span class="val hm-based-v">Hof / Saale, DE</span><br><br>
+      <span class="lbl hm-status">Status</span>
+      <span class="val hm-status-v">EU citizen · remote-first</span>
+    </div>
+
+    <div class="hero-meta-col">
+      <span class="lbl hm-cred">Credentials</span>
+      <span class="val">DEKRA №2023337</span><br>
+      <span class="hm-school" style="color:var(--ink-3)">Tel-Ran Berlin · 960h</span>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-primary" data-i18n-html="hero.cta.view">View work <span class="arrow">→</span></a>
+        <a href="CV.html" target="_blank" class="btn btn-ghost" data-i18n="hero.cta.cv">CV</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span class="ln"></span> <span data-i18n="hero.scroll">Scroll</span></div>
+</section>
+
+<!-- ───── TICKER ───── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>Cloudflare Workers <span class="dot">●</span> n8n agents <span class="dot">●</span> Whisper · LLaMA · Gemini <span class="dot">●</span> Telegram Mini-Apps <span class="dot">●</span> FastAPI <span class="dot">●</span> Docker · systemd <span class="dot">●</span> HMAC-SHA256 <span class="dot">●</span> Ollama · local LLM <span class="dot">●</span> Telegram Stars <span class="dot">●</span> Supabase · Firebase <span class="dot">●</span></span>
+    <span aria-hidden="true">Cloudflare Workers <span class="dot">●</span> n8n agents <span class="dot">●</span> Whisper · LLaMA · Gemini <span class="dot">●</span> Telegram Mini-Apps <span class="dot">●</span> FastAPI <span class="dot">●</span> Docker · systemd <span class="dot">●</span> HMAC-SHA256 <span class="dot">●</span> Ollama · local LLM <span class="dot">●</span> Telegram Stars <span class="dot">●</span> Supabase · Firebase <span class="dot">●</span></span>
+  </div>
+</div>
+
+<!-- ───── METRICS ───── -->
+<section class="s" id="index" style="padding-top:6rem">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ I — At a glance</span>
+      <div class="num-big">01</div>
+    </div>
+    <div>
+      <h2 class="section-title">A short ledger of <em>what shipped</em>.</h2>
+      <p class="section-sub">Every figure points to live infrastructure — servers I own, deployed under my own name, serving real users today.</p>
+    </div>
+  </div>
+
+  <div class="metrics reveal-stagger">
+    <div class="metric">
+      <div class="ix">i.</div>
+      <div class="num"><span class="n" data-target="7">0</span></div>
+      <div class="lbl">Production systems</div>
+      <div class="det">All serving real users</div>
+    </div>
+    <div class="metric">
+      <div class="ix">ii.</div>
+      <div class="num"><span class="n" data-target="19">0</span><span class="unit">+</span></div>
+      <div class="lbl">GitHub repositories</div>
+      <div class="det">Public, actively growing</div>
+    </div>
+    <div class="metric">
+      <div class="ix">iii.</div>
+      <div class="num"><span class="n" data-target="10">0</span><span class="unit">mo</span></div>
+      <div class="lbl">Zero to seven live</div>
+      <div class="det">Solo delivery, since 07/2025</div>
+    </div>
+    <div class="metric">
+      <div class="ix">iv.</div>
+      <div class="num"><span class="n" data-target="4">0</span></div>
+      <div class="lbl">Languages spoken</div>
+      <div class="det">RU · LV · EN · DE</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── STORY ───── -->
+<section class="s" id="story">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ II — The route</span>
+      <div class="num-big">02</div>
+    </div>
+    <div>
+      <h2 class="section-title">Fourteen years moving freight.<br>Now I move <em>features into production</em>.</h2>
+    </div>
+  </div>
+
+  <div class="story-grid">
+    <div class="story-left reveal">
+      <p class="lede">I didn't take the conventional route. I took the <em>self-disciplined</em> one.</p>
+      <p>Fourteen years in multicultural logistics — Tesco Carlisle, long-haul freight across the UK and Europe — taught me systems, processes, and how to <strong>deliver under pressure</strong>.</p>
+      <p>In 2022 I retrained as a Frontend Developer at <strong>Tel-Ran Berlin</strong> (960h, DEKRA-certified). Then I went deeper: LLMs, prompt engineering, serverless, local AI. Nights and weekends, while driving part-time to pay the bills.</p>
+      <p>From mid-2025, <strong>I've been shipping</strong>. Not learning. Real systems, real users, real infrastructure — under my own name.</p>
+      <div class="story-pull">Self-discipline is the skill that transfers. Everything else I learn fast — and I have.</div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.15s">
+      <div class="timeline">
+        <div class="tl-row">
+          <div class="tl-year">2008 — 22</div>
+          <div class="tl-content">
+            <div class="ttl">Logistics, UK &amp; Germany</div>
+            <div class="desc">Tesco Carlisle (WMS, planograms), long-haul freight. Process, resilience, multicultural teams.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">10/22 — 10/23</div>
+          <div class="tl-content">
+            <div class="ttl">Frontend Developer · Tel-Ran Berlin</div>
+            <div class="desc">DEKRA-certified, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">2023 — 25</div>
+          <div class="tl-content">
+            <div class="ttl">Deep self-study in AI &amp; automation</div>
+            <div class="desc">n8n, Cloudflare Workers, Ollama, prompt engineering, local LLM, Docker.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">07/25 — now</div>
+          <div class="tl-content">
+            <div class="ttl">Production mode · 7 live systems</div>
+            <div class="desc">End-to-end: architecture → deployment → monitoring. Solo delivery, real users.</div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-year">Q2 / 26</div>
+          <div class="tl-content">
+            <div class="ttl">Open to your team</div>
+            <div class="desc">Immediate availability. Germany-based, EU citizen. Remote or on-site.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── VALUES ───── -->
+<section class="s" id="values">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ III — Approach</span>
+      <div class="num-big">03</div>
+    </div>
+    <div>
+      <h2 class="section-title">What an early-stage team needs<br>— in <em>one hire</em>.</h2>
+      <p class="section-sub">Startups don't need specialists. They need operators who ship features end-to-end without waiting for permission. Six things I bring on day one.</p>
+    </div>
+  </div>
+
+  <div class="values reveal-stagger">
+    <div class="value">
+      <div class="vix">i. Ship rate</div>
+      <h3>Founder-grade <em>ownership</em>.</h3>
+      <p>Spec → architecture → code → deploy → monitor → iterate. No hand-offs, no "not my job". Seven live systems in ten months — solo. The cadence your runway needs.</p>
+    </div>
+    <div class="value">
+      <div class="vix">ii. Full stack</div>
+      <h3>AI, backend &amp; <em>infra</em> in one.</h3>
+      <p>LLM pipelines, agent orchestration, RAG-ready patterns, FastAPI/Python, Cloudflare edge, Docker/systemd. One headcount, full stack — your seed runway stretches further.</p>
+    </div>
+    <div class="value">
+      <div class="vix">iii. AI-native</div>
+      <h3>LLM is native, <em>not a bolt-on</em>.</h3>
+      <p>Multi-provider failover (OpenAI / Gemini / Groq / Ollama). Structured outputs, prompt architectures, voice + vision pipelines, streaming APIs. I design with latency, cost &amp; failure modes in mind.</p>
+    </div>
+    <div class="value">
+      <div class="vix">iv. Production hygiene</div>
+      <h3>Defaults, <em>not afterthoughts</em>.</h3>
+      <p>HMAC-SHA256, zero-secrets architecture, rate limiting, systemd auto-restart, health checks, webhook verification, secrets via env. Built in from day one.</p>
+    </div>
+    <div class="value">
+      <div class="vix">v. Late-career grit</div>
+      <h3>Self-driven, <em>under pressure</em>.</h3>
+      <p>Career-switched at 35+ and shipped seven live systems in ten months while working part-time. Not talent — discipline. I don't need reminders to unblock myself.</p>
+    </div>
+    <div class="value">
+      <div class="vix">vi. Full product</div>
+      <h3>Beyond the <em>backend</em>.</h3>
+      <p>I can design, implement, and launch an AI product end to end — voice, visual generation (ComfyUI, Stable Diffusion), UI, copy, deployment. Useful when your team is three people and a deadline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───── PROJECTS ───── -->
+<section class="s" id="projects">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ IV — Work · Selected</span>
+      <div class="num-big">04</div>
+    </div>
+    <div>
+      <h2 class="section-title">Seven systems.<br>Shipped <em>solo</em>. All live.</h2>
+      <p class="section-sub">Every project below runs on infrastructure I own and operate. This is what "ships fast" looks like in practice — not side projects, real production.</p>
+    </div>
+  </div>
+
+  <div class="proj-list">
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">01</span>
+        <span class="date">08 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Flagship</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Dictaphone <span class="it">v7.0</span></h3>
+        <div class="tagline">Edge voice pipeline · Whisper → LLM · sub-second latency.</div>
+        <div class="desc">Serverless voice-to-insight pipeline on Cloudflare edge. User voice note → Whisper transcription → LLM summarization → rich Mini-App UI. Zero cold-start, global edge latency, zero secrets leaked to client.</div>
+        <div class="arch"><span class="k">Telegram Mini-App</span><span class="arr">→</span>Cloudflare Workers<span class="arr">→</span><span class="k">Groq Whisper</span> + LLaMA 3.3 70B<span class="arr">→</span>response</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5b1f"/><stop offset="1" stop-color="#ffd29a"/></linearGradient></defs><circle cx="100" cy="100" r="40" fill="none" stroke="url(#g1)" stroke-width="2"/><circle cx="100" cy="100" r="65" fill="none" stroke="url(#g1)" stroke-width="1" opacity="0.5"/><circle cx="100" cy="100" r="85" fill="none" stroke="url(#g1)" stroke-width="0.8" opacity="0.3"/><g stroke="#ff5b1f" stroke-width="2"><line x1="100" y1="60" x2="100" y2="80"/><line x1="100" y1="120" x2="100" y2="140"/><line x1="60" y1="100" x2="80" y2="100"/><line x1="120" y1="100" x2="140" y2="100"/></g></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">Live</span><span class="l">in production</span></div>
+          <div class="proj-stat"><span class="n">0 ms</span><span class="l">cold start</span></div>
+          <div class="proj-stat"><span class="n">HMAC</span><span class="l">webhook auth</span></div>
+          <div class="proj-stat"><span class="n">Edge</span><span class="l">global</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Cloudflare Workers</span>
+          <span class="tag p">Groq Whisper</span>
+          <span class="tag">LLaMA 3.3</span>
+          <span class="tag">JS ESM</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">02</span>
+        <span class="date">09 / 2025 — ongoing</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Moderation <span class="it">Bot</span></h3>
+        <div class="tagline">n8n workflow · dual-AI failover · auto-escalation.</div>
+        <div class="desc">Production AI agent workflow for Telegram moderation. 15+ node n8n pipeline classifies every message with structured JSON outputs, routes to action, escalates sanctions. Dual-provider failover keeps it running when any LLM API fails.</div>
+        <div class="arch">Message<span class="arr">→</span>Filter<span class="arr">→</span><span class="k">Nemotron</span><span class="arr">→</span>fallback <span class="k">GPT-4.1</span><span class="arr">→</span>Router<span class="arr">→</span>Telegram</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff5b1f" stroke-width="1.5"><circle cx="40" cy="100" r="14"/><circle cx="100" cy="60" r="14"/><circle cx="100" cy="140" r="14"/><circle cx="160" cy="100" r="14"/><line x1="54" y1="100" x2="86" y2="68"/><line x1="54" y1="100" x2="86" y2="132"/><line x1="114" y1="68" x2="146" y2="100"/><line x1="114" y1="132" x2="146" y2="100"/></g><g fill="#ff5b1f"><circle cx="40" cy="100" r="3"/><circle cx="100" cy="60" r="3"/><circle cx="100" cy="140" r="3"/><circle cx="160" cy="100" r="3"/></g></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">15+</span><span class="l">n8n nodes</span></div>
+          <div class="proj-stat"><span class="n">2</span><span class="l">AI providers</span></div>
+          <div class="proj-stat"><span class="n">3-tier</span><span class="l">sanctions</span></div>
+          <div class="proj-stat"><span class="n">JSON</span><span class="l">structured</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">n8n</span>
+          <span class="tag p">OpenRouter</span>
+          <span class="tag">GPT-4.1-mini</span>
+          <span class="tag">Telegram API</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">03</span>
+        <span class="date">10 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Monetized SaaS</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Psychology <span class="it">Bot</span></h3>
+        <div class="tagline">Full SaaS · payments · conversational agent.</div>
+        <div class="desc">End-to-end SaaS built solo: distributed serverless backend + auth + payments + referral program + AI failover. Real users, real revenue, real infrastructure — no team, no funding.</div>
+        <div class="arch"><span class="k">Mini-App</span><span class="arr">→</span>HMAC-SHA256<span class="arr">→</span>Apps Script<span class="arr">→</span>Firebase<span class="arr">→</span><span class="k">Gemini</span> + TTS</div>
+        <a href="#" class="proj-cta">Read case study →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff5b1f" stroke-width="1.2"><path d="M50 70 Q100 30 150 70 Q170 100 150 130 Q100 170 50 130 Q30 100 50 70 Z"/><circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="50" opacity="0.5"/></g><circle cx="100" cy="100" r="6" fill="#ff5b1f"/></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">7-skill</span><span class="l">protocol</span></div>
+          <div class="proj-stat"><span class="n">Stars</span><span class="l">payments</span></div>
+          <div class="proj-stat"><span class="n">Atomic</span><span class="l">credit ops</span></div>
+          <div class="proj-stat"><span class="n">Live</span><span class="l">revenue</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Gemini 2.5</span>
+          <span class="tag p">Telegram Stars</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">Apps Script</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">04</span>
+        <span class="date">10 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">bushmark.cc</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>Bushmark — <span class="it">Secure Clipboard</span></h3>
+        <div class="tagline">Self-hosted · cookie auth · one-click install.</div>
+        <div class="desc">Self-hosted secure clipboard solving a real daily problem: transferring text between servers and devices without USB or third-party services. Three persistent slots, 24h history, auto-rotation, Tailwind UI.</div>
+        <div class="arch">Client<span class="arr">→</span><span class="k">Nginx</span> reverse proxy<span class="arr">→</span><span class="k">FastAPI</span> (systemd)<span class="arr">→</span>disk + 30d rotation</div>
+        <a href="https://bushmark.cc" target="_blank" class="proj-cta">Visit bushmark.cc →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff5b1f" stroke-width="1.2"><rect x="60" y="50" width="80" height="100" rx="6"/><line x1="75" y1="75" x2="125" y2="75"/><line x1="75" y1="95" x2="125" y2="95"/><line x1="75" y1="115" x2="110" y2="115"/></g><circle cx="140" cy="60" r="6" fill="#7ee0a8"/></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">1-click</span><span class="l">bash install</span></div>
+          <div class="proj-stat"><span class="n">24.04</span><span class="l">Ubuntu VPS</span></div>
+          <div class="proj-stat"><span class="n">24h</span><span class="l">history</span></div>
+          <div class="proj-stat"><span class="n">3</span><span class="l">slots</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">FastAPI</span>
+          <span class="tag p">Nginx</span>
+          <span class="tag">systemd</span>
+          <span class="tag">Tailwind</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">05</span>
+        <span class="date">07 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Open Source</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>CyberDed Ultra <span class="it">+ ComfyUI</span></h3>
+        <div class="tagline">Local AI infra · one-click installer · Android + Linux.</div>
+        <div class="desc">One-click installer for local AI infrastructure. Flask backend with Server-Sent Events streaming chat, real-time system monitoring, Docker-Compose ComfyUI stack with NVIDIA auto-config. Full bash automation.</div>
+        <div class="arch">Bash installer<span class="arr">→</span><span class="k">Ollama</span> + <span class="k">ComfyUI</span> Docker<span class="arr">→</span>Flask (SSE)<span class="arr">→</span>NVIDIA Toolkit</div>
+        <a href="https://github.com/aleksbuss" target="_blank" class="proj-cta">View on GitHub →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff5b1f" stroke-width="1.2"><rect x="40" y="60" width="50" height="40" rx="3"/><rect x="110" y="60" width="50" height="40" rx="3"/><rect x="40" y="110" width="50" height="40" rx="3"/><rect x="110" y="110" width="50" height="40" rx="3"/><line x1="90" y1="80" x2="110" y2="80"/><line x1="65" y1="100" x2="65" y2="110"/><line x1="135" y1="100" x2="135" y2="110"/><line x1="90" y1="130" x2="110" y2="130"/></g></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">SSE</span><span class="l">streaming</span></div>
+          <div class="proj-stat"><span class="n">GPU</span><span class="l">auto-detect</span></div>
+          <div class="proj-stat"><span class="n">OSS</span><span class="l">MIT</span></div>
+          <div class="proj-stat"><span class="n">2 OS</span><span class="l">Linux + Android</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Docker</span>
+          <span class="tag p">Ollama</span>
+          <span class="tag">Flask</span>
+          <span class="tag">ComfyUI</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj reveal">
+      <div class="proj-meta">
+        <span class="num">06</span>
+        <span class="date">11 / 2025 — ongoing</span>
+        <span class="date" style="color:var(--ink-3)">Open Source</span>
+        <span class="badge">Live</span>
+      </div>
+      <div class="proj-body">
+        <h3>Termux <span class="it">AI Dictaphone</span></h3>
+        <div class="tagline">Android as offline AI server · zero cloud cost.</div>
+        <div class="desc">Local AI deployment product: complete offline AI stack on any Android phone — Whisper transcription + LLaMA/Gemma inference running on-device. Zero cloud cost, full privacy. Published OSS.</div>
+        <div class="arch">Termux (Android)<span class="arr">→</span><span class="k">faster-whisper</span> / whisper.cpp<span class="arr">→</span><span class="k">Ollama</span> (LLaMA, Gemma)</div>
+        <a href="https://github.com/aleksbuss" target="_blank" class="proj-cta">View on GitHub →</a>
+      </div>
+      <div class="proj-aside">
+        <div class="proj-thumb"><div class="proj-thumb-inner">
+          <svg viewBox="0 0 200 200"><g fill="none" stroke="#ff5b1f" stroke-width="1.2"><rect x="75" y="40" width="50" height="120" rx="8"/><rect x="83" y="55" width="34" height="70" rx="2"/><circle cx="100" cy="142" r="4"/></g><g fill="#ff5b1f"><rect x="92" y="65" width="3" height="50"/><rect x="98" y="75" width="3" height="40"/><rect x="104" y="60" width="3" height="55"/></g></svg>
+        </div></div>
+        <div class="proj-stats">
+          <div class="proj-stat"><span class="n">100%</span><span class="l">offline</span></div>
+          <div class="proj-stat"><span class="n">$ 0</span><span class="l">API cost</span></div>
+          <div class="proj-stat"><span class="n">Dual</span><span class="l">mode</span></div>
+          <div class="proj-stat"><span class="n">On-device</span><span class="l">privacy</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="tag p">Termux</span>
+          <span class="tag p">faster-whisper</span>
+          <span class="tag">Ollama</span>
+          <span class="tag">Python</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div style="margin-top:3rem;text-align:center" class="reveal">
+    <a href="https://github.com/aleksbuss" target="_blank" class="btn btn-ghost">Explore all 19+ repos on GitHub <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<!-- ───── STACK ───── -->
+<section class="s" id="stack">
+  <div class="section-head reveal">
+    <div class="left">
+      <span class="eyebrow">§ V — Toolkit</span>
+      <div class="num-big">05</div>
+    </div>
+    <div>
+      <h2 class="section-title">Full-stack AI automation,<br>top to <em>bottom</em>.</h2>
+      <p class="section-sub">From edge serverless to local LLM on Android — every tool here I've used in production.</p>
+    </div>
+  </div>
+
+  <div class="stack-rows">
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">i.</span>
+        <span class="ttl"><em style="font-style:italic">AI</em> · LLM · Agents</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">OpenAI GPT-4 / 4.1 / TTS</span>
+        <span class="stack-pill primary">Google Gemini 2.5</span>
+        <span class="stack-pill primary">Groq Whisper-large-v3</span>
+        <span class="stack-pill primary">Ollama · LLaMA · Gemma</span>
+        <span class="stack-pill">Agent workflows · n8n</span>
+        <span class="stack-pill">Prompt engineering</span>
+        <span class="stack-pill">Structured outputs</span>
+        <span class="stack-pill">Multi-provider failover</span>
+        <span class="stack-pill">RAG-ready patterns</span>
+        <span class="stack-pill">faster-whisper · whisper.cpp</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">ii.</span>
+        <span class="ttl"><em style="font-style:italic">Automation</em> &amp; No-code</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">n8n · workflows · agents</span>
+        <span class="stack-pill primary">Webhooks &amp; HTTP routing</span>
+        <span class="stack-pill">Code Nodes (JS/Python)</span>
+        <span class="stack-pill">Error handling &amp; retries</span>
+        <span class="stack-pill">Chain-of-Thought architecture</span>
+        <span class="stack-pill">Multi-protocol agents</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">iii.</span>
+        <span class="ttl"><em style="font-style:italic">Programming</em></span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">JavaScript · ESM · async</span>
+        <span class="stack-pill primary">Python · Flask · FastAPI</span>
+        <span class="stack-pill primary">Bash · systems scripting</span>
+        <span class="stack-pill">React (foundations)</span>
+        <span class="stack-pill">HTML5 · CSS3 · responsive</span>
+        <span class="stack-pill">Streaming APIs (SSE)</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">iv.</span>
+        <span class="ttl"><em style="font-style:italic">Cloud</em> &amp; Serverless</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">Cloudflare Workers · edge</span>
+        <span class="stack-pill primary">Google Apps Script</span>
+        <span class="stack-pill primary">Firebase Realtime DB</span>
+        <span class="stack-pill">GitHub Pages</span>
+        <span class="stack-pill">Supabase / PostgreSQL</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">v.</span>
+        <span class="ttl"><em style="font-style:italic">Production</em> &amp; Ops</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">Docker · Compose</span>
+        <span class="stack-pill primary">Nginx · reverse proxy</span>
+        <span class="stack-pill primary">Ubuntu VPS · systemd</span>
+        <span class="stack-pill">Health checks · auto-restart</span>
+        <span class="stack-pill">Secrets · env vars</span>
+        <span class="stack-pill">Git/GitHub · Wrangler</span>
+        <span class="stack-pill">NVIDIA Container Toolkit</span>
+        <span class="stack-pill">Background jobs · rotation</span>
+      </div>
+    </div>
+
+    <div class="stack-row reveal">
+      <div class="head">
+        <span class="num">vi.</span>
+        <span class="ttl"><em style="font-style:italic">Security</em> &amp; Payments</span>
+      </div>
+      <div class="stack-items">
+        <span class="stack-pill primary">HMAC-SHA256 · JWT</span>
+        <span class="stack-pill primary">Telegram Bot API · Mini-Apps</span>
+        <span class="stack-pill primary">Telegram Stars</span>
+        <span class="stack-pill">CORS · secrets mgmt</span>
+        <span class="stack-pill">Anti-fraud logic</span>
+        <span class="stack-pill">Rate limiting · webhook verify</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="langs reveal-stagger">
+    <div class="lang" style="--w:100%">
+      <div class="code">RU</div>
+      <div class="name">Russian</div>
+      <div class="bar"></div>
+      <div class="lvl">Native</div>
+    </div>
+    <div class="lang" style="--w:98%">
+      <div class="code">LV</div>
+      <div class="name">Latvian</div>
+      <div class="bar"></div>
+      <div class="lvl">C2 · Fluent</div>
+    </div>
+    <div class="lang" style="--w:82%">
+      <div class="code">EN</div>
+      <div class="name">English</div>
+      <div class="bar"></div>
+      <div class="lvl">C1 · Business</div>
+    </div>
+    <div class="lang" style="--w:45%">
+      <div class="code">DE</div>
+      <div class="name">German</div>
+      <div class="bar"></div>
+      <div class="lvl">A2/B1 · Improving</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CONTACT ───── -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-eye reveal">§ VI — Now hiring myself out</div>
+    <h2 class="contact-h reveal">Let's turn your backlog<br>into <em>shipped software</em>.</h2>
+    <p class="contact-lede reveal">I'm looking for AI Engineer or Founding Engineer roles at early-stage startups (Seed–Series C). I write production code, own features end-to-end, and ship fast. EU citizen, based in Germany, available immediately.</p>
+
+    <div class="contact-actions reveal">
+      <a href="/cdn-cgi/l/email-protection#81e0ede4eaf2e3f4f2f2c1e6ece0e8edafe2eeecbef2f4e3ebe4e2f5bcc8eff5e4f3f7e8e4f6a4b3b1f3e4f0f4e4f2f5a4b3b1aca4b3b1c0c8a4b3b1c4efe6e8efe4e4f3" class="btn btn-primary">Request an interview <span class="arrow">→</span></a>
+      <a href="https://github.com/aleksbuss" target="_blank" class="btn btn-ghost">See the code</a>
+      <a href="CV.html" target="_blank" class="btn btn-ghost">Download CV</a>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div class="contact-cell">
+        <div class="lbl">Email</div>
+        <a href="/cdn-cgi/l/email-protection#dcbdb0b9b7afbea9afaf9cbbb1bdb5b0f2bfb3b1"><span class="__cf_email__" data-cfemail="72131e1719011007010132151f131b1e5c111d1f">[email&#160;protected]</span></a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">Phone</div>
+        <a href="tel:+4917673503486">+49 176 73503486</a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">GitHub</div>
+        <a href="https://github.com/aleksbuss" target="_blank">/aleksbuss</a>
+      </div>
+      <div class="contact-cell">
+        <div class="lbl">Location</div>
+        <span>Hof / Saale · DE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div><span class="live">●</span> &nbsp;aleksbuss.dev — all systems operational</div>
+  <div>© Aleksejs Buss · 2026 · Set in Fraunces &amp; Geist</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ─── PRELOADER ───
+let pct = 0;
+const pctEl = document.getElementById('pct');
+const pre = document.getElementById('preloader');
+const preTimer = setInterval(() => {
+  pct = Math.min(100, pct + Math.random() * 18);
+  pctEl.textContent = Math.floor(pct) + '%';
+  if (pct >= 100) {
+    clearInterval(preTimer);
+    setTimeout(() => {
+      pre.classList.add('gone');
+      document.body.style.overflow = '';
+      setTimeout(() => pre.remove(), 1100);
+      // trigger split-text reveal
+      document.querySelectorAll('.reveal-line').forEach((el, i) => {
+        setTimeout(() => el.classList.add('in'), 200 + i * 180);
+      });
+    }, 200);
+  }
+}, 100);
+document.body.style.overflow = 'hidden';
+
+// ─── CUSTOM CURSOR ───
+const cdot = document.getElementById('cdot');
+const cring = document.getElementById('cring');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let rx = mx, ry = my;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function cursorLoop() {
+  rx += (mx - rx) * 0.18;
+  ry += (my - ry) * 0.18;
+  cdot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  cring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+  requestAnimationFrame(cursorLoop);
+}
+cursorLoop();
+document.querySelectorAll('a, button, .stack-pill, .tag, .metric, .value, .proj, .tl-row').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+
+// ─── PARALLAX (mouse-driven blobs + grid + hero orb) ───
+const b1 = document.getElementById('blob1');
+const b2 = document.getElementById('blob2');
+const b3 = document.getElementById('blob3');
+const orb = document.getElementById('heroOrb');
+const gridBg = document.getElementById('gridBg');
+let pmx = 0, pmy = 0;
+document.addEventListener('mousemove', e => {
+  pmx = (e.clientX / window.innerWidth - 0.5) * 2;
+  pmy = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+function paraLoop() {
+  if (b1) b1.style.transform = `translate3d(${pmx*40}px, ${pmy*30}px, 0)`;
+  if (b2) b2.style.transform = `translate3d(${pmx*-30}px, ${pmy*-40}px, 0)`;
+  if (b3) b3.style.transform = `translate3d(${pmx*25}px, ${pmy*-20}px, 0)`;
+  if (gridBg) gridBg.style.transform = `translate3d(${pmx*15}px, ${pmy*15}px, 0)`;
+  if (orb) orb.style.transform = `translate3d(${pmx*-30}px, ${pmy*-30}px, 0) rotate(${pmx*8}deg)`;
+  requestAnimationFrame(paraLoop);
+}
+paraLoop();
+
+// ─── 3D TILT ON PROJECTS + VALUES + METRICS ───
+function applyTilt(sel, mag = 6, scale = 1.01) {
+  document.querySelectorAll(sel).forEach(el => {
+    el.style.transformStyle = 'preserve-3d';
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const cx = (e.clientX - r.left) / r.width;
+      const cy = (e.clientY - r.top) / r.height;
+      const rxv = (cy - 0.5) * -mag;
+      const ryv = (cx - 0.5) * mag;
+      el.style.transform = `perspective(1200px) rotateX(${rxv}deg) rotateY(${ryv}deg) scale(${scale})`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+}
+applyTilt('.proj-thumb', 18, 1.04);
+applyTilt('.value', 4, 1.005);
+applyTilt('.metric', 4, 1.005);
+
+// ─── PROGRESS BAR ───
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const p = (window.scrollY / h) * 100;
+  progress.style.width = p + '%';
+});
+
+// ─── CLOCK ───
+function tick() {
+  const el = document.getElementById('clock');
+  if (!el) return;
+  const d = new Date();
+  const t = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Europe/Berlin' });
+  el.textContent = t + ' CET';
+}
+tick(); setInterval(tick, 1000);
+
+// ─── REVEAL OBSERVER ───
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+document.querySelectorAll('.reveal, .reveal-stagger, .lang, .metric').forEach(el => io.observe(el));
+
+// metric counters
+function count(el, target) {
+  const dur = 1800; let s = null;
+  const step = ts => {
+    if (!s) s = ts;
+    const p = Math.min((ts - s) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(e * target);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+const cIo = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.n[data-target]').forEach(n => count(n, parseInt(n.dataset.target)));
+      cIo.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('.metrics').forEach(m => cIo.observe(m));
+
+// ─── EN/DE FULL TRANSLATION ───
+// Dictionary: each entry maps a CSS selector to {en, de} content.
+// On init we cache the original English HTML so toggling back works.
+const I18N = [
+  // NAV
+  ['.nav-links li:nth-child(1) a',       'Index',     'Übersicht'],
+  ['.nav-links li:nth-child(2) a',       'Story',     'Werdegang'],
+  ['.nav-links li:nth-child(3) a',       'Approach',  'Arbeitsweise'],
+  ['.nav-links li:nth-child(4) a',       'Work',      'Projekte'],
+  ['.nav-links li:nth-child(5) a',       'Stack',     'Stack'],
+  ['.nav-links li:nth-child(6) a',       'Contact',   'Kontakt'],
+  ['#modeBtn',                           'Recruiter', 'Recruiter'],
+  ['#hireBtn',                            'Hire →',    'Anstellen →'],
+
+  // HERO
+  ['.hero-clock .lbl:nth-child(1)',      'HOF / SAALE · DE',         'HOF / SAALE · DE'],
+  ['.hero-clock .lbl:nth-child(3)',      'EST. 2025',                'GEGR. 2025'],
+  ['.hero-marker .left',                 '№ 2026 / FOLIO',           'NR. 2026 / FOLIO'],
+  ['.hero-marker .right',                'Available · Q2 ’26',       'Verfügbar · Q2 ’26'],
+  ['.hero-headline',
+    '<span class="ln"><span class="reveal-line in">Production AI,</span></span><span class="ln"><span class="reveal-line in"><span class="it">shipped</span> <span class="amp">solo.</span></span></span>',
+    '<span class="ln"><span class="reveal-line in">Produktive KI,</span></span><span class="ln"><span class="reveal-line in"><span class="it">solo</span> <span class="amp">geliefert.</span></span></span>'],
+  ['.hero-foot .lede',
+    'An AI engineer for early-stage teams. I take features from spec to live infrastructure — <em>seven production systems in ten months</em>, end to end, no hand-holding.',
+    'KI-Ingenieur für junge Teams. Ich bringe Features von der Spezifikation bis in die Live-Infrastruktur — <em>sieben Produktionssysteme in zehn Monaten</em>, durchgehend, ohne Aufsicht.'],
+  ['.hm-based',    'Based',                       'Standort'],
+  ['.hm-status',   'Status',                      'Status'],
+  ['.hm-status-v', 'EU citizen · remote-first',   'EU-Bürger · Remote bevorzugt'],
+  ['.hm-cred',     'Credentials',                 'Qualifikation'],
+  ['.hm-school',   'Tel-Ran Berlin · 960h',      'Tel-Ran Berlin · 960h'],
+  ['.btn-primary[href="#projects"]', 'View work <span class="arrow">→</span>', 'Projekte ansehen <span class="arrow">→</span>'],
+  ['.hero-actions .btn-ghost',       'CV',                          'Lebenslauf'],
+  ['.scroll-cue',                     '<span class="ln"></span> Scroll', '<span class="ln"></span> Scrollen'],
+
+  // METRICS section
+  ['#index .eyebrow',     '§ I — At a glance',                            '§ I — Auf einen Blick'],
+  ['#index .section-title', 'A short ledger of <em>what shipped</em>.',  'Eine kurze Bilanz <em>der Lieferungen</em>.'],
+  ['#index .section-sub',  'Every figure points to live infrastructure — servers I own, deployed under my own name, serving real users today.',
+                           'Jede Zahl steht für Live-Infrastruktur — Server in meinem Besitz, unter meinem Namen betrieben, mit echten Nutzern.'],
+  ['.metrics .metric:nth-child(1) .lbl', 'Production systems',  'Produktionssysteme'],
+  ['.metrics .metric:nth-child(1) .det', 'All serving real users', 'Alle mit echten Nutzern'],
+  ['.metrics .metric:nth-child(2) .lbl', 'GitHub repositories', 'GitHub-Repositories'],
+  ['.metrics .metric:nth-child(2) .det', 'Public, actively growing', 'Öffentlich, wachsend'],
+  ['.metrics .metric:nth-child(3) .lbl', 'Zero to seven live',  'Null auf sieben live'],
+  ['.metrics .metric:nth-child(3) .det', 'Solo delivery, since 07/2025', 'Solo-Lieferung, seit 07/2025'],
+  ['.metrics .metric:nth-child(4) .lbl', 'Languages spoken',    'Gesprochene Sprachen'],
+  ['.metrics .metric:nth-child(4) .det', 'RU · LV · EN · DE',   'RU · LV · EN · DE'],
+
+  // STORY
+  ['#story .eyebrow',    '§ II — The route',                                '§ II — Der Weg'],
+  ['#story .section-title', 'Fourteen years moving freight.<br>Now I move <em>features into production</em>.',
+                            'Vierzehn Jahre Frachttransport.<br>Heute liefere ich <em>Features in Produktion</em>.'],
+  ['.story-left .lede',  'I didn\'t take the conventional route. I took the <em>self-disciplined</em> one.',
+                         'Ich nahm nicht den konventionellen Weg. Ich nahm den <em>disziplinierten</em> Weg.'],
+  ['.story-left p:nth-of-type(1)',
+    'Fourteen years in multicultural logistics — Tesco Carlisle, long-haul freight across the UK and Europe — taught me systems, processes, and how to <strong>deliver under pressure</strong>.',
+    'Vierzehn Jahre multikulturelle Logistik — Tesco Carlisle, Fernverkehr quer durch UK und Europa — lehrten mich Systeme, Prozesse und <strong>Lieferung unter Druck</strong>.'],
+  ['.story-left p:nth-of-type(2)',
+    'In 2022 I retrained as a Frontend Developer at <strong>Tel-Ran Berlin</strong> (960h, DEKRA-certified). Then I went deeper: LLMs, prompt engineering, serverless, local AI. Nights and weekends, while driving part-time to pay the bills.',
+    '2022 bildete ich mich zum Frontend-Entwickler an der <strong>Tel-Ran Berlin</strong> um (960h, DEKRA-zertifiziert). Dann ging ich tiefer: LLMs, Prompt-Engineering, Serverless, lokale KI. Abends und am Wochenende, während ich Teilzeit fuhr, um die Rechnungen zu zahlen.'],
+  ['.story-left p:nth-of-type(3)',
+    'From mid-2025, <strong>I\'ve been shipping</strong>. Not learning. Real systems, real users, real infrastructure — under my own name.',
+    'Seit Mitte 2025 <strong>liefere ich</strong>. Nicht mehr lernen. Echte Systeme, echte Nutzer, echte Infrastruktur — unter meinem Namen.'],
+  ['.story-pull', 'Self-discipline is the skill that transfers. Everything else I learn fast — and I have.',
+                  'Selbstdisziplin ist die Fähigkeit, die übertragbar ist. Alles andere lerne ich schnell — und habe es bewiesen.'],
+
+  // Timeline
+  ['.timeline .tl-row:nth-child(1) .ttl',  'Logistics, UK & Germany',     'Logistik, UK & Deutschland'],
+  ['.timeline .tl-row:nth-child(1) .desc', 'Tesco Carlisle (WMS, planograms), long-haul freight. Process, resilience, multicultural teams.',
+                                            'Tesco Carlisle (WMS, Planogramme), Fernverkehr. Prozess, Belastbarkeit, multikulturelle Teams.'],
+  ['.timeline .tl-row:nth-child(2) .ttl',  'Frontend Developer · Tel-Ran Berlin', 'Frontend-Entwickler · Tel-Ran Berlin'],
+  ['.timeline .tl-row:nth-child(2) .desc', 'DEKRA-certified, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.',
+                                            'DEKRA-zertifiziert, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.'],
+  ['.timeline .tl-row:nth-child(3) .ttl',  'Deep self-study in AI & automation', 'Selbststudium in KI & Automatisierung'],
+  ['.timeline .tl-row:nth-child(3) .desc', 'n8n, Cloudflare Workers, Ollama, prompt engineering, local LLM, Docker.',
+                                            'n8n, Cloudflare Workers, Ollama, Prompt-Engineering, lokales LLM, Docker.'],
+  ['.timeline .tl-row:nth-child(4) .ttl',  'Production mode · 7 live systems', 'Produktionsmodus · 7 Live-Systeme'],
+  ['.timeline .tl-row:nth-child(4) .desc', 'End-to-end: architecture → deployment → monitoring. Solo delivery, real users.',
+                                            'End-to-End: Architektur → Deployment → Monitoring. Solo-Lieferung, echte Nutzer.'],
+  ['.timeline .tl-row:nth-child(5) .ttl',  'Open to your team',           'Offen für Ihr Team'],
+  ['.timeline .tl-row:nth-child(5) .desc', 'Immediate availability. Germany-based, EU citizen. Remote or on-site.',
+                                            'Sofort verfügbar. In Deutschland ansässig, EU-Bürger. Remote oder vor Ort.'],
+
+  // VALUES
+  ['#values .eyebrow',     '§ III — Approach',                                '§ III — Arbeitsweise'],
+  ['#values .section-title','What an early-stage team needs<br>— in <em>one hire</em>.',
+                            'Was ein junges Team braucht<br>— in <em>einer Einstellung</em>.'],
+  ['#values .section-sub', 'Startups don\'t need specialists. They need operators who ship features end-to-end without waiting for permission. Six things I bring on day one.',
+                           'Startups brauchen keine Spezialisten. Sie brauchen Operatoren, die Features eigenständig liefern. Sechs Dinge bringe ich vom ersten Tag an mit.'],
+  ['.values .value:nth-child(1) .vix',  'i. Ship rate',                       'i. Liefertempo'],
+  ['.values .value:nth-child(1) h3',    'Founder-grade <em>ownership</em>.',  'Verantwortung wie ein <em>Gründer</em>.'],
+  ['.values .value:nth-child(1) p',     'Spec → architecture → code → deploy → monitor → iterate. No hand-offs, no "not my job". Seven live systems in ten months — solo. The cadence your runway needs.',
+                                         'Spec → Architektur → Code → Deployment → Monitoring → Iteration. Keine Übergaben, kein „nicht mein Job". Sieben Live-Systeme in zehn Monaten — solo. Das Tempo, das Ihre Runway braucht.'],
+  ['.values .value:nth-child(2) .vix',  'ii. Full stack',                     'ii. Full Stack'],
+  ['.values .value:nth-child(2) h3',    'AI, backend &amp; <em>infra</em> in one.', 'KI, Backend & <em>Infra</em> in einem.'],
+  ['.values .value:nth-child(2) p',     'LLM pipelines, agent orchestration, RAG-ready patterns, FastAPI/Python, Cloudflare edge, Docker/systemd. One headcount, full stack — your seed runway stretches further.',
+                                         'LLM-Pipelines, Agent-Orchestrierung, RAG-fähige Patterns, FastAPI/Python, Cloudflare Edge, Docker/systemd. Ein Headcount, voller Stack — Ihre Seed-Runway hält länger.'],
+  ['.values .value:nth-child(3) .vix',  'iii. AI-native',                     'iii. KI-nativ'],
+  ['.values .value:nth-child(3) h3',    'LLM is native, <em>not a bolt-on</em>.', 'LLM ist nativ, <em>kein Aufsatz</em>.'],
+  ['.values .value:nth-child(3) p',     'Multi-provider failover (OpenAI / Gemini / Groq / Ollama). Structured outputs, prompt architectures, voice + vision pipelines, streaming APIs. I design with latency, cost &amp; failure modes in mind.',
+                                         'Multi-Provider-Failover (OpenAI / Gemini / Groq / Ollama). Strukturierte Outputs, Prompt-Architekturen, Voice + Vision Pipelines, Streaming-APIs. Ich designe mit Latenz, Kosten und Fehlermodi im Blick.'],
+  ['.values .value:nth-child(4) .vix',  'iv. Production hygiene',             'iv. Produktions-Hygiene'],
+  ['.values .value:nth-child(4) h3',    'Defaults, <em>not afterthoughts</em>.', 'Standards, <em>kein Nachgedanke</em>.'],
+  ['.values .value:nth-child(4) p',     'HMAC-SHA256, zero-secrets architecture, rate limiting, systemd auto-restart, health checks, webhook verification, secrets via env. Built in from day one.',
+                                         'HMAC-SHA256, Zero-Secrets-Architektur, Rate Limiting, systemd Auto-Restart, Health Checks, Webhook-Verifikation, Secrets via env. Vom ersten Tag eingebaut.'],
+  ['.values .value:nth-child(5) .vix',  'v. Late-career grit',                'v. Reife Beharrlichkeit'],
+  ['.values .value:nth-child(5) h3',    'Self-driven, <em>under pressure</em>.', 'Selbstgetrieben, <em>unter Druck</em>.'],
+  ['.values .value:nth-child(5) p',     'Career-switched at 35+ and shipped seven live systems in ten months while working part-time. Not talent — discipline. I don\'t need reminders to unblock myself.',
+                                         'Karrierewechsel mit 35+ und sieben Live-Systeme in zehn Monaten geliefert — bei Teilzeitarbeit. Kein Talent — Disziplin. Ich brauche keine Erinnerungen, um mich freizumachen.'],
+  ['.values .value:nth-child(6) .vix',  'vi. Full product',                   'vi. Komplettes Produkt'],
+  ['.values .value:nth-child(6) h3',    'Beyond the <em>backend</em>.',       'Mehr als nur <em>Backend</em>.'],
+  ['.values .value:nth-child(6) p',     'I can design, implement, and launch an AI product end to end — voice, visual generation (ComfyUI, Stable Diffusion), UI, copy, deployment. Useful when your team is three people and a deadline.',
+                                         'Ich kann ein KI-Produkt End-to-End entwerfen, implementieren und launchen — Voice, Bildgenerierung (ComfyUI, Stable Diffusion), UI, Copy, Deployment. Nützlich, wenn Ihr Team drei Leute und eine Deadline ist.'],
+
+  // PROJECTS section header
+  ['#projects .eyebrow',     '§ IV — Work · Selected',         '§ IV — Projekte · Auswahl'],
+  ['#projects .section-title', 'Seven systems.<br>Shipped <em>solo</em>. All live.',
+                                'Sieben Systeme.<br><em>Solo</em> geliefert. Alle live.'],
+  ['#projects .section-sub', 'Every project below runs on infrastructure I own and operate. This is what "ships fast" looks like in practice — not side projects, real production.',
+                              'Jedes Projekt läuft auf Infrastruktur, die ich besitze und betreibe. So sieht „schnell liefern" in der Praxis aus — keine Sideprojects, echte Produktion.'],
+
+  // Project taglines + descriptions
+  ['.proj:nth-of-type(1) .tagline', 'Edge voice pipeline · Whisper → LLM · sub-second latency.',
+                                     'Edge-Voice-Pipeline · Whisper → LLM · sub-Sekunden-Latenz.'],
+  ['.proj:nth-of-type(1) .desc',    'Serverless voice-to-insight pipeline on Cloudflare edge. User voice note → Whisper transcription → LLM summarization → rich Mini-App UI. Zero cold-start, global edge latency, zero secrets leaked to client.',
+                                     'Serverless Voice-to-Insight-Pipeline auf Cloudflare Edge. Sprachnotiz → Whisper-Transkription → LLM-Zusammenfassung → Mini-App-UI. Kein Cold-Start, globale Edge-Latenz, keine Secrets im Client.'],
+  ['.proj:nth-of-type(2) .tagline', 'n8n workflow · dual-AI failover · auto-escalation.',
+                                     'n8n-Workflow · Dual-KI-Failover · Auto-Eskalation.'],
+  ['.proj:nth-of-type(2) .desc',    'Production AI agent workflow for Telegram moderation. 15+ node n8n pipeline classifies every message with structured JSON outputs, routes to action, escalates sanctions. Dual-provider failover keeps it running when any LLM API fails.',
+                                     'Produktiver KI-Agent-Workflow für Telegram-Moderation. n8n-Pipeline mit 15+ Knoten klassifiziert jede Nachricht mit strukturiertem JSON, leitet weiter, eskaliert Sanktionen. Dual-Provider-Failover hält den Betrieb aufrecht, wenn eine LLM-API ausfällt.'],
+  ['.proj:nth-of-type(3) .tagline', 'Full SaaS · payments · conversational agent.',
+                                     'Komplette SaaS · Zahlungen · Konversations-Agent.'],
+  ['.proj:nth-of-type(3) .desc',    'End-to-end SaaS built solo: distributed serverless backend + auth + payments + referral program + AI failover. Real users, real revenue, real infrastructure — no team, no funding.',
+                                     'End-to-End SaaS, solo gebaut: verteiltes Serverless-Backend + Auth + Zahlungen + Referral-Programm + KI-Failover. Echte Nutzer, echter Umsatz, echte Infrastruktur — ohne Team, ohne Finanzierung.'],
+  ['.proj:nth-of-type(4) .tagline', 'Self-hosted · cookie auth · one-click install.',
+                                     'Selbst-gehostet · Cookie-Auth · Ein-Klick-Installation.'],
+  ['.proj:nth-of-type(4) .desc',    'Self-hosted secure clipboard solving a real daily problem: transferring text between servers and devices without USB or third-party services. Three persistent slots, 24h history, auto-rotation, Tailwind UI.',
+                                     'Selbst-gehostete sichere Zwischenablage, die ein reales Alltagsproblem löst: Text zwischen Servern und Geräten übertragen, ohne USB oder Drittanbieter. Drei persistente Slots, 24h-Verlauf, Auto-Rotation, Tailwind-UI.'],
+  ['.proj:nth-of-type(5) .tagline', 'Local AI infra · one-click installer · Android + Linux.',
+                                     'Lokale KI-Infra · Ein-Klick-Installer · Android + Linux.'],
+  ['.proj:nth-of-type(5) .desc',    'One-click installer for local AI infrastructure. Flask backend with Server-Sent Events streaming chat, real-time system monitoring, Docker-Compose ComfyUI stack with NVIDIA auto-config. Full bash automation.',
+                                     'Ein-Klick-Installer für lokale KI-Infrastruktur. Flask-Backend mit Server-Sent-Events-Chat-Streaming, Echtzeit-Monitoring, Docker-Compose-ComfyUI-Stack mit NVIDIA-Auto-Konfiguration. Komplette Bash-Automatisierung.'],
+  ['.proj:nth-of-type(6) .tagline', 'Android as offline AI server · zero cloud cost.',
+                                     'Android als Offline-KI-Server · null Cloud-Kosten.'],
+  ['.proj:nth-of-type(6) .desc',    'Local AI deployment product: complete offline AI stack on any Android phone — Whisper transcription + LLaMA/Gemma inference running on-device. Zero cloud cost, full privacy. Published OSS.',
+                                     'Lokales KI-Deployment-Produkt: kompletter Offline-KI-Stack auf jedem Android-Telefon — Whisper-Transkription + LLaMA/Gemma-Inferenz auf dem Gerät. Null Cloud-Kosten, volle Privatsphäre. Als OSS veröffentlicht.'],
+
+  // Project meta dates
+  ['.proj:nth-of-type(1) .proj-meta .date:nth-of-type(2)', 'Flagship',       'Flaggschiff'],
+  ['.proj:nth-of-type(3) .proj-meta .date:nth-of-type(2)', 'Monetized SaaS', 'Monetarisierte SaaS'],
+  ['.proj:nth-of-type(5) .proj-meta .date:nth-of-type(2)', 'Open Source',    'Open Source'],
+  ['.proj:nth-of-type(6) .proj-meta .date:nth-of-type(2)', 'Open Source',    'Open Source'],
+
+  // CTAs
+  ['.proj:nth-of-type(1) .proj-cta', 'Read case study →',  'Fallstudie lesen →'],
+  ['.proj:nth-of-type(2) .proj-cta', 'Read case study →',  'Fallstudie lesen →'],
+  ['.proj:nth-of-type(3) .proj-cta', 'Read case study →',  'Fallstudie lesen →'],
+  ['.proj:nth-of-type(4) .proj-cta', 'Visit bushmark.cc →','bushmark.cc öffnen →'],
+  ['.proj:nth-of-type(5) .proj-cta', 'View on GitHub →',   'Auf GitHub ansehen →'],
+  ['.proj:nth-of-type(6) .proj-cta', 'View on GitHub →',   'Auf GitHub ansehen →'],
+
+  // Live badges
+  ['.proj:nth-of-type(1) .badge', 'Live', 'Live'],
+  ['.proj:nth-of-type(2) .badge', 'Live', 'Live'],
+  ['.proj:nth-of-type(3) .badge', 'Live', 'Live'],
+  ['.proj:nth-of-type(4) .badge', 'Live', 'Live'],
+  ['.proj:nth-of-type(5) .badge', 'Live', 'Live'],
+  ['.proj:nth-of-type(6) .badge', 'Live', 'Live'],
+
+  // GitHub explore button
+  ['#projects .btn-ghost', 'Explore all 19+ repos on GitHub <span class="arrow">→</span>',
+                            'Alle 19+ Repos auf GitHub ansehen <span class="arrow">→</span>'],
+
+  // Stack row titles
+  ['.stack-row:nth-child(1) .ttl', '<em style="font-style:italic">AI</em> · LLM · Agents',
+                                    '<em style="font-style:italic">KI</em> · LLM · Agenten'],
+  ['.stack-row:nth-child(2) .ttl', '<em style="font-style:italic">Automation</em> &amp; No-code',
+                                    '<em style="font-style:italic">Automatisierung</em> &amp; No-Code'],
+  ['.stack-row:nth-child(3) .ttl', '<em style="font-style:italic">Programming</em>',
+                                    '<em style="font-style:italic">Programmierung</em>'],
+  ['.stack-row:nth-child(4) .ttl', '<em style="font-style:italic">Cloud</em> &amp; Serverless',
+                                    '<em style="font-style:italic">Cloud</em> &amp; Serverless'],
+  ['.stack-row:nth-child(5) .ttl', '<em style="font-style:italic">Production</em> &amp; Ops',
+                                    '<em style="font-style:italic">Produktion</em> &amp; Ops'],
+  ['.stack-row:nth-child(6) .ttl', '<em style="font-style:italic">Security</em> &amp; Payments',
+                                    '<em style="font-style:italic">Sicherheit</em> &amp; Zahlungen'],
+
+  // Project stat labels (4 per project × 6 projects)
+  ['.proj:nth-of-type(1) .proj-stat:nth-child(1) .l', 'in production',  'in Produktion'],
+  ['.proj:nth-of-type(1) .proj-stat:nth-child(2) .l', 'cold start',     'Cold Start'],
+  ['.proj:nth-of-type(1) .proj-stat:nth-child(3) .l', 'webhook auth',   'Webhook-Auth'],
+  ['.proj:nth-of-type(1) .proj-stat:nth-child(4) .l', 'global',         'global'],
+  ['.proj:nth-of-type(2) .proj-stat:nth-child(1) .l', 'n8n nodes',      'n8n-Knoten'],
+  ['.proj:nth-of-type(2) .proj-stat:nth-child(2) .l', 'AI providers',   'KI-Provider'],
+  ['.proj:nth-of-type(2) .proj-stat:nth-child(3) .l', 'sanctions',      'Sanktionen'],
+  ['.proj:nth-of-type(2) .proj-stat:nth-child(4) .l', 'structured',     'strukturiert'],
+  ['.proj:nth-of-type(3) .proj-stat:nth-child(1) .l', 'protocol',       'Protokoll'],
+  ['.proj:nth-of-type(3) .proj-stat:nth-child(2) .l', 'payments',       'Zahlungen'],
+  ['.proj:nth-of-type(3) .proj-stat:nth-child(3) .l', 'credit ops',     'Credit-Ops'],
+  ['.proj:nth-of-type(3) .proj-stat:nth-child(4) .l', 'revenue',        'Umsatz'],
+  ['.proj:nth-of-type(4) .proj-stat:nth-child(1) .l', 'bash install',   'Bash-Installation'],
+  ['.proj:nth-of-type(4) .proj-stat:nth-child(2) .l', 'Ubuntu VPS',     'Ubuntu VPS'],
+  ['.proj:nth-of-type(4) .proj-stat:nth-child(3) .l', 'history',        'Verlauf'],
+  ['.proj:nth-of-type(4) .proj-stat:nth-child(4) .l', 'slots',          'Slots'],
+  ['.proj:nth-of-type(5) .proj-stat:nth-child(1) .l', 'streaming',      'Streaming'],
+  ['.proj:nth-of-type(5) .proj-stat:nth-child(2) .l', 'auto-detect',    'Auto-Erkennung'],
+  ['.proj:nth-of-type(5) .proj-stat:nth-child(3) .l', 'MIT',            'MIT'],
+  ['.proj:nth-of-type(5) .proj-stat:nth-child(4) .l', 'Linux + Android','Linux + Android'],
+  ['.proj:nth-of-type(6) .proj-stat:nth-child(1) .l', 'offline',        'offline'],
+  ['.proj:nth-of-type(6) .proj-stat:nth-child(2) .l', 'API cost',       'API-Kosten'],
+  ['.proj:nth-of-type(6) .proj-stat:nth-child(3) .l', 'mode',           'Modus'],
+  ['.proj:nth-of-type(6) .proj-stat:nth-child(4) .l', 'privacy',        'Privatsphäre'],
+
+  // STACK
+  ['#stack .eyebrow',     '§ V — Toolkit',                         '§ V — Werkzeuge'],
+  ['#stack .section-title', 'Full-stack AI automation,<br>top to <em>bottom</em>.',
+                            'Full-Stack KI-Automatisierung,<br>von oben bis <em>unten</em>.'],
+  ['#stack .section-sub', 'From edge serverless to local LLM on Android — every tool here I\'ve used in production.',
+                          'Von Edge-Serverless bis lokales LLM auf Android — jedes Werkzeug habe ich in Produktion eingesetzt.'],
+
+  // Languages section
+  ['.langs .lang:nth-child(1) .name', 'Russian',  'Russisch'],
+  ['.langs .lang:nth-child(1) .lvl',  'Native',   'Muttersprache'],
+  ['.langs .lang:nth-child(2) .name', 'Latvian',  'Lettisch'],
+  ['.langs .lang:nth-child(2) .lvl',  'C2 · Fluent', 'C2 · Fließend'],
+  ['.langs .lang:nth-child(3) .name', 'English',  'Englisch'],
+  ['.langs .lang:nth-child(3) .lvl',  'C1 · Business', 'C1 · Business'],
+  ['.langs .lang:nth-child(4) .name', 'German',   'Deutsch'],
+  ['.langs .lang:nth-child(4) .lvl',  'A2/B1 · Improving', 'A2/B1 · Im Aufbau'],
+
+  // CONTACT
+  ['.contact-eye',  '§ VI — Now hiring myself out',                  '§ VI — Verfügbar zur Einstellung'],
+  ['.contact-h',    'Let\'s turn your backlog<br>into <em>shipped software</em>.',
+                    'Verwandeln wir Ihr Backlog<br>in <em>ausgelieferte Software</em>.'],
+  ['.contact-lede', 'I\'m looking for AI Engineer or Founding Engineer roles at early-stage startups (Seed–Series C). I write production code, own features end-to-end, and ship fast. EU citizen, based in Germany, available immediately.',
+                    'Ich suche AI-Engineer- oder Founding-Engineer-Rollen bei jungen Startups (Seed–Series C). Ich schreibe Produktionscode, übernehme Features End-to-End und liefere schnell. EU-Bürger, in Deutschland, sofort verfügbar.'],
+  ['.contact-actions .btn-primary', 'Request an interview <span class="arrow">→</span>',
+                                     'Interview anfragen <span class="arrow">→</span>'],
+  ['.contact-actions .btn-ghost:nth-of-type(2)', 'See the code',     'Code ansehen'],
+  ['.contact-actions .btn-ghost:nth-of-type(3)', 'Download CV',      'Lebenslauf'],
+  ['.contact-cell:nth-child(1) .lbl', 'Email',    'E-Mail'],
+  ['.contact-cell:nth-child(2) .lbl', 'Phone',    'Telefon'],
+  ['.contact-cell:nth-child(3) .lbl', 'GitHub',   'GitHub'],
+  ['.contact-cell:nth-child(4) .lbl', 'Location', 'Standort'],
+
+  // Footer
+  ['footer div:nth-child(1)', '<span class="live">●</span> &nbsp;aleksbuss.dev — all systems operational',
+                              '<span class="live">●</span> &nbsp;aleksbuss.dev — alle Systeme betriebsbereit'],
+  ['footer div:nth-child(2)', '© Aleksejs Buss · 2026 · Set in Fraunces &amp; Geist',
+                              '© Aleksejs Buss · 2026 · Schriften: Fraunces &amp; Geist'],
+];
+
+let curLang = 'en';
+function applyLang(target) {
+  I18N.forEach(([sel, en, de]) => {
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = target === 'de' ? de : en;
+  });
+}
+document.getElementById('langBtn')?.addEventListener('click', e => {
+  curLang = curLang === 'en' ? 'de' : 'en';
+  e.currentTarget.textContent = curLang === 'en' ? 'EN / DE' : 'DE / EN';
+  e.currentTarget.classList.toggle('on', curLang === 'de');
+  applyLang(curLang);
+});
+
+// ─── Recruiter mode ───
+let rec = false;
+const btn = document.getElementById('modeBtn');
+const headline = document.querySelector('.hero-headline');
+const lede = document.querySelector('.hero-foot .lede');
+const headlineO = headline?.innerHTML;
+const ledeO = lede?.innerHTML;
+btn?.addEventListener('click', () => {
+  rec = !rec;
+  btn.classList.toggle('on', rec);
+  btn.textContent = rec ? 'Bold' : 'Recruiter';
+  if (headline) headline.innerHTML = rec
+    ? '<span class="ln"><span class="reveal-line in">Aleksejs Buss.</span></span><span class="ln"><span class="reveal-line in"><span class="amp">AI Engineer.</span></span></span>'
+    : headlineO;
+  if (lede) lede.innerHTML = rec
+    ? 'DEKRA-certified Frontend Developer with deep specialization in AI automation, LLM integration, and serverless architecture. <em>Seven independently deployed production systems</em> since July 2025. Available immediately.'
+    : ledeO;
+});
+
+// ─── TWEAKS ───
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#ff8b1f",
+  "showCursor": true,
+  "showAurora": true,
+  "showTicker": true
+}/*EDITMODE-END*/;
+let st = {...TWEAK_DEFAULTS};
+let panel = null;
+function apply(t) {
+  document.documentElement.style.setProperty('--accent', t.accent);
+  if (cdot && cring) {
+    cdot.style.display = t.showCursor ? 'block' : 'none';
+    cring.style.display = t.showCursor ? 'block' : 'none';
+    document.body.style.cursor = t.showCursor ? 'none' : 'auto';
+  }
+  document.querySelector('.aurora').style.display = t.showAurora ? 'block' : 'none';
+  document.querySelector('.ticker').style.display = t.showTicker ? 'block' : 'none';
+}
+function build() {
+  const p = document.createElement('div');
+  p.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9000;background:#0b0d12;color:#f5f3ed;border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:1.4rem;width:260px;font-family:Geist,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,0.5);display:none';
+  p.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+      <span style="font-family:Fraunces,serif;font-style:italic;font-size:1.1rem">Tweaks</span>
+      <button id="ct" style="background:none;border:none;color:#8a8576;cursor:pointer;font-size:1.3rem;line-height:1">×</button>
+    </div>
+    <label style="display:block;margin-bottom:0.9rem">
+      <span style="font-size:0.7rem;color:#8a8576;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.4rem">Accent</span>
+      <input type="color" id="ta" value="${st.accent}" style="width:100%;height:34px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;cursor:pointer">
+    </label>
+    <label style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;cursor:pointer">
+      <span style="font-size:0.85rem">Custom cursor</span>
+      <input type="checkbox" id="tc" ${st.showCursor?'checked':''}>
+    </label>
+    <label style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;cursor:pointer">
+      <span style="font-size:0.85rem">Aurora background</span>
+      <input type="checkbox" id="taa" ${st.showAurora?'checked':''}>
+    </label>
+    <label style="display:flex;justify-content:space-between;align-items:center;cursor:pointer">
+      <span style="font-size:0.85rem">Show ticker</span>
+      <input type="checkbox" id="tt" ${st.showTicker?'checked':''}>
+    </label>`;
+  document.body.appendChild(p);
+  p.querySelector('#ct').onclick = () => { p.style.display='none'; window.parent.postMessage({type:'__edit_mode_dismissed'},'*'); };
+  p.querySelector('#ta').oninput = e => { st.accent = e.target.value; apply(st); window.parent.postMessage({type:'__edit_mode_set_keys',edits:st},'*'); };
+  p.querySelector('#tc').onchange = e => { st.showCursor = e.target.checked; apply(st); window.parent.postMessage({type:'__edit_mode_set_keys',edits:st},'*'); };
+  p.querySelector('#taa').onchange = e => { st.showAurora = e.target.checked; apply(st); window.parent.postMessage({type:'__edit_mode_set_keys',edits:st},'*'); };
+  p.querySelector('#tt').onchange = e => { st.showTicker = e.target.checked; apply(st); window.parent.postMessage({type:'__edit_mode_set_keys',edits:st},'*'); };
+  return p;
+}
+window.addEventListener('message', e => {
+  if (e.data?.type === '__activate_edit_mode') { if (!panel) panel = build(); panel.style.display='block'; }
+  if (e.data?.type === '__deactivate_edit_mode') { if (panel) panel.style.display='none'; }
+});
+window.parent.postMessage({type:'__edit_mode_available'},'*');
+apply(st);
+</script>
+</body>
+</html>

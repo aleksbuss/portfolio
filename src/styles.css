@@ -1,0 +1,546 @@
+/* Additions on top of /portfolio.css — keep portfolio.css pristine. */
+
+/* ─── LIGHT THEME ─── */
+:root[data-theme="light"] {
+  --bg:        #f5f3ed;
+  --bg-2:      #efece4;
+  --bg-3:      #e6e2d5;
+  --panel:     rgba(255,255,255,0.78);
+  --rule:      rgba(0,0,0,0.08);
+  --rule-2:    rgba(0,0,0,0.16);
+  --rule-3:    rgba(0,0,0,0.28);
+  --ink:       #1a1814;
+  --ink-2:     #4a4639;
+  --ink-3:     #5a5547;
+  --ink-mute:  #a8a394;
+  --accent:    #d24a0e;
+  --accent-2:  #ff8a4a;
+  --signal:    #2e8b57;
+  --plasma:    #2a5cd9;
+  --warn:      #b88500;
+}
+
+:root[data-theme="light"] .grain {
+  mix-blend-mode: multiply;
+  opacity: 0.18;
+}
+:root[data-theme="light"] .scan { opacity: 0.04; }
+:root[data-theme="light"] .aurora .blob { mix-blend-mode: multiply; opacity: 0.18; }
+
+:root[data-theme="light"] .grid-bg {
+  background-image: radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px);
+}
+
+/* ─── LIGHT THEME · GLASS SURFACES ───
+   portfolio.css hardcodes near-black backgrounds for the top bar, command
+   dock, and command panel. In light theme that dropped a dark slab over
+   the cream page with dark text on it — illegible. Override the surfaces
+   here (portfolio.css stays pristine) using cream-tinted glass that keeps
+   the same backdrop-blur language but works on light bg. */
+:root[data-theme="light"] .sysbar {
+  background: rgba(245,243,237,0.78);
+  border-bottom-color: var(--rule-2);
+  color: var(--ink);
+}
+:root[data-theme="light"] .sysbar .runtime,
+:root[data-theme="light"] .sysbar .runtime .field .k { color: var(--ink-3); }
+:root[data-theme="light"] .sysbar .runtime .field .v { color: var(--ink); }
+:root[data-theme="light"] .sysbtn { border-color: var(--rule-2); }
+:root[data-theme="light"] .sysbtn:hover { background: rgba(0,0,0,0.04); }
+
+:root[data-theme="light"] .cmd-dock {
+  background: rgba(255,255,255,0.78);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04) inset;
+}
+:root[data-theme="light"] .cmd-dock .kbd { background: rgba(0,0,0,0.04); }
+:root[data-theme="light"] .cmd-panel {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+}
+
+/* Highlight surfaces that used rgba(255,255,255,0.0X) in dark — invert
+   to ink-tinted in light so the affordance stays visible on cream bg. */
+:root[data-theme="light"] .proj-body .arch,
+:root[data-theme="light"] .proj-stats,
+:root[data-theme="light"] .tag,
+:root[data-theme="light"] .stack-pill,
+:root[data-theme="light"] .case-arch { background: rgba(0,0,0,0.035); }
+:root[data-theme="light"] .tag.p,
+:root[data-theme="light"] .stack-pill.primary { background: rgba(0,0,0,0.06); }
+:root[data-theme="light"] .stack-pill:hover { background: rgba(210,74,14,0.08); }
+:root[data-theme="light"] .tl-row:hover { background: rgba(0,0,0,0.025); }
+:root[data-theme="light"] .metric:hover { background: rgba(210,74,14,0.05); }
+:root[data-theme="light"] .lang:hover { background: rgba(210,74,14,0.04); }
+:root[data-theme="light"] .proj-thumb {
+  background: linear-gradient(135deg, #e6e2d5, #f0ece2);
+}
+:root[data-theme="light"] .proj-thumb .live-overlay { background: rgba(255,255,255,0.7); }
+
+/* The scanline overlay uses white at 0.5 alpha — that adds blown-out
+   horizontal lines on cream. Suppress it in light. */
+:root[data-theme="light"] .scan { display: none; }
+
+/* ─── A11Y · FOCUS RING ───
+   Keyboard users need a visible focus indicator everywhere a sysbtn,
+   case-close, or proj CTA can be reached. Use the accent so it reads
+   in both themes; outline-offset prevents the ring from clipping
+   tight glyph buttons. (UI/UX Pro Max §1: focus-states.) */
+.sysbtn:focus-visible,
+.cmd-close:focus-visible,
+.case-close:focus-visible,
+.proj-cta:focus-visible,
+.case-cta:focus-visible,
+.stack-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+/* ─── HERO · LIVE WAVEFORM VIZ ───
+   Right column of the hero card on ≥1024px. Three.js renders into the
+   canvas; the SVG inside is a static fallback shown when Three.js is
+   skipped (coarse pointer / reduced-motion / no WebGL2). The transcript
+   below cycles through real-system snippets.
+
+   Theme registers (set by .hero-waveform.ts via CSS vars):
+     dark   = neon CRT — signal-green primary line, drop-shadow glow,
+              scanline overlay (inherits global .scan).
+     light  = blueprint — plasma-blue lines on cream, faint grid,
+              no glow, lower amplitude.
+*/
+.agent-card {
+  /* Phone/tablet: stack name above viz. Desktop: 2-col grid below. */
+  display: grid;
+  gap: 1.4rem 2.5rem;
+}
+@media (min-width: 1024px) {
+  .agent-card {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+.agent-card-main { min-width: 0; }
+
+.hero-viz {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+.hero-viz-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255,106,26,0.04) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.05));
+}
+.hero-viz-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  /* Bloom-equivalent without postprocessing bundle: drop-shadow on the
+     transparent canvas paints a soft halo around the lines. Cheap. */
+  filter: drop-shadow(0 0 14px rgba(111,224,159,0.55));
+}
+.hero-viz.viz-static .hero-viz-canvas { display: none; }
+.hero-viz-fallback {
+  position: absolute; inset: 8% 4%;
+  width: 92%; height: 84%;
+  color: var(--signal);
+  display: none;
+  pointer-events: none;
+}
+.hero-viz.viz-static .hero-viz-fallback { display: block; }
+
+/* Frame corner ticks — terminal-aesthetic registration marks. */
+.hero-viz-corner {
+  position: absolute; width: 14px; height: 14px;
+  border-color: var(--rule-2);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+}
+.hero-viz-corner.tl { top: 8px;    left: 8px;    border-top-width: 1px; border-left-width: 1px; }
+.hero-viz-corner.tr { top: 8px;    right: 8px;   border-top-width: 1px; border-right-width: 1px; }
+.hero-viz-corner.bl { bottom: 8px; left: 8px;    border-bottom-width: 1px; border-left-width: 1px; }
+.hero-viz-corner.br { bottom: 8px; right: 8px;   border-bottom-width: 1px; border-right-width: 1px; }
+
+.hero-viz-label {
+  position: absolute; top: 12px; left: 14px;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  z-index: 2;
+  pointer-events: none;
+}
+.hero-viz-label .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgba(111,224,159,0.18), 0 0 10px var(--signal);
+  animation: ping 2s infinite;
+}
+
+.hero-viz-transcript {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  letter-spacing: 0.01em;
+  min-height: 2.6em;
+  padding: 0.55rem 0.7rem;
+  border-left: 2px solid var(--accent);
+  background: linear-gradient(90deg, rgba(255,106,26,0.05), transparent 60%);
+  transition: opacity 280ms ease-out;
+  word-break: break-word;
+}
+.hero-viz-transcript.vt-fade { opacity: 0.25; }
+.hero-viz-transcript .vt-meta {
+  color: var(--accent);
+  margin-right: 0.5em;
+  font-weight: 500;
+}
+.hero-viz-transcript .vt-text { color: var(--ink); }
+.hero-viz-transcript .vt-caret {
+  display: inline-block;
+  width: 0.55em;
+  margin-left: 0.05em;
+  color: var(--signal);
+  animation: caret 0.95s steps(2) infinite;
+}
+
+/* Scanline overlay isolated to the viz frame — gives the CRT vibe even
+   when the global .scan is suppressed (e.g. light theme below). */
+.hero-viz-frame::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(255,255,255,0.025) 2px,
+    rgba(255,255,255,0.025) 3px
+  );
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* ─── LIGHT THEME · BLUEPRINT VARIANT ─── */
+:root[data-theme="light"] .hero-viz-frame {
+  background:
+    linear-gradient(180deg, rgba(42,92,217,0.04), transparent 70%),
+    linear-gradient(0deg, rgba(255,255,255,0.6), rgba(255,255,255,0.6));
+  border-color: var(--rule-2);
+}
+:root[data-theme="light"] .hero-viz-frame::after {
+  /* Blueprint grid replaces CRT scanlines. */
+  background-image:
+    linear-gradient(rgba(42,92,217,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42,92,217,0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mix-blend-mode: multiply;
+}
+:root[data-theme="light"] .hero-viz-canvas {
+  /* No neon halo on blueprint — it would look fake on cream. */
+  filter: none;
+}
+:root[data-theme="light"] .hero-viz-fallback { color: var(--plasma); }
+:root[data-theme="light"] .hero-viz-label .dot {
+  background: var(--signal);
+  box-shadow: 0 0 0 3px rgba(46,139,87,0.15), 0 0 6px rgba(46,139,87,0.6);
+}
+:root[data-theme="light"] .hero-viz-transcript {
+  background: linear-gradient(90deg, rgba(42,92,217,0.05), transparent 60%);
+  border-left-color: var(--plasma);
+}
+:root[data-theme="light"] .hero-viz-transcript .vt-meta { color: var(--plasma); }
+:root[data-theme="light"] .hero-viz-transcript .vt-caret { color: var(--plasma); }
+
+/* ─── REDUCED MOTION · transcript freeze ─── */
+@media (prefers-reduced-motion: reduce) {
+  .hero-viz-transcript .vt-caret { animation: none; }
+}
+
+/* ─── SYSBAR EXTRAS ─── */
+.sysbtn { white-space: nowrap; }
+.sysbtn .lbl { display: inline-block; }
+#themeBtn { min-width: 5.6rem; }
+#langBtn { min-width: 4.2rem; }
+@media (max-width: 520px) {
+  /* Compact min-widths on small phones so HIRE never gets squeezed. */
+  #themeBtn { min-width: 0; }
+  #langBtn  { min-width: 0; }
+}
+
+/* ─── CMD-DOCK CLOSE BUTTON ─── */
+.cmd-close {
+  display: none;
+  font-family: var(--mono);
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0.35rem 0.55rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rule-2);
+  border-radius: 5px;
+  color: var(--ink-2);
+  cursor: none;
+  transition: all 0.18s;
+}
+.cmd-close:hover { color: var(--accent); border-color: var(--accent); }
+.cmd-dock.open .cmd-close { display: inline-flex; align-items: center; justify-content: center; }
+.cmd-dock.open .placeholder { display: none; }
+
+/* ─── CASE STUDY MODAL ─── */
+#caseModal {
+  border: 1px solid var(--rule-2);
+  background: linear-gradient(180deg, var(--bg-2), var(--bg-3));
+  color: var(--ink);
+  border-radius: 18px;
+  width: min(720px, calc(100vw - 2rem));
+  max-width: 100vw;
+  max-height: 86vh;
+  padding: 0;
+  margin: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+  overflow: hidden;
+  view-transition-name: case-modal;
+}
+#caseModal::backdrop {
+  background: rgba(5,6,10,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+#caseModal[open] {
+  animation: caseIn 0.45s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes caseIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#caseModal > * { padding-left: 2rem; padding-right: 2rem; }
+
+.case-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.1rem;
+  width: 36px;
+  height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  line-height: 1;
+  background: rgba(255,255,255,0.04);
+  color: var(--ink-2);
+  border: 1px solid var(--rule-2);
+  border-radius: 8px;
+  cursor: none;
+  z-index: 2;
+  transition: all 0.2s;
+}
+.case-close:hover { color: var(--accent); border-color: var(--accent); }
+
+.case-head {
+  padding-top: 2.4rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 1px solid var(--rule);
+  background: linear-gradient(180deg, rgba(255,106,26,0.06), transparent);
+}
+.case-num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--accent);
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  line-height: 1;
+}
+.case-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.case-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: var(--ink-2);
+}
+.case-section {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.case-section:last-of-type { border-bottom: none; }
+.case-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+.case-section p {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+}
+.case-arch {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--rule);
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.case-highlights {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.case-highlights li {
+  padding: 0.5rem 0 0.5rem 1.4rem;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  border-bottom: 1px dashed var(--rule);
+}
+.case-highlights li:last-child { border-bottom: none; }
+.case-highlights li::before {
+  content: '↳';
+  color: var(--accent);
+  position: absolute;
+  left: 0; top: 0.5rem;
+}
+.case-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.case-cta {
+  display: inline-flex;
+  margin: 1.5rem 0 2rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-decoration: none;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.2s;
+}
+.case-cta:hover { gap: 1rem; }
+
+/* ─── GITHUB LIVE TAG ─── */
+.gh-live {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-3);
+}
+.gh-stars { color: var(--accent); }
+
+/* ─── TOUCH TARGET FLOOR (UI/UX Pro Max §2 touch-target-size) ───
+   On a coarse pointer (phones, tablets, accessibility devices) every
+   tappable control needs ≥44pt — the terminal-chrome buttons in the top
+   bar were ~28px tall, below floor. Bump only on coarse pointer so
+   desktop keeps its compact terminal aesthetic. */
+@media (pointer: coarse) {
+  .sysbtn,
+  .cmd-close,
+  .case-close,
+  .stack-pill,
+  .tag {
+    min-height: 44px;
+  }
+  .sysbtn { padding: 0.65rem 0.7rem; }
+  .stack-pill, .tag { display: inline-flex; align-items: center; }
+  /* Keyboard hint chips ([T], [L]) waste horizontal space on devices
+     that have no keyboard — hide them so the four sysbar buttons fit
+     across iPhone widths after the touch-target bump. The `aria-label`
+     on themeBtn/langBtn still carries meaning for screen readers. */
+  .sysbtn .kbd { display: none; }
+}
+
+/* On small phones the four sysbar buttons + brand still overflow even
+   after compacting. CONTACT is redundant (the #contact section is one
+   scroll away); the brand version chip is decorative — drop both at
+   ≤520px so HIRE (the primary CTA) stays in the viewport. */
+@media (max-width: 520px) {
+  .sysbar a[data-key="contact"] { display: none; }
+  .sysbar .brand-mono .ver { display: none; }
+}
+
+/* ─── CURSOR · ACCESSIBILITY GUARDS ───
+   portfolio.css sets `body { cursor: none }` so the custom dot/ring can
+   stand in for the OS pointer. That works on a fine-pointer desktop with
+   normal motion, but for users who request reduced motion it's a hostile
+   default — the smoothed ring still tracks them and there's no system
+   cursor fallback. Restore the OS cursor for that group, and always show
+   a text caret on form fields regardless of theme. */
+@media (prefers-reduced-motion: reduce) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+input, textarea, [contenteditable] { cursor: text; }
+
+/* ─── COMMAND DOCK · MOTION REFINEMENT ───
+   The dock animates `width` over 400ms — width triggers layout each
+   frame. Drop the duration to 280ms (still feels deliberate) and disable
+   for reduced-motion users so the open/close is instant for them. */
+.cmd-dock {
+  transition: width 0.28s cubic-bezier(0.7,0,0.3,1), bottom 0.3s, opacity 0.3s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmd-dock { transition: none; }
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  .aurora .blob,
+  .grain,
+  .scan,
+  .ticker-track,
+  .reveal,
+  .reveal-stagger > * {
+    animation: none !important;
+    transform: none !important;
+  }
+  .reveal, .reveal-stagger > * { opacity: 1 !important; }
+  .grain { display: none; }
+  .ticker-track { animation: none !important; }
+  .boot-line { opacity: 1 !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* ─── WILL-CHANGE HINTS for hot paths ───
+   `will-change` promotes the element to its own compositing layer — that
+   pays off only when the element actually animates. Gate it on the same
+   media queries motion.ts uses to decide whether to drive transforms,
+   so reduced-motion / coarse-pointer users don't pay the GPU memory
+   cost for layers that will never repaint. */
+@media (prefers-reduced-motion: no-preference) and (pointer: fine) {
+  .aurora .blob { will-change: transform; }
+  .grid-bg { will-change: transform; }
+  .cursor-dot, .cursor-ring { will-change: transform; }
+}
+.hero-name .typed-name { will-change: contents; }

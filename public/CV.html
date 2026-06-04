@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleksejs Buss — CV · AI Engineer</title>
+<meta name="description" content="Curriculum Vitae — Aleksejs Buss. AI Engineer. Hof / Saale, DE. EU citizen. Available immediately.">
+<meta name="author" content="Aleksejs Buss">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://aleksbuss.dev/CV.html">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Aleksejs Buss",
+  "jobTitle": "AI Engineer",
+  "url": "https://aleksbuss.dev/CV.html",
+  "email": "mailto:aleksbuss@gmail.com",
+  "telephone": "+4917673503486",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Hof",
+    "addressRegion": "Bavaria",
+    "addressCountry": "DE"
+  },
+  "sameAs": ["https://github.com/aleksbuss"],
+  "knowsLanguage": ["ru", "lv", "en", "de"]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:        #05060a;
+  --bg-2:      #0a0c12;
+  --rule:      rgba(255,255,255,0.10);
+  --rule-2:    rgba(255,255,255,0.18);
+  --ink:       #f3efe5;
+  --ink-2:     #c4bfb1;
+  --ink-3:     #837e6f;
+  --ink-mute:  #4a4639;
+  --accent:    #ff6a1a;
+  --signal:    #6fe09f;
+
+  --serif: 'Fraunces', 'Times New Roman', serif;
+  --sans:  'Geist', system-ui, -apple-system, sans-serif;
+  --mono:  'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+
+  --maxw: 920px;
+  --gut:  clamp(1.25rem, 4vw, 2.4rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
+  line-height: 1.55;
+}
+::selection { background: var(--accent); color: var(--bg); }
+a { color: inherit; text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--accent); }
+
+main {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 4rem) var(--gut);
+}
+
+/* ─── HEADER ─── */
+.cv-mark {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: var(--mono); font-size: 0.72rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 2rem;
+}
+.cv-mark .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0 4px rgba(111,224,159,0.12), 0 0 14px var(--signal);
+}
+.cv-mark .sep { color: var(--ink-mute); }
+.cv-mark .ref { color: var(--accent); }
+
+header.cv-head {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2.5rem;
+  align-items: end;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
+}
+header.cv-head h1 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+header.cv-head h1 .it {
+  font-style: italic;
+  color: var(--accent);
+  display: block;
+}
+.cv-role {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 0.8rem;
+  display: block;
+}
+.cv-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.15rem;
+  color: var(--ink-2);
+  margin-top: 1rem;
+  letter-spacing: -0.005em;
+}
+.cv-contact {
+  display: flex; flex-direction: column;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+.cv-contact .row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.cv-contact .lbl {
+  color: var(--ink-3);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.cv-contact .val { color: var(--ink); }
+.cv-contact a.val { border-bottom: 1px dashed var(--rule-2); }
+
+/* ─── SECTIONS ─── */
+section.cv-section {
+  margin-bottom: 3.2rem;
+  break-inside: avoid;
+}
+.sect-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.2rem;
+  align-items: baseline;
+  margin-bottom: 1.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--rule);
+}
+.sect-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.sect-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.sect-title em { font-style: italic; color: var(--accent); }
+
+/* ─── SUMMARY ─── */
+.summary {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--ink-2);
+  max-width: 60ch;
+  letter-spacing: -0.005em;
+}
+.summary em { color: var(--accent); font-style: italic; }
+.summary strong { color: var(--ink); font-weight: 500; }
+
+/* ─── PROJECTS ─── */
+.proj-list { display: flex; flex-direction: column; }
+.proj-item {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1.5rem;
+  padding: 1.4rem 0;
+  border-bottom: 1px dashed var(--rule);
+  break-inside: avoid;
+}
+.proj-item:last-child { border-bottom: none; }
+.proj-when {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+}
+.proj-when .role-tag {
+  display: block;
+  color: var(--ink-3);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+.proj-body h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.18rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.proj-body h3 .it { font-style: italic; color: var(--accent); font-weight: 300; }
+.proj-body .pjtag {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-2);
+  margin-bottom: 0.6rem;
+}
+.proj-body .pjdesc {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  margin-bottom: 0.6rem;
+  max-width: 60ch;
+}
+.proj-body .pjarch {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-3);
+  line-height: 1.6;
+  margin-bottom: 0.6rem;
+}
+.proj-body .pjarch .arr { color: var(--accent); margin: 0 0.25em; }
+.proj-body .pjarch .k { color: var(--ink); }
+.proj-body .pjlinks {
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem;
+  font-family: var(--mono); font-size: 0.74rem;
+  color: var(--ink-3);
+}
+.proj-body .pjlinks a { color: var(--accent); border-bottom: 1px dashed var(--rule-2); }
+
+/* ─── EXPERIENCE ─── */
+.exp-list { display: flex; flex-direction: column; }
+.exp-row {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px dashed var(--rule);
+  break-inside: avoid;
+}
+.exp-row:last-child { border-bottom: none; }
+.exp-when {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+}
+.exp-body h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.exp-body .where {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.exp-body p {
+  font-size: 0.93rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+.exp-body ul {
+  list-style: none;
+  margin-top: 0.4rem;
+}
+.exp-body ul li {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+.exp-body ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* ─── STACK ─── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.6rem 1.5rem;
+  align-items: baseline;
+}
+.stack-grid dt {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  padding: 0.4rem 0;
+}
+.stack-grid dd {
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  color: var(--ink-2);
+  line-height: 1.65;
+  padding: 0.4rem 0;
+  border-bottom: 1px dashed var(--rule);
+}
+.stack-grid dd:last-of-type { border-bottom: none; }
+
+/* ─── EDUCATION + LANGUAGES (side by side) ─── */
+.edu-langs {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2.5rem;
+}
+.edu-block h3, .lang-block h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+}
+.edu-block .when {
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.edu-block p {
+  font-size: 0.92rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+  max-width: 50ch;
+}
+.cert-line {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--rule);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  line-height: 1.55;
+}
+.cert-line .id { color: var(--accent); }
+
+.lang-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.lang-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 0.7rem;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+.lang-row .lname { color: var(--ink); }
+.lang-row .bar {
+  height: 2px;
+  background: var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.lang-row .bar::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: var(--w, 0%);
+  background: linear-gradient(90deg, var(--accent), #ffb878);
+}
+.lang-row .lvl { color: var(--ink-3); font-size: 0.74rem; }
+
+/* ─── FOOTER ─── */
+footer.cv-foot {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+}
+footer.cv-foot .live { color: var(--signal); }
+.print-cta {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--rule-2);
+  background: transparent;
+  color: var(--ink-2);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.print-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 720px) {
+  header.cv-head { grid-template-columns: 1fr; gap: 1.5rem; }
+  .proj-item, .exp-row { grid-template-columns: 1fr; gap: 0.4rem; }
+  .stack-grid { grid-template-columns: 1fr; gap: 0.2rem; }
+  .stack-grid dt { padding-bottom: 0; }
+  .stack-grid dd { padding-top: 0.2rem; padding-bottom: 0.8rem; }
+  .edu-langs { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ─── PRINT (A4, light theme) ─── */
+@media print {
+  :root {
+    --bg:    #ffffff;
+    --bg-2:  #ffffff;
+    --rule:  rgba(0,0,0,0.12);
+    --rule-2:rgba(0,0,0,0.20);
+    --ink:   #0a0c10;
+    --ink-2: #2a2820;
+    --ink-3: #5a5648;
+    --ink-mute: #888270;
+    --accent: #c63d00;
+    --signal: #2e8b57;
+  }
+  @page { size: A4; margin: 18mm 14mm; }
+  body { background: #fff; color: #000; }
+  main { padding: 0; max-width: 100%; }
+  .print-cta, .cv-mark .dot { display: none; }
+  a { color: var(--accent); border-bottom: none !important; }
+  header.cv-head { margin-bottom: 1.6rem; padding-bottom: 1.2rem; }
+  section.cv-section { margin-bottom: 1.4rem; }
+  .proj-item, .exp-row { padding: 0.6rem 0; }
+  h1, h2, h3 { color: #000 !important; }
+  .summary, .proj-body p, .exp-body p, .exp-body ul li { color: #1a1814 !important; }
+  .lang-row .bar { background: rgba(0,0,0,0.1); }
+  .lang-row .bar::after { background: var(--accent); }
+}
+</style>
+</head>
+
+<body>
+<main itemscope itemtype="https://schema.org/Person">
+
+<div class="cv-mark">
+  <span class="dot" aria-hidden="true"></span>
+  <span>Curriculum Vitae</span>
+  <span class="sep">·</span>
+  <span class="ref">№ 2026 / CV-01</span>
+  <span class="sep">·</span>
+  <span>Updated April 2026</span>
+</div>
+
+<header class="cv-head">
+  <div>
+    <h1>
+      <span itemprop="givenName">Aleksejs</span>
+      <span class="it" itemprop="familyName">Buss</span>
+    </h1>
+    <span class="cv-role" itemprop="jobTitle">AI Engineer · Production Systems</span>
+    <p class="cv-tagline">
+      Production AI for early-stage teams.<br>
+      Seven live systems. Ten months. Solo.
+    </p>
+  </div>
+
+  <address class="cv-contact" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+    <div class="row">
+      <span class="lbl">Email</span>
+      <a class="val" href="mailto:aleksbuss@gmail.com" itemprop="email">aleksbuss@gmail.com</a>
+    </div>
+    <div class="row">
+      <span class="lbl">Phone</span>
+      <a class="val" href="tel:+4917673503486" itemprop="telephone">+49 176 73503486</a>
+    </div>
+    <div class="row">
+      <span class="lbl">GitHub</span>
+      <a class="val" href="https://github.com/aleksbuss" target="_blank" rel="noopener">github.com/aleksbuss</a>
+    </div>
+    <div class="row">
+      <span class="lbl">Web</span>
+      <a class="val" href="https://aleksbuss.dev" target="_blank" rel="noopener">aleksbuss.dev</a>
+    </div>
+    <div class="row">
+      <span class="lbl">Location</span>
+      <span class="val">
+        <span itemprop="addressLocality">Hof</span> /
+        <span itemprop="addressRegion">Saale</span>,
+        <span itemprop="addressCountry">DE</span> · EU citizen
+      </span>
+    </div>
+    <div class="row">
+      <span class="lbl">Status</span>
+      <span class="val" style="color:var(--signal)">Available immediately · remote or on-site</span>
+    </div>
+  </address>
+</header>
+
+<!-- ── SUMMARY ── -->
+<section class="cv-section">
+  <div class="sect-head">
+    <span class="sect-num">§ 01</span>
+    <h2 class="sect-title">Summary <em>— at a glance</em></h2>
+  </div>
+  <p class="summary">
+    AI engineer for early-stage teams — <em>features from spec to live infrastructure</em>,
+    end to end, no hand-holding. Self-taught after a 14-year logistics career and a DEKRA-certified
+    frontend retraining. Since mid-2025 I have shipped <strong>seven production systems</strong>
+    serving real users — Cloudflare Workers, n8n, FastAPI, Telegram Mini-Apps, multi-provider LLM
+    pipelines, payments, security. Founder-grade ownership at one headcount.
+  </p>
+</section>
+
+<!-- ── SELECTED WORK ── -->
+<section class="cv-section">
+  <div class="sect-head">
+    <span class="sect-num">§ 02</span>
+    <h2 class="sect-title">Selected work <em>— production systems</em></h2>
+  </div>
+  <div class="proj-list">
+
+    <article class="proj-item">
+      <div class="proj-when">
+        08/2025 — now
+        <span class="role-tag">Flagship</span>
+      </div>
+      <div class="proj-body">
+        <h3>AI Dictaphone <span class="it">v7.0</span></h3>
+        <p class="pjtag">Edge voice pipeline · Whisper → LLM · sub-second latency.</p>
+        <p class="pjdesc">Serverless voice-to-insight pipeline on Cloudflare edge. Voice note → Groq Whisper transcription → LLaMA 3.3 70B summarization → rich Mini-App UI. Zero cold-start, HMAC-verified webhooks, no persistent storage of voice content.</p>
+        <p class="pjarch"><span class="k">Telegram Mini-App</span><span class="arr">→</span>Cloudflare Workers<span class="arr">→</span><span class="k">Groq Whisper</span>+LLaMA 3.3 70B</p>
+        <div class="pjlinks">
+          <span>Stack: Cloudflare Workers · Groq Whisper-large-v3 · LLaMA 3.3 70B · JS ESM</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
+        09/2025 — now
+      </div>
+      <div class="proj-body">
+        <h3>AI Moderation <span class="it">Bot</span></h3>
+        <p class="pjtag">n8n workflow · dual-AI failover · auto-escalation.</p>
+        <p class="pjdesc">15+ node n8n pipeline classifies every Telegram message with structured JSON outputs, routes to action, escalates sanctions across three tiers. Dual-provider failover (Nemotron primary, GPT-4.1 fallback) keeps moderation alive when any single LLM API is down.</p>
+        <p class="pjarch">Message<span class="arr">→</span><span class="k">Nemotron</span><span class="arr">→</span>fallback <span class="k">GPT-4.1</span><span class="arr">→</span>Router<span class="arr">→</span>action</p>
+        <div class="pjlinks">
+          <span>Stack: n8n · OpenRouter · GPT-4.1-mini · Nemotron · Telegram Bot API</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
+        10/2025 — now
+        <span class="role-tag">Monetized SaaS</span>
+      </div>
+      <div class="proj-body">
+        <h3>Mystic Mini-App <span class="it">— AI Psychology Bot</span></h3>
+        <p class="pjtag">Full SaaS · payments · multi-persona conversational agent.</p>
+        <p class="pjdesc">End-to-end SaaS solo: HMAC-SHA256 auth → distributed Apps Script backend → Firebase Realtime DB → Gemini 2.5 + TTS pipeline. Telegram Stars for native checkout, atomic credit operations, referral program, multi-persona system (Numerology, Dream Interpreter, Runes).</p>
+        <p class="pjarch"><span class="k">Mini-App</span><span class="arr">→</span>HMAC-SHA256<span class="arr">→</span>Apps Script<span class="arr">→</span>Firebase<span class="arr">→</span><span class="k">Gemini</span>+TTS</p>
+        <div class="pjlinks">
+          <span>Stack: Gemini 2.5 · Telegram Stars · Firebase RTDB · Apps Script · HMAC-SHA256</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
+        10/2025 — now
+        <span class="role-tag">bushmark.cc</span>
+      </div>
+      <div class="proj-body">
+        <h3>Bushmark — <span class="it">Secure Clipboard</span></h3>
+        <p class="pjtag">Self-hosted · cookie auth · one-click install.</p>
+        <p class="pjdesc">Self-hosted secure clipboard at bushmark.cc — three persistent slots, 24h history, auto-rotation, Tailwind UI. One-line bash install on any Ubuntu VPS handles Nginx + FastAPI + systemd setup automatically.</p>
+        <p class="pjarch">Browser<span class="arr">→</span><span class="k">Nginx</span> reverse proxy<span class="arr">→</span><span class="k">FastAPI</span> (systemd)</p>
+        <div class="pjlinks">
+          <a href="https://bushmark.cc" target="_blank" rel="noopener">bushmark.cc →</a>
+          <span>Stack: FastAPI · Nginx · systemd · Tailwind · Ubuntu 24.04</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
+        07/2025 — now
+        <span class="role-tag">Open Source</span>
+      </div>
+      <div class="proj-body">
+        <h3>CyberDed Ultra <span class="it">+ ComfyUI</span></h3>
+        <p class="pjtag">Local AI infra · one-click installer · Android + Linux.</p>
+        <p class="pjdesc">Bash installer for the entire local-AI stack: Ollama for inference, ComfyUI for image generation, NVIDIA Container Toolkit auto-config, Flask backend with Server-Sent Events streaming chat, real-time monitoring. Two OS targets — Linux + Termux Android.</p>
+        <p class="pjarch">Bash installer<span class="arr">→</span><span class="k">Ollama</span>+<span class="k">ComfyUI</span> Docker<span class="arr">→</span>Flask SSE</p>
+        <div class="pjlinks">
+          <a href="https://github.com/aleksbuss" target="_blank" rel="noopener">github.com/aleksbuss →</a>
+          <span>Stack: Docker · Ollama · Flask · ComfyUI · NVIDIA Container Toolkit</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
+        11/2025 — now
+        <span class="role-tag">Open Source</span>
+      </div>
+      <div class="proj-body">
+        <h3>Termux <span class="it">AI Dictaphone</span></h3>
+        <p class="pjtag">Android as offline AI server · zero cloud cost.</p>
+        <p class="pjdesc">Complete offline AI on any modern Android: Whisper transcription via faster-whisper / whisper.cpp, LLaMA / Gemma inference via Ollama, all on-device through Termux. Zero API cost, full privacy. Published OSS.</p>
+        <p class="pjarch">Termux (Android)<span class="arr">→</span><span class="k">faster-whisper</span><span class="arr">→</span><span class="k">Ollama</span> (LLaMA, Gemma)</p>
+        <div class="pjlinks">
+          <a href="https://github.com/aleksbuss" target="_blank" rel="noopener">github.com/aleksbuss →</a>
+          <span>Stack: Termux · faster-whisper · whisper.cpp · Ollama · Python</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ── -->
+<section class="cv-section">
+  <div class="sect-head">
+    <span class="sect-num">§ 03</span>
+    <h2 class="sect-title">Experience <em>— the route</em></h2>
+  </div>
+
+  <div class="exp-list">
+
+    <article class="exp-row">
+      <div class="exp-when">07/2025 — now</div>
+      <div class="exp-body">
+        <h3>AI Engineer · Solo Production</h3>
+        <div class="where">Independent · Hof / Saale, DE</div>
+        <ul>
+          <li>Designed, deployed, and operate seven production AI systems end-to-end — own architecture, own code, own infrastructure.</li>
+          <li>Multi-provider LLM pipelines (OpenAI, Gemini, Groq, Ollama) with failover; structured outputs; voice + vision flows.</li>
+          <li>Edge serverless on Cloudflare Workers; Telegram Mini-App + Bot integration with HMAC-SHA256 webhook verification.</li>
+          <li>Self-hosted infra: Ubuntu VPS, Nginx, systemd, Docker, Tailscale, NVIDIA Container Toolkit.</li>
+          <li>Monetization: Telegram Stars payments, atomic credit ops, referral logic, anti-fraud heuristics.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="exp-row">
+      <div class="exp-when">2023 — 2025</div>
+      <div class="exp-body">
+        <h3>Self-directed study · AI &amp; Automation</h3>
+        <div class="where">Independent</div>
+        <ul>
+          <li>n8n agent workflows; prompt engineering; structured outputs; chain-of-thought architectures.</li>
+          <li>Local LLM deployment (Ollama, llama.cpp, faster-whisper); Docker Compose; SSE streaming.</li>
+          <li>Cloudflare Workers, Apps Script, Firebase, FastAPI, systemd, edge-first architectures.</li>
+          <li>Worked logistics part-time to fund deep evening / weekend study.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="exp-row">
+      <div class="exp-when">10/2022 — 10/2023</div>
+      <div class="exp-body">
+        <h3>Frontend Developer (retraining)</h3>
+        <div class="where">Tel-Ran Berlin · 960h · DEKRA-certified</div>
+        <ul>
+          <li>JavaScript Advanced (ESM, async, prototypes); React fundamentals; DSA; HTML5/CSS3.</li>
+          <li>DevOps essentials (Git/GitHub, CI fundamentals, Docker basics); QA; UI/UX foundations.</li>
+          <li>Career switch from logistics into software engineering.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="exp-row">
+      <div class="exp-when">2008 — 2022</div>
+      <div class="exp-body">
+        <h3>Logistics &amp; Long-Haul Freight</h3>
+        <div class="where">Tesco Carlisle (UK) · multinational freight, UK &amp; Europe</div>
+        <ul>
+          <li>14 years operating in multicultural teams across UK, DE, NL, FR, BE.</li>
+          <li>Warehouse management systems (WMS), planograms, route planning, just-in-time delivery.</li>
+          <li>Process discipline and resilience under deadline pressure — the skill that transfers.</li>
+        </ul>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ── STACK ── -->
+<section class="cv-section">
+  <div class="sect-head">
+    <span class="sect-num">§ 04</span>
+    <h2 class="sect-title">Stack <em>— used in production</em></h2>
+  </div>
+
+  <dl class="stack-grid">
+    <dt>AI / LLM</dt>
+    <dd>OpenAI GPT-4 / 4.1 / TTS · Google Gemini 2.5 · Groq Whisper-large-v3 · Ollama (LLaMA, Gemma) · faster-whisper · whisper.cpp · OpenRouter · Nemotron · multi-provider failover · structured outputs · prompt engineering · RAG-ready patterns</dd>
+
+    <dt>Automation</dt>
+    <dd>n8n · workflows · agents · code nodes (JS/Python) · webhook routing · error handling &amp; retries · chain-of-thought architecture · multi-protocol agents</dd>
+
+    <dt>Languages</dt>
+    <dd>JavaScript (ESM, async) · TypeScript · Python (FastAPI, Flask) · Bash · HTML5 · CSS3 · SQL · React (foundations) · streaming APIs (SSE)</dd>
+
+    <dt>Cloud / Edge</dt>
+    <dd>Cloudflare Workers · Wrangler · Google Apps Script · Firebase Realtime DB · GitHub Pages · Supabase / PostgreSQL</dd>
+
+    <dt>Operations</dt>
+    <dd>Docker / Compose · Nginx (reverse proxy, TLS) · Ubuntu VPS · systemd (services, timers) · health checks · auto-restart · log rotation · NVIDIA Container Toolkit · Tailscale</dd>
+
+    <dt>Security</dt>
+    <dd>HMAC-SHA256 · JWT · Telegram Bot API · Telegram Mini-Apps SDK · Telegram Stars payments · CSP · CORS · webhook verification · rate limiting · secret management · anti-fraud logic</dd>
+
+    <dt>Tooling</dt>
+    <dd>Git / GitHub · Vite · Vitest · Playwright · ESLint · Wrangler · macOS / Linux daily driver</dd>
+  </dl>
+</section>
+
+<!-- ── EDUCATION + LANGUAGES ── -->
+<section class="cv-section">
+  <div class="sect-head">
+    <span class="sect-num">§ 05</span>
+    <h2 class="sect-title">Education &amp; <em>languages</em></h2>
+  </div>
+
+  <div class="edu-langs">
+    <div class="edu-block">
+      <h3>Frontend Developer</h3>
+      <div class="when">10/2022 — 10/2023 · 960 hours</div>
+      <p>Tel-Ran Berlin · DEKRA-certified vocational programme. JavaScript Advanced, React, DSA, DevOps, QA, UI/UX, HTML5/CSS3.</p>
+
+      <div class="cert-line">
+        <strong>Certification:</strong> DEKRA <span class="id">№ 2023337</span><br>
+        <strong>Issued:</strong> Berlin, Germany — 2023
+      </div>
+    </div>
+
+    <div class="lang-block">
+      <h3>Languages</h3>
+      <div class="lang-list">
+        <div class="lang-row" style="--w:100%">
+          <span class="lname">Russian</span>
+          <span class="bar"></span>
+          <span class="lvl">Native</span>
+        </div>
+        <div class="lang-row" style="--w:98%">
+          <span class="lname">Latvian</span>
+          <span class="bar"></span>
+          <span class="lvl">C2 · Fluent</span>
+        </div>
+        <div class="lang-row" style="--w:82%">
+          <span class="lname">English</span>
+          <span class="bar"></span>
+          <span class="lvl">C1 · Business</span>
+        </div>
+        <div class="lang-row" style="--w:45%">
+          <span class="lname">Deutsch</span>
+          <span class="bar"></span>
+          <span class="lvl">A2/B1 · Improving</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="cv-foot">
+  <div>
+    <span class="live">●</span>&nbsp; aleksbuss.dev — all systems operational
+  </div>
+  <button type="button" class="print-cta" onclick="window.print()">Print / Save as PDF ↓</button>
+  <div>© Aleksejs Buss · 2026</div>
+</footer>
+
+</main>
+</body>
+</html>
