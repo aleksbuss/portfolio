@@ -22,7 +22,3 @@ blob-report/
 # OS / editor
 .DS_Store
 *.log
-
-# Temporary: token lacks `workflow` scope, so the CI workflow can't be pushed
-# yet. Remove this line after `gh auth refresh -s workflow`, then commit the file.
-.github/workflows/ci.yml
