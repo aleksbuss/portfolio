@@ -544,3 +544,47 @@ input, textarea, [contenteditable] { cursor: text; }
   .cursor-dot, .cursor-ring { will-change: transform; }
 }
 .hero-name .typed-name { will-change: contents; }
+
+/* ───────────────────────────────────────────────────────────
+   UI/UX audit pass — mobile polish (additions only; portfolio.css
+   stays pristine). Covers: dynamic viewport height, tap latency,
+   tap-highlight flash, and ≥44px touch targets on coarse pointers.
+   ─────────────────────────────────────────────────────────── */
+
+/* 1. Dynamic viewport height — 100vh on mobile includes the URL bar and
+   causes overflow / a jump when it hides. dvh tracks the real viewport.
+   100vh kept first as a fallback for engines without dvh. */
+body,
+#hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* 2. Kill the ~300ms tap delay on interactive elements (double-tap-zoom
+   is irrelevant here — the layout is already touch-sized). */
+a, button, input,
+.sysbtn, .btn, .cmd-sug, .proj-cta, .cmd-dock .send {
+  touch-action: manipulation;
+}
+
+/* 3. Remove the default grey tap flash; press feedback comes from our own
+   :active scale instead so taps still feel responsive. */
+* { -webkit-tap-highlight-color: transparent; }
+.btn:active,
+.sysbtn:active,
+.cmd-sug:active,
+.cmd-dock .send:active {
+  transform: scale(0.97);
+}
+
+/* 4. Touch targets ≥44px — only on coarse pointers, so the desktop layout
+   stays visually compact. Small utility controls were ~25-28px. */
+@media (pointer: coarse) {
+  .sysbtn,
+  .cmd-sug,
+  .cmd-dock .send {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
