@@ -85,7 +85,7 @@ const STUDIES: Record<string, CaseStudy> = {
     highlights: [
       'SSE streaming chat (real-time tokens, no polling)',
       'GPU auto-detection (NVIDIA / AMD / CPU fallback)',
-      'MIT-licensed open source',
+      'Real-time system monitoring (CPU / GPU / RAM)',
       'Two OS targets: Ubuntu Linux + Termux Android',
     ],
     stack: ['Docker', 'Ollama', 'Flask', 'ComfyUI', 'NVIDIA Container Toolkit'],
