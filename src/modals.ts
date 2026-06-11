@@ -16,6 +16,22 @@ interface CaseStudy {
 const STUDIES: Record<string, CaseStudy> = {
   '01': {
     num: '01',
+    title: 'Orchestra — Multi-Agent AI Workspace',
+    tagline: 'Mixture-of-Agents pipeline · code-guaranteed Skeptic · live cost telemetry.',
+    problem: 'Single-LLM assistants answer confidently even when wrong, and "self-hosted ChatGPT" wrappers inherit that: one model, one blind spot, no way to know what an answer cost. Prompt-level guardrails are unreliable — weak models silently drop instructions.',
+    solution: 'A real Mixture-of-Agents pipeline: a Router generates 3–5 hyper-specialised expert personas per prompt and fans them out in parallel, with an adversarial Skeptic injected by code — not by prompt. Embedding-based disagreement detection makes the aggregator surface expert conflict instead of smoothing it away; an optional reflection critic + revisor pass improves the final answer. Every chat shows live token + USD cost. BYOK or fully local via Ollama.',
+    architecture: 'Router (DPG) → 3–5 parallel proposers + code-guaranteed Skeptic → disagreement detector (embedding distance) → aggregator → reflection critic/revisor → answer + cost banner.',
+    highlights: [
+      'Skeptic guaranteed by code, not by prompt (PM #37)',
+      'Disagreement detection: expert conflict is surfaced, never smoothed away',
+      '2,602 tests (Vitest + Playwright) · 74 documented post-mortems · CI',
+      'Live per-chat cost telemetry (tokens + USD) · BYOK or fully local',
+    ],
+    stack: ['TypeScript (strict)', 'Next.js 15', 'Vitest', 'Playwright', 'Docker', 'Ollama'],
+    link: { href: 'https://github.com/aleksbuss/orchestra', label: 'View on GitHub →' },
+  },
+  '02': {
+    num: '02',
     title: 'AI Dictaphone v7.0',
     tagline: 'Edge voice pipeline · Whisper → LLM · sub-second latency.',
     problem: 'Voice notes inside Telegram are hard to triage at scale — re-listening is slow, transcripts and summaries live in different tools, and any voice-to-text product the user touches has to feel native to Telegram.',
@@ -28,9 +44,10 @@ const STUDIES: Record<string, CaseStudy> = {
       'No persistent storage of voice content (privacy by design)',
     ],
     stack: ['Cloudflare Workers', 'Groq Whisper-large-v3', 'LLaMA 3.3 70B', 'JS ESM', 'Telegram Mini-Apps'],
+    link: { href: 'https://github.com/aleksbuss/trascribatorV2', label: 'View on GitHub →' },
   },
-  '02': {
-    num: '02',
+  '03': {
+    num: '03',
     title: 'AI Moderation Bot',
     tagline: 'n8n workflow · dual-AI failover · auto-escalation.',
     problem: 'Telegram chat moderation with regex/keyword bots produces both false positives (banned for innocent words) and false negatives (cleverly worded scams pass through). Big communities need contextual AI, but a single LLM provider is a single point of failure.',
@@ -44,8 +61,8 @@ const STUDIES: Record<string, CaseStudy> = {
     ],
     stack: ['n8n', 'OpenRouter', 'GPT-4.1-mini', 'Nemotron', 'Telegram Bot API'],
   },
-  '03': {
-    num: '03',
+  '04': {
+    num: '04',
     title: 'AI Psychology Bot — Mystic Mini-App',
     tagline: 'Full SaaS · payments · conversational agent.',
     problem: 'A monetized AI product needs all the moving pieces: auth, payments, retention loops, AI failover, real-user error handling. Most solo builders get stuck wiring auth + payments + AI together cleanly.',
@@ -58,9 +75,10 @@ const STUDIES: Record<string, CaseStudy> = {
       'Real revenue, no team, no funding',
     ],
     stack: ['Gemini 2.5', 'Telegram Stars', 'Firebase RTDB', 'Apps Script', 'HMAC-SHA256'],
+    link: { href: 'https://github.com/aleksbuss/ai-psycho-bot', label: 'View on GitHub →' },
   },
-  '04': {
-    num: '04',
+  '05': {
+    num: '05',
     title: 'Bushmark — Secure Clipboard',
     tagline: 'Self-hosted · cookie auth · one-click install.',
     problem: 'Transferring text between servers and devices means USB sticks, third-party pastebins, or copy/paste hops through chat apps. None are private, none are simple.',
@@ -75,8 +93,8 @@ const STUDIES: Record<string, CaseStudy> = {
     stack: ['FastAPI', 'Nginx', 'systemd', 'Tailwind', 'Ubuntu 24.04'],
     link: { href: 'https://bushmark.cc', label: 'Visit bushmark.cc →' },
   },
-  '05': {
-    num: '05',
+  '06': {
+    num: '06',
     title: 'CyberDed Ultra + ComfyUI',
     tagline: 'Local AI infra · one-click installer · Android + Linux.',
     problem: 'Local AI means dependency hell — CUDA versions, Python venvs, Docker compose files, ComfyUI custom nodes, NVIDIA Container Toolkit setup. Most "easy" installers skip half of it and break two weeks later.',
@@ -90,8 +108,8 @@ const STUDIES: Record<string, CaseStudy> = {
     ],
     stack: ['Docker', 'Ollama', 'Flask', 'ComfyUI', 'NVIDIA Container Toolkit'],
   },
-  '06': {
-    num: '06',
+  '07': {
+    num: '07',
     title: 'Termux AI Dictaphone',
     tagline: 'Android as offline AI server · zero cloud cost.',
     problem: 'Cloud LLM calls cost money, leak data, and stop working without signal. Most "local AI" projects need a beefy GPU desktop. What if your phone could be the entire stack?',

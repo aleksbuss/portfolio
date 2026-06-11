@@ -171,7 +171,7 @@ test.describe('portfolio · case-study modals', () => {
     const cta = page.locator('.proj').first().locator('.proj-cta');
     await cta.click();
     await expect(page.locator('#caseModal')).toBeVisible();
-    await expect(page.locator('.case-title')).toContainText('AI Dictaphone');
+    await expect(page.locator('.case-title')).toContainText('Orchestra');
     await page.locator('.case-close').click();
     await expect(page.locator('#caseModal')).not.toBeVisible();
   });

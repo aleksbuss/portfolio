@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aleksejs Buss — CV · AI Engineer</title>
-<meta name="description" content="Curriculum Vitae — Aleksejs Buss. AI Engineer. Hof / Saale, DE. EU citizen. Available immediately.">
+<title>Aleksejs Buss — CV · AI Engineer · Multi-Agent Systems</title>
+<meta name="description" content="Curriculum Vitae — Aleksejs Buss. AI Engineer specialising in multi-agent LLM systems. Hof / Saale, DE. EU citizen. Available immediately.">
 <meta name="author" content="Aleksejs Buss">
 <meta name="robots" content="index, follow">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="canonical" href="https://aleksbuss.dev/CV.html">
+<link rel="canonical" href="https://aleksejs-portfolio.pages.dev/CV.html">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Aleksejs Buss",
-  "jobTitle": "AI Engineer",
-  "url": "https://aleksbuss.dev/CV.html",
+  "jobTitle": "AI Engineer — Multi-Agent Systems",
+  "url": "https://aleksejs-portfolio.pages.dev/CV.html",
   "email": "mailto:aleksbuss@gmail.com",
-  "telephone": "+4917673503486",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Hof",
@@ -482,7 +481,7 @@ footer.cv-foot .live { color: var(--signal); }
   <span class="sep">·</span>
   <span class="ref">№ 2026 / CV-01</span>
   <span class="sep">·</span>
-  <span>Updated April 2026</span>
+  <span>Updated June 2026</span>
 </div>
 
 <header class="cv-head">
@@ -491,10 +490,10 @@ footer.cv-foot .live { color: var(--signal); }
       <span itemprop="givenName">Aleksejs</span>
       <span class="it" itemprop="familyName">Buss</span>
     </h1>
-    <span class="cv-role" itemprop="jobTitle">AI Engineer · Production Systems</span>
+    <span class="cv-role" itemprop="jobTitle">AI Engineer · Multi-Agent Systems</span>
     <p class="cv-tagline">
-      Production AI for early-stage teams.<br>
-      Seven live systems. Ten months. Solo.
+      Creator of Orchestra — open-source Mixture-of-Agents platform.<br>
+      Eight production systems. Shipped solo.
     </p>
   </div>
 
@@ -503,17 +502,14 @@ footer.cv-foot .live { color: var(--signal); }
       <span class="lbl">Email</span>
       <a class="val" href="mailto:aleksbuss@gmail.com" itemprop="email">aleksbuss@gmail.com</a>
     </div>
-    <div class="row">
-      <span class="lbl">Phone</span>
-      <a class="val" href="tel:+4917673503486" itemprop="telephone">+49 176 73503486</a>
-    </div>
+    
     <div class="row">
       <span class="lbl">GitHub</span>
       <a class="val" href="https://github.com/aleksbuss" target="_blank" rel="noopener">github.com/aleksbuss</a>
     </div>
     <div class="row">
       <span class="lbl">Web</span>
-      <a class="val" href="https://aleksbuss.dev" target="_blank" rel="noopener">aleksbuss.dev</a>
+      <a class="val" href="https://aleksejs-portfolio.pages.dev" target="_blank" rel="noopener">aleksejs-portfolio.pages.dev</a>
     </div>
     <div class="row">
       <span class="lbl">Location</span>
@@ -537,11 +533,14 @@ footer.cv-foot .live { color: var(--signal); }
     <h2 class="sect-title">Summary <em>— at a glance</em></h2>
   </div>
   <p class="summary">
-    AI engineer for early-stage teams — <em>features from spec to live infrastructure</em>,
-    end to end, no hand-holding. Self-taught after a 14-year logistics career and a DEKRA-certified
-    frontend retraining. Since mid-2025 I have shipped <strong>seven production systems</strong>
-    serving real users — Cloudflare Workers, n8n, FastAPI, Telegram Mini-Apps, multi-provider LLM
-    pipelines, payments, security. Founder-grade ownership at one headcount.
+    AI engineer specialising in <em>multi-agent LLM systems</em>. Creator of
+    <strong>Orchestra</strong> — an open-source Mixture-of-Agents workspace (TypeScript /
+    Next.js 15) with <strong>2,602 tests and 74 documented post-mortems</strong>: parallel
+    expert agents, a code-guaranteed Skeptic, embedding-based disagreement detection.
+    Since mid-2025 I have shipped <strong>eight production AI systems</strong> serving real
+    users — Cloudflare Workers edge, Telegram Mini-Apps, multi-provider LLM pipelines,
+    payments, security. Features from spec to live infrastructure, end to end —
+    founder-grade ownership at one headcount.
   </p>
 </section>
 
@@ -555,8 +554,25 @@ footer.cv-foot .live { color: var(--signal); }
 
     <article class="proj-item">
       <div class="proj-when">
+        05/2026 — now
+        <span class="role-tag">Flagship · OSS</span>
+      </div>
+      <div class="proj-body">
+        <h3>Orchestra — <span class="it">Multi-Agent AI Workspace</span></h3>
+        <p class="pjtag">Mixture-of-Agents pipeline · code-guaranteed Skeptic · live cost telemetry.</p>
+        <p class="pjdesc">Self-hosted AI workspace running 3–5 specialised expert agents in parallel on every substantive turn. Router with dynamic persona generation; a Skeptic guaranteed by code, not by prompt; embedding-based disagreement detection that surfaces expert conflict instead of smoothing it away; reflection critic + revisor pass. Live per-chat token + USD cost banner. BYOK or fully local via Ollama. 2,602 tests, 74 documented post-mortems, CI — MIT-licensed.</p>
+        <p class="pjarch"><span class="k">Router (DPG)</span><span class="arr">→</span>proposers ∥ <span class="k">Skeptic</span><span class="arr">→</span>disagreement detector<span class="arr">→</span><span class="k">Aggregator</span><span class="arr">→</span>reflection</p>
+        <div class="pjlinks">
+          <a href="https://github.com/aleksbuss/orchestra" target="_blank" rel="noopener">github.com/aleksbuss/orchestra →</a>
+          <span>Stack: TypeScript (strict) · Next.js 15 · Vitest · Playwright · Docker</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="proj-item">
+      <div class="proj-when">
         08/2025 — now
-        <span class="role-tag">Flagship</span>
+        <span class="role-tag">Production</span>
       </div>
       <div class="proj-body">
         <h3>AI Dictaphone <span class="it">v7.0</span></h3>
@@ -587,12 +603,12 @@ footer.cv-foot .live { color: var(--signal); }
     <article class="proj-item">
       <div class="proj-when">
         10/2025 — now
-        <span class="role-tag">Monetized SaaS</span>
+        <span class="role-tag">SaaS product</span>
       </div>
       <div class="proj-body">
-        <h3>Mystic Mini-App <span class="it">— AI Psychology Bot</span></h3>
-        <p class="pjtag">Full SaaS · payments · multi-persona conversational agent.</p>
-        <p class="pjdesc">End-to-end SaaS solo: HMAC-SHA256 auth → distributed Apps Script backend → Firebase Realtime DB → Gemini 2.5 + TTS pipeline. Telegram Stars for native checkout, atomic credit operations, referral program, multi-persona system (Numerology, Dream Interpreter, Runes).</p>
+        <h3>AI Psychology <span class="it">Bot</span></h3>
+        <p class="pjtag">Full SaaS · payments · crisis support · CBT exercises.</p>
+        <p class="pjdesc">End-to-end SaaS solo: HMAC-SHA256 auth → distributed Apps Script backend → Firebase Realtime DB → Gemini 2.5 + TTS pipeline. Telegram Stars for native checkout, atomic credit operations, referral program, panic intervention, 7-Skill protocol.</p>
         <p class="pjarch"><span class="k">Mini-App</span><span class="arr">→</span>HMAC-SHA256<span class="arr">→</span>Apps Script<span class="arr">→</span>Firebase<span class="arr">→</span><span class="k">Gemini</span>+TTS</p>
         <div class="pjlinks">
           <span>Stack: Gemini 2.5 · Telegram Stars · Firebase RTDB · Apps Script · HMAC-SHA256</span>
@@ -602,7 +618,7 @@ footer.cv-foot .live { color: var(--signal); }
 
     <article class="proj-item">
       <div class="proj-when">
-        10/2025 — now
+        02/2025 — now
         <span class="role-tag">bushmark.cc</span>
       </div>
       <div class="proj-body">
@@ -619,8 +635,8 @@ footer.cv-foot .live { color: var(--signal); }
 
     <article class="proj-item">
       <div class="proj-when">
-        07/2025 — now
-        <span class="role-tag">Open Source</span>
+        11/2025 — now
+        <span class="role-tag">Self-hosted</span>
       </div>
       <div class="proj-body">
         <h3>CyberDed Ultra <span class="it">+ ComfyUI</span></h3>
@@ -636,7 +652,7 @@ footer.cv-foot .live { color: var(--signal); }
 
     <article class="proj-item">
       <div class="proj-when">
-        11/2025 — now
+        01/2026 — now
         <span class="role-tag">Open Source</span>
       </div>
       <div class="proj-body">
@@ -669,7 +685,8 @@ footer.cv-foot .live { color: var(--signal); }
         <h3>AI Engineer · Solo Production</h3>
         <div class="where">Independent · Hof / Saale, DE</div>
         <ul>
-          <li>Designed, deployed, and operate seven production AI systems end-to-end — own architecture, own code, own infrastructure.</li>
+          <li>Designed, deployed, and operate eight production AI systems end-to-end — own architecture, own code, own infrastructure.</li>
+          <li>Built Orchestra, an open-source multi-agent AI workspace (TypeScript/Next.js 15): MoA pipeline with parallel expert proposers, code-guaranteed Skeptic, embedding-based disagreement detection — 2,602 tests, 74 post-mortems, CI.</li>
           <li>Multi-provider LLM pipelines (OpenAI, Gemini, Groq, Ollama) with failover; structured outputs; voice + vision flows.</li>
           <li>Edge serverless on Cloudflare Workers; Telegram Mini-App + Bot integration with HMAC-SHA256 webhook verification.</li>
           <li>Self-hosted infra: Ubuntu VPS, Nginx, systemd, Docker, Tailscale, NVIDIA Container Toolkit.</li>
@@ -729,6 +746,9 @@ footer.cv-foot .live { color: var(--signal); }
   </div>
 
   <dl class="stack-grid">
+    <dt>Agent Systems</dt>
+    <dd>Mixture-of-Agents (MoA) orchestration · dynamic persona generation · embedding-based disagreement detection · reflection loops (Generator-Critic-Revisor) · cost telemetry · agent tool design · sandbox &amp; SSRF guards</dd>
+
     <dt>AI / LLM</dt>
     <dd>OpenAI GPT-4 / 4.1 / TTS · Google Gemini 2.5 · Groq Whisper-large-v3 · Ollama (LLaMA, Gemma) · faster-whisper · whisper.cpp · OpenRouter · Nemotron · multi-provider failover · structured outputs · prompt engineering · RAG-ready patterns</dd>
 
@@ -736,7 +756,7 @@ footer.cv-foot .live { color: var(--signal); }
     <dd>n8n · workflows · agents · code nodes (JS/Python) · webhook routing · error handling &amp; retries · chain-of-thought architecture · multi-protocol agents</dd>
 
     <dt>Languages</dt>
-    <dd>JavaScript (ESM, async) · TypeScript · Python (FastAPI, Flask) · Bash · HTML5 · CSS3 · SQL · React (foundations) · streaming APIs (SSE)</dd>
+    <dd>TypeScript (strict) · Next.js 15 / React · JavaScript (ESM, async) · Python (FastAPI, Flask) · Bash · HTML5 · CSS3 · SQL · streaming APIs (SSE)</dd>
 
     <dt>Cloud / Edge</dt>
     <dd>Cloudflare Workers · Wrangler · Google Apps Script · Firebase Realtime DB · GitHub Pages · Supabase / PostgreSQL</dd>
@@ -748,7 +768,7 @@ footer.cv-foot .live { color: var(--signal); }
     <dd>HMAC-SHA256 · JWT · Telegram Bot API · Telegram Mini-Apps SDK · Telegram Stars payments · CSP · CORS · webhook verification · rate limiting · secret management · anti-fraud logic</dd>
 
     <dt>Tooling</dt>
-    <dd>Git / GitHub · Vite · Vitest · Playwright · ESLint · Wrangler · macOS / Linux daily driver</dd>
+    <dd>Git / GitHub · GitHub Actions CI · Vite · Vitest · Playwright · ESLint · Wrangler · macOS / Linux daily driver</dd>
   </dl>
 </section>
 
@@ -792,7 +812,7 @@ footer.cv-foot .live { color: var(--signal); }
         <div class="lang-row" style="--w:45%">
           <span class="lname">Deutsch</span>
           <span class="bar"></span>
-          <span class="lvl">A2/B1 · Improving</span>
+          <span class="lvl">B1</span>
         </div>
       </div>
     </div>
@@ -801,7 +821,7 @@ footer.cv-foot .live { color: var(--signal); }
 
 <footer class="cv-foot">
   <div>
-    <span class="live">●</span>&nbsp; aleksbuss.dev — all systems operational
+    <span class="live">●</span>&nbsp; aleksejs-portfolio.pages.dev — all systems operational
   </div>
   <button type="button" class="print-cta" onclick="window.print()">Print / Save as PDF ↓</button>
   <div>© Aleksejs Buss · 2026</div>
