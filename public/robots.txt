@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aleksbuss.dev/sitemap.xml
+Sitemap: https://aleksejs-portfolio.pages.dev/sitemap.xml
