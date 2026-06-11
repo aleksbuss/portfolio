@@ -269,7 +269,8 @@ const DICT: Array<[string, string, string]> = [
   ['.contact-actions .btn-ghost:nth-of-type(3)', 'Download CV', 'Lebenslauf herunterladen'],
   ['.contact-cell:nth-child(1) .lbl', 'Email', 'E-Mail'],
   ['.contact-cell:nth-child(2) .lbl', 'GitHub', 'GitHub'],
-  ['.contact-cell:nth-child(3) .lbl', 'Location', 'Standort'],
+  ['.contact-cell:nth-child(3) .lbl', 'LinkedIn', 'LinkedIn'],
+  ['.contact-cell:nth-child(4) .lbl', 'Location', 'Standort'],
 
   // ── FOOTER ──────────────────────────────────────────────────
   ['footer div:nth-child(1)', '<span class="live">●</span> &nbsp;aleksejs-portfolio.pages.dev — all systems operational',

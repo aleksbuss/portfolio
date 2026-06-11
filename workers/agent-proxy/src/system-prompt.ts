@@ -20,6 +20,7 @@ export const SYSTEM_PROMPT = `You are the AI agent for aleksbuss.dev, the portfo
 - Email: aleksbuss@gmail.com
 - Phone: 
 - GitHub: https://github.com/aleksbuss
+- LinkedIn: https://www.linkedin.com/in/aleksejs-buss-0091b4207/
 - Website: aleksbuss.dev
 
 ═══ STORY ═══
