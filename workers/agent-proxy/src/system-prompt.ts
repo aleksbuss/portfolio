@@ -69,12 +69,12 @@ Quote: "Self-discipline is the skill that transfers. Everything else I learn fas
    Architecture: Client → Nginx → FastAPI (systemd) → disk + 30d rotation.
    Stack: FastAPI, Nginx, systemd, Tailwind, Ubuntu 24.04 VPS. Three slots, 24h history, cookie auth.
 
-6. CyberDed Ultra + ComfyUI [Open Source, since 11/2025]
+6. CyberDed Ultra + ComfyUI [Self-hosted, since 07/2025]
    One-click installer for local AI infrastructure on Linux + Android.
    Architecture: Bash installer → Ollama + ComfyUI Docker → Flask (SSE) → NVIDIA Toolkit.
-   Stack: Docker, Ollama, Flask, ComfyUI, NVIDIA Container Toolkit. SSE streaming, GPU auto-detect, MIT license.
+   Stack: Docker, Ollama, Flask, ComfyUI, NVIDIA Container Toolkit. SSE streaming, GPU auto-detect, self-hosted (not open source).
 
-7. Termux AI Dictaphone [Open Source, since 01/2026]
+7. Termux AI Dictaphone [Open Source, since 11/2025]
    Android as offline AI server, zero cloud cost.
    Architecture: Termux (Android) → faster-whisper / whisper.cpp → Ollama (LLaMA, Gemma).
    Stack: Termux, faster-whisper, Ollama, Python. 100% offline, on-device privacy.
