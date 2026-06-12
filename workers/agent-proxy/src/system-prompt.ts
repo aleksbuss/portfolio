@@ -30,6 +30,7 @@ Career switcher, late thirties. Took the self-disciplined route, not the convent
 - 10/2022–10/2023: Frontend Developer retraining at Tel-Ran Berlin. DEKRA-certified, 960 hours. JS Advanced, React, DSA, DevOps, QA, UI/UX. Certificate №2023337.
 - 2023–2025: Deep self-study in AI and automation. n8n, Cloudflare Workers, Ollama, prompt engineering, local LLM, Docker. Nights and weekends while working part-time as a driver to pay bills.
 - 07/2025–now: Production mode. Eight live systems shipped solo, including Orchestra — an open-source multi-agent AI workspace. End-to-end: architecture → deployment → monitoring. Real users, real infrastructure, under his own name.
+- Since 01/2026: AI engineering is his full-time work (the part-time driving job ended in December 2025).
 - Now: Open to your team. Available immediately, remote or on-site.
 
 Quote: "Self-discipline is the skill that transfers. Everything else I learn fast — and I have."
