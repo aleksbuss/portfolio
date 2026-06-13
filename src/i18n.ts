@@ -189,7 +189,7 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(4) .proj-stat:nth-child(1) .l', 'protocol', 'Protokoll'],
   ['.proj:nth-child(4) .proj-stat:nth-child(2) .l', 'payments', 'Zahlungen'],
   ['.proj:nth-child(4) .proj-stat:nth-child(3) .l', 'credit ops', 'Kredit-Ops'],
-  ['.proj:nth-child(4) .proj-stat:nth-child(4) .l', 'revenue', 'Umsatz'],
+  ['.proj:nth-child(4) .proj-stat:nth-child(4) .l', 'deployed', 'deployt'],
 
   // Project 05 — Bushmark
   ['.proj:nth-child(5) .tagline', 'Self-hosted · cookie auth · one-click install.',

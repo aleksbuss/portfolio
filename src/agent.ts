@@ -19,11 +19,11 @@ const DEFAULT_ENDPOINT = 'https://aleksejs-agent-proxy.aleksbuss.workers.dev/cha
 
 const FALLBACK: Array<{ keys: string[]; text: string }> = [
   { keys: ['project', 'work', 'shipped', 'show me'],
-    text: '7 production systems are live. Flagship: AI Dictaphone v7.0 (Whisper → LLM on Cloudflare edge). Plus: AI moderation bot (n8n, dual-AI failover), Mystic SaaS (Telegram Stars + Gemini), bushmark.cc (FastAPI/Nginx), CyberDed Ultra (Ollama + ComfyUI), AI Psychology Bot (full SaaS), Termux Dictaphone (offline AI on Android). Scroll to §IV.' },
+    text: 'Eight systems built & deployed solo. Flagship: Orchestra — open-source Mixture-of-Agents platform (TypeScript/Next.js, 2,600+ tests, 70+ post-mortems). Plus: AI Dictaphone (Whisper → LLM on Cloudflare edge), AI moderation bot (n8n, dual-AI failover), AI Psychology Bot (Telegram Stars SaaS), bushmark.cc (FastAPI/Nginx), CyberDed Ultra (Ollama + ComfyUI), Termux Dictaphone (offline AI on Android). Scroll to §IV.' },
   { keys: ['stack', 'tech', 'tool', 'use'],
     text: 'AI: OpenAI · Gemini · Groq · Ollama. Edge: Cloudflare Workers · Apps Script. Backend: Python (FastAPI/Flask) · JS (ESM). Ops: Docker · systemd · Nginx · Ubuntu VPS. Auth: HMAC-SHA256 · Telegram Bot API. §V has the full toolkit.' },
   { keys: ['hire', 'why', 'recruit'],
-    text: 'Founder-grade ownership: spec → architecture → code → deploy → monitor — solo. Seven live systems in ten months, zero hand-holding. Late-career switch (35+) means disciplined under pressure. Full-stack means one headcount stretches a seed runway further.' },
+    text: 'Founder-grade ownership: spec → architecture → code → deploy → monitor — solo. Eight systems shipped solo since mid-2025, zero hand-holding. Late-career switch (35+) means disciplined under pressure. Full-stack means one headcount stretches a seed runway further.' },
   { keys: ['process', 'role', 'looking', 'available', 'interview'],
     text: 'Looking for AI Engineer / Founding Engineer roles at Seed–Series C. Available immediately, Germany-based, EU citizen, remote or on-site. Drop a note: aleksbuss@gmail.com.' },
   { keys: ['who', 'about'],

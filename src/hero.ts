@@ -3,7 +3,7 @@ import { $, isReducedMotion } from './utils';
 const TOKEN_LINES = [
   '> initializing description...',
   '> ai engineer · early-stage teams · solo delivery',
-  '> seven production systems · ten months · zero hand-holding',
+  '> eight systems · built & deployed solo · zero hand-holding',
   '> shipping features end-to-end since 07/2025',
   '> available immediately · EU citizen · Hof / Saale, DE',
 ];

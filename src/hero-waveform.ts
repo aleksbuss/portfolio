@@ -32,13 +32,13 @@ interface Phrase {
 }
 
 const PHRASES: Phrase[] = [
-  { meta: '[system · pulse]',   text: '7 production systems · all green · last sync 12s ago' },
+  { meta: '[system · pulse]',   text: '8 production systems · all green · last sync 12s ago' },
   { meta: '[edge · cf-fra]',    text: 'request → fra1 → cdg2 → lhr · 38ms p50' },
   { meta: '[ollama · local]',   text: 'llama3.2:8b loaded · context 8k · streaming' },
   { meta: '[n8n · flow]',       text: 'message → moderation_check → translate → reply ✓' },
   { meta: '[telegram · bot]',   text: 'webhook verified · HMAC-SHA256 · session opened' },
   { meta: '[deploy · cf]',      text: 'pushed to 12 PoPs · 8.4s · 0 cold-start' },
-  { meta: '[agent · respond]',  text: 'founder-grade ownership · EU-based · open Q3 ’26' },
+  { meta: '[agent · respond]',  text: 'founder-grade ownership · EU-based · available now' },
   { meta: '[github · sync]',    text: '3 commits ahead · main → live in 22s' },
 ];
 
