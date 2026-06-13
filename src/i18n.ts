@@ -43,10 +43,10 @@ const DICT: Array<[string, string, string]> = [
   // ── METRICS (§ I) ───────────────────────────────────────────
   ['#index .eyebrow', '§ I — At a glance', '§ I — Auf einen Blick'],
   ['#index .section-title', 'A short ledger of <em>what shipped</em>.', 'Eine kurze Bilanz <em>der Lieferungen</em>.'],
-  ['#index .section-sub', 'Every figure points to live infrastructure — servers I own, deployed under my own name, serving real users today.',
-                          'Jede Zahl steht für Live-Infrastruktur — Server in meinem Besitz, unter meinem Namen, mit echten Nutzern.'],
+  ['#index .section-sub', 'Every figure points to live infrastructure — production-grade systems I architected, built, and deployed end-to-end under my own name.',
+                          'Jede Zahl steht für Live-Infrastruktur — produktionsreife Systeme, die ich selbst architektiert, gebaut und End-to-End deployt habe.'],
   ['#index .metric:nth-child(1) .lbl', 'Production systems', 'Produktionssysteme'],
-  ['#index .metric:nth-child(1) .det', 'All serving real users', 'Alle dienen echten Nutzern'],
+  ['#index .metric:nth-child(1) .det', 'All deployed & live', 'Alle deployt & live'],
   ['#index .metric:nth-child(2) .lbl', 'Tests in the flagship', 'Tests im Flaggschiff'],
   ['#index .metric:nth-child(2) .det', 'Orchestra · Vitest + Playwright', 'Orchestra · Vitest + Playwright'],
   ['#index .metric:nth-child(3) .lbl', 'Zero to eight live', 'Von null auf acht live'],
@@ -55,8 +55,8 @@ const DICT: Array<[string, string, string]> = [
 
   // ── STORY (§ II) ────────────────────────────────────────────
   ['#story .eyebrow', '§ II — The route', '§ II — Der Weg'],
-  ['#story .section-title', 'Fourteen years moving freight.<br>Now I move <em>features into production</em>.',
-                            'Vierzehn Jahre Frachttransport.<br>Heute liefere ich <em>Features in Produktion</em>.'],
+  ['#story .section-title', 'Fourteen years in logistics.<br>Now I move <em>features into production</em>.',
+                            'Vierzehn Jahre Logistik.<br>Heute liefere ich <em>Features in Produktion</em>.'],
   ['#story .story-left .lede', "I didn't take the conventional route. I took the <em>self-disciplined</em> one.",
                                 'Ich nahm nicht den konventionellen Weg. Ich nahm den <em>disziplinierten</em>.'],
   // Bio paragraphs the user explicitly flagged as untranslated.
@@ -67,8 +67,8 @@ const DICT: Array<[string, string, string]> = [
     'In 2022 I retrained as a Frontend Developer at <strong>Tel-Ran Berlin</strong> (960h, DEKRA-certified). Then I went deeper: LLMs, prompt engineering, serverless, local AI. Nights and weekends, while driving part-time to pay the bills.',
     '2022 habe ich mich zum Frontend-Entwickler an der <strong>Tel-Ran Berlin</strong> umgeschult (960h, DEKRA-zertifiziert). Danach ging es tiefer: LLMs, Prompt Engineering, Serverless, lokale KI. Abends und am Wochenende, während ich nebenbei LKW gefahren bin, um die Rechnungen zu zahlen.'],
   ['#story .story-left p:nth-of-type(4)',
-    "From mid-2025, <strong>I've been shipping</strong>. Not learning. Real systems, real users, real infrastructure — under my own name.",
-    'Seit Mitte 2025 <strong>liefere ich</strong>. Nicht mehr lerne. Echte Systeme, echte Nutzer, echte Infrastruktur — unter meinem eigenen Namen.'],
+    "From mid-2025, <strong>I've been shipping</strong>. Not learning. Real systems, real infrastructure, built end-to-end — under my own name.",
+    'Seit Mitte 2025 <strong>liefere ich</strong>. Nicht mehr lerne. Echte Systeme, echte Infrastruktur, End-to-End gebaut — unter meinem eigenen Namen.'],
   ['.story-pull', 'Self-discipline is the skill that transfers. Everything else I learn fast — and I have.',
                   'Selbstdisziplin ist die Fähigkeit, die übertragbar ist. Alles andere lerne ich schnell — und habe es bewiesen.'],
   // Timeline (5 rows)
@@ -86,8 +86,8 @@ const DICT: Array<[string, string, string]> = [
     'n8n, Cloudflare Workers, Ollama, Prompt Engineering, lokale LLMs, Docker.'],
   ['#story .tl-row:nth-child(4) .ttl', 'Production mode · 8 live systems', 'Produktionsmodus · 8 Live-Systeme'],
   ['#story .tl-row:nth-child(4) .desc',
-    'End-to-end: architecture → deployment → monitoring. Solo delivery, real users.',
-    'End-to-End: Architektur → Deployment → Monitoring. Solo geliefert, echte Nutzer.'],
+    'End-to-end: architecture → deployment → monitoring. Solo delivery, top to bottom.',
+    'End-to-End: Architektur → Deployment → Monitoring. Solo geliefert, von oben bis unten.'],
   ['#story .tl-row:nth-child(5) .ttl', 'Open to your team', 'Offen für Ihr Team'],
   ['#story .tl-row:nth-child(5) .desc',
     'Immediate availability. Germany-based, EU citizen. Remote or on-site.',
@@ -133,11 +133,11 @@ const DICT: Array<[string, string, string]> = [
 
   // ── PROJECTS (§ IV) ─────────────────────────────────────────
   ['#projects .eyebrow', '§ IV — Work · Selected', '§ IV — Projekte · Auswahl'],
-  ['#projects .section-title', 'Eight systems.<br>Shipped <em>solo</em>. All live.',
-                               'Acht Systeme.<br><em>Solo</em> geliefert. Alle live.'],
+  ['#projects .section-title', 'Production systems,<br>shipped <em>solo</em>.',
+                               'Produktionssysteme,<br><em>solo</em> geliefert.'],
   ['#projects .section-sub',
-    'Every project below runs on infrastructure I own and operate. This is what "ships fast" looks like in practice — not side projects, real production.',
-    'Jedes Projekt unten läuft auf Infrastruktur, die ich besitze und betreibe. So sieht „schnelles Liefern" in der Praxis aus — keine Nebenprojekte, echte Produktion.'],
+    'A selection from eight systems below — each deployed on infrastructure I own and operate, architected and built end-to-end to production standards.',
+    'Eine Auswahl aus acht Systemen unten — jedes auf Infrastruktur deployt, die ich besitze und betreibe, End-to-End auf Produktionsniveau gebaut.'],
 
   
   // Project 01 — Orchestra
@@ -183,8 +183,8 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(4) .tagline', 'Full SaaS · payments · crisis support · CBT exercises.',
                                   'Komplettes SaaS · Zahlungen · Krisenhilfe · CBT-Übungen.'],
   ['.proj:nth-child(4) .desc',
-    'End-to-end SaaS built solo: distributed serverless backend + auth + payments + referral program + AI failover. Real users, real revenue, real infrastructure — no team, no funding.',
-    'End-to-End-SaaS solo gebaut: verteiltes Serverless-Backend + Auth + Zahlungen + Referral-Programm + KI-Failover. Echte Nutzer, echte Umsätze, echte Infrastruktur — kein Team, keine Finanzierung.'],
+    'End-to-end SaaS built solo to prove out full payment-system integration: distributed serverless backend + auth + Telegram Stars payments + atomic credits + referral program + AI failover. The hard parts wired cleanly, end to end.',
+    'End-to-End-SaaS solo gebaut, um die komplette Zahlungssystem-Integration zu zeigen: verteiltes Serverless-Backend + Auth + Telegram-Stars-Zahlungen + atomare Credits + Referral-Programm + KI-Failover. Die schwierigen Teile sauber verdrahtet, End-to-End.'],
   ['.proj:nth-child(4) .proj-cta', 'Read case study →', 'Fallstudie lesen →'],
   ['.proj:nth-child(4) .proj-stat:nth-child(1) .l', 'protocol', 'Protokoll'],
   ['.proj:nth-child(4) .proj-stat:nth-child(2) .l', 'payments', 'Zahlungen'],

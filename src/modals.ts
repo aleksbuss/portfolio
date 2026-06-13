@@ -72,7 +72,7 @@ const STUDIES: Record<string, CaseStudy> = {
       'Telegram Stars payments — first-class native checkout',
       'Atomic credit operations (no double-spend under concurrency)',
       'Multi-persona system with topic-restricted system prompts',
-      'Real revenue, no team, no funding',
+      'Built solo end-to-end — no team, no funding',
     ],
     stack: ['Gemini 2.5', 'Telegram Stars', 'Firebase RTDB', 'Apps Script', 'HMAC-SHA256'],
     link: { href: 'https://github.com/aleksbuss/ai-psycho-bot', label: 'View on GitHub →' },
