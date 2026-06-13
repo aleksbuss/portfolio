@@ -145,8 +145,8 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(1) .tagline', 'Mixture-of-Agents pipeline · code-guaranteed Skeptic · live cost telemetry.',
                                   'Mixture-of-Agents-Pipeline · code-garantierter Skeptiker · Live-Kosten-Telemetrie.'],
   ['.proj:nth-child(1) .desc',
-    'Self-hosted AI workspace that runs 3–5 specialised expert agents in parallel on every substantive turn. Embedding-based disagreement detection surfaces expert conflict instead of smoothing it away; a reflection critic revises the final answer. 2,602 tests, 74 documented post-mortems, CI — engineering-led, MIT-licensed.',
-    'Selbst gehosteter KI-Workspace, der bei jedem substanziellen Turn 3–5 spezialisierte Experten-Agenten parallel ausführt. Embedding-basierte Disagreement Detection macht Expertenkonflikte sichtbar, statt sie zu glätten; ein Reflexions-Kritiker überarbeitet die finale Antwort. 2.602 Tests, 74 dokumentierte Post-Mortems, CI — engineering-geführt, MIT-lizenziert.'],
+    'Self-hosted AI workspace that runs 3–5 specialised expert agents in parallel on every substantive turn. Embedding-based disagreement detection surfaces expert conflict instead of smoothing it away; a reflection critic revises the final answer. 2,600+ tests, 70+ documented post-mortems, CI — engineering-led, MIT-licensed.',
+    'Selbst gehosteter KI-Workspace, der bei jedem substanziellen Turn 3–5 spezialisierte Experten-Agenten parallel ausführt. Embedding-basierte Disagreement Detection macht Expertenkonflikte sichtbar, statt sie zu glätten; ein Reflexions-Kritiker überarbeitet die finale Antwort. 2.600+ Tests, 70+ dokumentierte Post-Mortems, CI — engineering-geführt, MIT-lizenziert.'],
   ['.proj:nth-child(1) .proj-cta', 'Read case study →', 'Fallstudie lesen →'],
   ['.proj:nth-child(1) .proj-stat:nth-child(1) .l', 'tests', 'Tests'],
   ['.proj:nth-child(1) .proj-stat:nth-child(2) .l', 'post-mortems', 'Post-Mortems'],
@@ -154,7 +154,7 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(1) .proj-stat:nth-child(4) .l', 'open source', 'Open Source'],
 
   // Project 02 — AI Dictaphone
-  ['.proj:nth-child(2) .proj-meta .date:nth-child(3)', 'Flagship', 'Flaggschiff'],
+  ['.proj:nth-child(2) .proj-meta .date:nth-child(3)', 'Production', 'Produktion'],
   ['.proj:nth-child(2) .tagline', 'Edge voice pipeline · Whisper → LLM · sub-second latency.',
                                   'Edge-Voice-Pipeline · Whisper → LLM · Sub-Sekunden-Latenz.'],
   ['.proj:nth-child(2) .desc',

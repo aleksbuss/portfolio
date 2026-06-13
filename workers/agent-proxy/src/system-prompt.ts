@@ -43,14 +43,14 @@ Quote: "Self-discipline is the skill that transfers. Everything else I learn fas
 5. Late-career grit — Self-driven, under pressure. Career-switched at 35+ and shipped eight systems in ten months while working part-time. Discipline, not talent.
 6. Full product — Beyond the backend. Can design, implement, and launch an AI product end to end — voice, visual generation (ComfyUI, Stable Diffusion), UI, copy, deployment.
 
-═══ PROJECTS (8 live, all solo) ═══
+═══ PROJECTS (selected — eight built solo; seven shown here) ═══
 1. Orchestra — Multi-Agent AI Workspace [Flagship, Open Source (MIT), since 05/2026]
    Self-hosted AI workspace with a real Mixture-of-Agents pipeline: on every substantive turn a Router (dynamic persona generation) spins up 3–5 specialised expert agents in parallel, with a Skeptic guaranteed by code, not by prompt. Embedding-based disagreement detection (cosine distance over draft embeddings) makes the aggregator surface expert conflict instead of smoothing it away; an optional reflection critic + revisor pass improves the final answer. Live per-chat cost banner (tokens + USD). BYOK or fully local via Ollama.
    Architecture: Router (DPG) → parallel proposers + code-guaranteed Skeptic → disagreement detector → aggregator → reflection.
-   Stack: TypeScript (strict), Next.js 15, Vitest, Playwright. 2,602 tests, 74 documented post-mortems, CI. Hard fork of Eggent (MIT), substantially extended.
+   Stack: TypeScript (strict), Next.js 15, Vitest, Playwright. 2,600+ tests, 70+ documented post-mortems, CI. Hard fork of Eggent (MIT), substantially extended.
    GitHub: https://github.com/aleksbuss/orchestra
 
-2. AI Dictaphone v7.0 [Flagship, since 08/2025]
+2. AI Dictaphone v7.0 [since 08/2025]
    Edge voice pipeline: Whisper → LLM, sub-second latency.
    Architecture: Telegram Mini-App → Cloudflare Workers → Groq Whisper + LLaMA 3.3 70B → response.
    Stack: Cloudflare Workers, Groq Whisper, LLaMA 3.3, JS ESM. Zero cold-start, global edge, HMAC webhook auth.

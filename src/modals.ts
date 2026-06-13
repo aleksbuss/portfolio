@@ -24,7 +24,7 @@ const STUDIES: Record<string, CaseStudy> = {
     highlights: [
       'Skeptic guaranteed by code, not by prompt (PM #37)',
       'Disagreement detection: expert conflict is surfaced, never smoothed away',
-      '2,602 tests (Vitest + Playwright) · 74 documented post-mortems · CI',
+      '2,600+ tests (Vitest + Playwright) · 70+ documented post-mortems · CI',
       'Live per-chat cost telemetry (tokens + USD) · BYOK or fully local',
     ],
     stack: ['TypeScript (strict)', 'Next.js 15', 'Vitest', 'Playwright', 'Docker', 'Ollama'],
