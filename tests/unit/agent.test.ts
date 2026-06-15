@@ -4,7 +4,7 @@ import { __test } from '../../src/agent';
 describe('agent.pickFallback', () => {
   it('matches "show me your projects" → projects entry', () => {
     const txt = __test.pickFallback('show me your projects please');
-    expect(txt).toMatch(/production systems/i);
+    expect(txt).toMatch(/Orchestra/); // flagship project — unique to the projects fallback
   });
 
   it('matches "what stack do you use" → stack entry', () => {
