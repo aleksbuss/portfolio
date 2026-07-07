@@ -25,9 +25,9 @@ const FALLBACK: Array<{ keys: string[]; text: string }> = [
   { keys: ['hire', 'why', 'recruit'],
     text: 'Founder-grade ownership: spec → architecture → code → deploy → monitor — solo. Eight systems shipped solo since mid-2025, zero hand-holding. Late-career switch (35+) means disciplined under pressure. Full-stack means one headcount stretches a seed runway further.' },
   { keys: ['process', 'role', 'looking', 'available', 'interview'],
-    text: 'Looking for AI Engineer / Founding Engineer roles at Seed–Series C. Available immediately, Germany-based, EU citizen, remote or on-site. Drop a note: aleksbuss@gmail.com.' },
+    text: 'Looking for AI Systems Architect / Founding Engineer roles at Seed–Series C. Available immediately, Germany-based, EU citizen, remote or on-site. Drop a note: aleksbuss@gmail.com.' },
   { keys: ['who', 'about'],
-    text: 'Aleksejs Buss · AI engineer in Hof, Germany. 14 years in logistics → Frontend at Tel-Ran Berlin (DEKRA, 960h) → solo production AI since mid-2025.' },
+    text: 'Aleksejs Buss · AI Systems Architect in Hof, Germany. 14 years in logistics → Frontend at Tel-Ran Berlin (DEKRA, 960h) → solo production AI since mid-2025.' },
   { keys: ['contact', 'email', 'reach'],
     text: 'Email: aleksbuss@gmail.com. Phone: +49 176 73503486. GitHub: /aleksbuss. Or use the HIRE → button in the top status bar.' },
 ];

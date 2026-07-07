@@ -25,8 +25,8 @@ const DICT: Array<[string, string, string]> = [
   ['.hero-marker .right', 'Available now', 'Sofort verfügbar'],
   ['.agent-handshake span:last-child', 'handshake authenticated · session opened · greeting human',
                                        'Handshake authentifiziert · Sitzung offen · begrüße Mensch'],
-  ['.hero-tagline', 'AI engineer · multi-agent systems.<br>\n      <em>Production systems</em>, shipped solo.',
-                    'KI-Ingenieur · Multi-Agenten-Systeme.<br>\n      <em>Produktionssysteme</em>, solo geliefert.'],
+  ['.hero-tagline', 'AI systems architect · multi-agent orchestration.<br>\n      <em>Production AI systems</em>, designed & operated.',
+                    'KI-Systemarchitekt · Multi-Agenten-Orchestrierung.<br>\n      <em>Produktive KI-Systeme</em>, entworfen & betrieben.'],
 
   // hero foot — meta-col has two .lbl/.val pairs separated by <br><br>;
   // use :nth-of-type on span to dodge the line-break siblings.
@@ -55,8 +55,8 @@ const DICT: Array<[string, string, string]> = [
 
   // ── STORY (§ II) ────────────────────────────────────────────
   ['#story .eyebrow', '§ II — The route', '§ II — Der Weg'],
-  ['#story .section-title', 'Fourteen years in logistics.<br>Now I move <em>features into production</em>.',
-                            'Vierzehn Jahre Logistik.<br>Heute liefere ich <em>Features in Produktion</em>.'],
+  ['#story .section-title', 'Fourteen years in logistics.<br>Now I architect <em>AI systems for production</em>.',
+                            'Vierzehn Jahre Logistik.<br>Jetzt architektiere ich <em>KI-Systeme für die Produktion</em>.'],
   ['#story .story-left .lede', "I didn't take the conventional route. I took the <em>self-disciplined</em> one.",
                                 'Ich nahm nicht den konventionellen Weg. Ich nahm den <em>disziplinierten</em>.'],
   // Bio paragraphs the user explicitly flagged as untranslated.
@@ -80,14 +80,14 @@ const DICT: Array<[string, string, string]> = [
   ['#story .tl-row:nth-child(2) .desc',
     'DEKRA-certified, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.',
     'DEKRA-zertifiziert, 960h. JS Advanced, React, DSA, DevOps, QA, UI/UX.'],
-  ['#story .tl-row:nth-child(3) .ttl', 'Deep self-study in AI &amp; automation', 'Tiefes Selbststudium in KI &amp; Automatisierung'],
+  ['#story .tl-row:nth-child(3) .ttl', 'AI system design &amp; architecture self-study', 'KI-Systemdesign &amp; Architektur-Selbststudium'],
   ['#story .tl-row:nth-child(3) .desc',
     'n8n, Cloudflare Workers, Ollama, prompt engineering, local LLM, Docker.',
     'n8n, Cloudflare Workers, Ollama, Prompt Engineering, lokale LLMs, Docker.'],
-  ['#story .tl-row:nth-child(4) .ttl', 'Production mode · 8 live systems', 'Produktionsmodus · 8 Live-Systeme'],
+  ['#story .tl-row:nth-child(4) .ttl', 'Architecture &amp; operations · 8 production systems', 'Architektur &amp; Betrieb · 8 Produktionssysteme'],
   ['#story .tl-row:nth-child(4) .desc',
-    'End-to-end: architecture → deployment → monitoring. Solo delivery, top to bottom.',
-    'End-to-End: Architektur → Deployment → Monitoring. Solo geliefert, von oben bis unten.'],
+    'End-to-end: system design → deployment → monitoring. Designed and operated solo.',
+    'End-to-End: Systemdesign → Deployment → Monitoring. Entworfen und betrieben, solo.'],
   ['#story .tl-row:nth-child(5) .ttl', 'Open to your team', 'Offen für Ihr Team'],
   ['#story .tl-row:nth-child(5) .desc',
     'Immediate availability. Germany-based, EU citizen. Remote or on-site.',
@@ -95,11 +95,11 @@ const DICT: Array<[string, string, string]> = [
 
   // ── VALUES (§ III) ──────────────────────────────────────────
   ['#values .eyebrow', '§ III — Approach', '§ III — Arbeitsweise'],
-  ['#values .section-title', 'What an early-stage team needs<br>— in <em>one hire</em>.',
-                             'Was ein junges Team braucht<br>— in <em>einer Einstellung</em>.'],
+  ['#values .section-title', 'What I architect<br>— and <em>why it works</em>.',
+                             'Was ich architektiere<br>— und <em>warum es funktioniert</em>.'],
   ['#values .section-sub',
-    "Startups don't need specialists. They need operators who ship features end-to-end without waiting for permission. Six things I bring on day one.",
-    'Startups brauchen keine Spezialisten. Sie brauchen Operatoren, die Features end-to-end liefern, ohne auf Erlaubnis zu warten. Sechs Dinge, die ich vom ersten Tag an mitbringe.'],
+    'I design AI systems from first principles — agent topology, provider failover, latency budgets, cost routing — then build and operate them end-to-end. Six things I bring on day one.',
+    'Ich entwerfe KI-Systeme von Grund auf — Agenten-Topologie, Provider-Failover, Latenz-Budgets, Kosten-Routing — und baue und betreibe sie End-to-End. Sechs Dinge, die ich vom ersten Tag an mitbringe.'],
   ['#values .value:nth-child(1) .vix', 'i. Ship rate', 'i. Liefer-Tempo'],
   ['#values .value:nth-child(1) h3', 'Founder-grade <em>ownership</em>.', 'Gründer-niveau <em>Verantwortung</em>.'],
   ['#values .value:nth-child(1) p',
@@ -133,8 +133,8 @@ const DICT: Array<[string, string, string]> = [
 
   // ── PROJECTS (§ IV) ─────────────────────────────────────────
   ['#projects .eyebrow', '§ IV — Work · Selected', '§ IV — Projekte · Auswahl'],
-  ['#projects .section-title', 'Production systems,<br>shipped <em>solo</em>.',
-                               'Produktionssysteme,<br><em>solo</em> geliefert.'],
+  ['#projects .section-title', 'Production AI systems,<br>designed & <em>operated</em>.',
+                               'Produktive KI-Systeme,<br>entworfen & <em>betrieben</em>.'],
   ['#projects .section-sub',
     'A selection from eight systems below — each deployed on infrastructure I own and operate, architected and built end-to-end to production standards.',
     'Eine Auswahl aus acht Systemen unten — jedes auf Infrastruktur deployt, die ich besitze und betreibe, End-to-End auf Produktionsniveau gebaut.'],
@@ -235,8 +235,8 @@ const DICT: Array<[string, string, string]> = [
 
   // ── STACK (§ V) ─────────────────────────────────────────────
   ['#stack .eyebrow', '§ V — Toolkit', '§ V — Werkzeuge'],
-  ['#stack .section-title', 'Full-stack AI engineering,<br>top to <em>bottom</em>.',
-                            'Full-Stack KI-Engineering,<br>von oben bis <em>unten</em>.'],
+  ['#stack .section-title', 'AI systems design,<br>architecture to <em>operations</em>.',
+                            'KI-Systemdesign,<br>von der Architektur bis zum <em>Betrieb</em>.'],
   ['#stack .section-sub',
     "From edge serverless to local LLM on Android — every tool here I've used in production.",
     'Von Edge-Serverless bis lokales LLM auf Android — jedes Werkzeug hier habe ich in Produktion eingesetzt.'],
@@ -261,8 +261,8 @@ const DICT: Array<[string, string, string]> = [
   ['.contact-h', "Let's turn your backlog<br>into <em>shipped software</em>.",
                  'Verwandeln wir Ihr Backlog<br>in <em>ausgelieferte Software</em>.'],
   ['.contact-lede',
-    "I'm looking for AI Engineer or Founding Engineer roles at early-stage startups (Seed–Series C). I build multi-agent systems, write production code, own features end-to-end, and ship fast. EU citizen, based in Germany, available immediately.",
-    'Ich suche eine Stelle als KI-Ingenieur oder Founding Engineer bei Early-Stage-Startups (Seed–Series C). Ich baue Multi-Agenten-Systeme, schreibe Produktionscode, übernehme Features end-to-end und liefere schnell. EU-Bürger, in Deutschland, sofort verfügbar.'],
+    "I'm looking for AI Systems Architect, AI Platform, or Founding Engineer roles at early-stage startups (Seed–Series C). I design multi-agent systems, make architecture decisions, own features end-to-end, and deliver production-grade AI. EU citizen, based in Germany, available immediately.",
+    'Ich suche eine Stelle als KI-Systemarchitekt, AI Platform oder Founding Engineer bei Early-Stage-Startups (Seed–Series C). Ich entwerfe Multi-Agenten-Systeme, treffe Architekturentscheidungen, übernehme Features end-to-end und liefere produktionsreife KI. EU-Bürger, in Deutschland, sofort verfügbar.'],
   ['.contact-actions .btn-primary', 'Request an interview <span class="arrow">→</span>',
                                     'Interview anfragen <span class="arrow">→</span>'],
   ['.contact-actions .btn-ghost:nth-of-type(2)', 'See the code', 'Code ansehen'],

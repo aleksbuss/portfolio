@@ -4,8 +4,8 @@ describe('i18n basic switching', () => {
   beforeEach(() => {
     document.body.innerHTML = `
       <button id="langBtn"><span class="lbl">DE</span></button>
-      <span class="hero-tagline">AI engineer for early-stage teams.<br>
-      <em>Production systems</em>, shipped solo.</span>
+      <span class="hero-tagline">AI systems architect for early-stage teams.<br>
+      <em>Production AI systems</em>, designed & operated.</span>
       <span class="contact-eye">§ VI — Now hiring myself out</span>
     `;
     localStorage.clear();
