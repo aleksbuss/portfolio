@@ -445,7 +445,7 @@ footer.cv-foot .live { color: var(--signal); }
   .edu-langs { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
-/* ─── PRINT (A4, light theme) ─── */
+/* ─── PRINT (A4, light theme, ATS-optimised) ─── */
 @media print {
   :root {
     --bg:    #ffffff;
@@ -458,16 +458,41 @@ footer.cv-foot .live { color: var(--signal); }
     --ink-mute: #888270;
     --accent: #c63d00;
     --signal: #2e8b57;
+
+    /* ATS-safe system fonts — override custom Google Fonts */
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans:  Arial, Helvetica, sans-serif;
+    --mono:  'Courier New', Courier, monospace;
   }
   @page { size: A4; margin: 18mm 14mm; }
-  body { background: #fff; color: #000; }
+  body {
+    background: #fff; color: #000;
+    /* Disable ligatures & stylistic alternates that break ATS character extraction */
+    text-rendering: optimizeSpeed;
+    font-feature-settings: normal;
+    font-variant-ligatures: none;
+    -webkit-font-smoothing: auto;
+  }
   main { padding: 0; max-width: 100%; }
   .print-cta, .cv-mark .dot { display: none; }
   a { color: var(--accent); border-bottom: none !important; }
-  header.cv-head { margin-bottom: 1.6rem; padding-bottom: 1.2rem; }
+
+  /* Linearize ALL grid layouts into single-column for ATS line-by-line reading */
+  header.cv-head { display: block !important; margin-bottom: 1.6rem; padding-bottom: 1.2rem; }
+  header.cv-head .cv-contact { margin-top: 1rem; }
   section.cv-section { margin-bottom: 1.4rem; }
-  .proj-item, .exp-row, .stack-grid, .edu-langs { display: block !important; padding: 0.6rem 0; break-inside: avoid; }
-  .proj-when, .exp-when, .stack-grid dt { font-weight: 600; margin-bottom: 0.3rem; }
+  .proj-item, .exp-row { display: block !important; padding: 0.6rem 0; break-inside: avoid; }
+  .stack-grid { display: block !important; }
+  .stack-grid dt { display: inline; font-weight: 600; }
+  .stack-grid dt::after { content: ': '; }
+  .stack-grid dd { display: inline; margin-bottom: 0.5rem; }
+  .stack-grid dd::after { content: '\A'; white-space: pre; }
+  .edu-langs { display: block !important; }
+  .proj-when, .exp-when { font-weight: 600; margin-bottom: 0.3rem; }
+
+  /* Hide decorative em text in section titles so ATS sees clean headings */
+  .sect-title em { display: none; }
+
   h1, h2, h3 { color: #000 !important; }
   .summary, .proj-body p, .exp-body p, .exp-body ul li { color: #1a1814 !important; }
   .lang-row .bar { background: rgba(0,0,0,0.1); }
