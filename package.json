@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@types/three": "^0.184.0",
+    "playwright": "^1.61.1",
     "three": "^0.184.0"
   }
 }

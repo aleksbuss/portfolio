@@ -5,7 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
 // reuseExistingServer:true would then attach to the wrong dev server and tests
 // would fail against unrelated content. Override with $PORT in CI if needed.
 const PORT = Number(process.env.PORT) || 5193;
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -24,7 +24,7 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['iPhone 14'] } },
   ],
-  webServer: {
+  webServer: process.env.BASE_URL ? undefined : {
     command: `npm run dev -- --port ${PORT}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,

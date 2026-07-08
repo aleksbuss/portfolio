@@ -2,9 +2,9 @@ import { $, isReducedMotion } from './utils';
 
 const TOKEN_LINES = [
   '> initializing description...',
-  '> ai systems architect · multi-agent orchestration',
+  '> agentic ai engineer · multi-agent orchestration',
   '> eight systems · designed & operated solo · production-grade',
-  '> architecting AI systems end-to-end since 07/2025',
+  '> engineering AI systems end-to-end since 07/2025',
   '> available immediately · EU citizen · Hof / Saale, DE',
 ];
 

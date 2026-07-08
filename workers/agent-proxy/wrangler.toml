@@ -18,6 +18,6 @@ ALLOWED_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:
 # upstream-throttled most days; gpt-oss-120b is OpenAI's open-source 120B and
 # currently the most reliable free instruct model. Other live options as of
 # 2026-04: google/gemma-3-27b-it:free, z-ai/glm-4.5-air:free, openrouter/free.
-MODEL = "openai/gpt-oss-120b:free"
+MODEL = "openrouter/free"
 # Rate limit: messages per IP per hour
 RATE_LIMIT_PER_HOUR = "30"
