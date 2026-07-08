@@ -327,8 +327,8 @@ function apply(lang: Lang): void {
     if (lbl) lbl.textContent = lang === 'en' ? 'DE' : 'EN';
   }
   // Swap CV download hrefs to match the active language (ATS-optimised versions)
-  const cvLinks = document.querySelectorAll<HTMLAnchorElement>('a[href*="CV-ATS"]');
+  const cvLinks = document.querySelectorAll<HTMLAnchorElement>('a[href*="CV-Standard"]');
   for (const a of cvLinks) {
-    a.href = lang === 'en' ? 'CV-EN-ATS.html' : 'CV-ATS.html';
+    a.href = lang === 'en' ? 'CV-EN-Standard.html' : 'CV-Standard.html';
   }
 }
