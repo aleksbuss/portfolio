@@ -1,5 +1,5 @@
 /** Complete EN/DE i18n system. All visible copy synchronized. */
-import { $, $$ } from './utils';
+import { $ } from './utils';
 import { updateHeroHeadlineLang } from './hero';
 import { refreshOpenModalLang } from './modals';
 
@@ -14,7 +14,6 @@ const DICT: Array<[string, string, string]> = [
   // ── SYSBAR & NAVIGATION ──
   ['#sysbarStatusLbl', 'status', 'status'],
   ['#themeBtn .lbl', 'Light', 'Hell'],
-  ['#langBtn .lbl', 'DE', 'EN'],
   ['.sysbtn[data-key="the-way"] .lbl', 'The Way', 'Der Weg'],
   ['.sysbtn[data-key="ledger"] .lbl', 'Ledger', 'Register'],
   ['.sysbtn[data-key="systems"] .lbl', 'Systems', 'Systeme'],
@@ -222,10 +221,6 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(5) .proj-stat:nth-child(3) .l', 'guardrails', 'Sicherheitsfilter'],
   ['.proj:nth-child(5) .proj-stat:nth-child(4) .l', 'SaaS', 'SaaS'],
 
-  // Explore all repos CTA
-  ['#projects > .reveal:last-child .btn-ghost',
-    'Explore all repositories on GitHub <span class="arrow">→</span>',
-    'Alle Repositories auf GitHub erkunden <span class="arrow">→</span>'],
 
   // ── SECTION § V: TOOLKIT & STACK (#stack) ──
   ['#stack .eyebrow', '§ V — Toolkit &amp; Stack', '§ V — Werkzeuge &amp; Stack'],
@@ -275,8 +270,25 @@ const DICT: Array<[string, string, string]> = [
   ['.cmd-suggestions .cmd-sug:nth-child(4)', 'Hiring process?', 'Einstellungsprozess?'],
 ];
 
+function getStoredLang(): Lang {
+  try {
+    const val = localStorage.getItem(KEY);
+    return val === 'de' ? 'de' : 'en';
+  } catch {
+    return 'en';
+  }
+}
+
+function setStoredLang(lang: Lang): void {
+  try {
+    localStorage.setItem(KEY, lang);
+  } catch {
+    // Gracefully handle storage quota or SecurityError in sandboxes
+  }
+}
+
 export function initI18n(): void {
-  const saved = (localStorage.getItem(KEY) as Lang | null) ?? 'en';
+  const saved = getStoredLang();
   apply(saved);
 
   const btn = $<HTMLButtonElement>('#langBtn');
@@ -284,7 +296,7 @@ export function initI18n(): void {
     btn.addEventListener('click', () => {
       const next: Lang = (currentLang() === 'en') ? 'de' : 'en';
       apply(next);
-      localStorage.setItem(KEY, next);
+      setStoredLang(next);
     });
   }
 }
@@ -305,7 +317,12 @@ export function apply(lang: Lang): void {
   // 3. Apply DOM translations from dictionary
   for (const [sel, en, de] of DICT) {
     const el = $(sel);
-    if (!el) continue;
+    if (!el) {
+      if (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) {
+        console.warn('[i18n] element not found for selector:', sel);
+      }
+      continue;
+    }
     el.innerHTML = lang === 'en' ? en : de;
   }
 
