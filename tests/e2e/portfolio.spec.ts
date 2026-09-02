@@ -161,7 +161,7 @@ test.describe('portfolio · theme + i18n', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await page.locator('#langBtn').click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-    await expect(page.locator('.contact-eye')).toContainText('Verfügbar');
+    await expect(page.locator('.contact-eye')).toContainText('Kontakt');
   });
 });
 

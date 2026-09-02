@@ -1,5 +1,7 @@
-/** Minimal EN/DE i18n. Selectors mapped to translations. */
+/** Complete EN/DE i18n system. All visible copy synchronized. */
 import { $, $$ } from './utils';
+import { updateHeroHeadlineLang } from './hero';
+import { refreshOpenModalLang } from './modals';
 
 export type Lang = 'en' | 'de';
 
@@ -7,71 +9,74 @@ const KEY = 'lang';
 
 /**
  * Each entry: [selector, en HTML, de HTML].
- * Original HTML (the one in the markup) is the EN string, so toggling back is just
- * "set DE" / "set EN" — no caching needed.
  */
 const DICT: Array<[string, string, string]> = [
-  // sysbar status field
+  // ── SYSBAR & NAVIGATION ──
   ['#sysbarStatusLbl', 'status', 'status'],
-
-  // sysbtns & nav
-  ['#themeBtn .lbl', 'Light', 'Hell'], // initial label (when in dark mode)
-  ['#langBtn .lbl', 'DE', 'EN'],       // shows the OPPOSITE language as click target
-  ['.sysbtn[data-key="manifesto"] .lbl', 'Manifesto', 'Manifest'],
+  ['#themeBtn .lbl', 'Light', 'Hell'],
+  ['#langBtn .lbl', 'DE', 'EN'],
+  ['.sysbtn[data-key="the-way"] .lbl', 'The Way', 'Der Weg'],
   ['.sysbtn[data-key="ledger"] .lbl', 'Ledger', 'Register'],
   ['.sysbtn[data-key="systems"] .lbl', 'Systems', 'Systeme'],
-  ['.sysbtn[data-key="approach"] .lbl', 'Approach', 'Ansatz'],
+  ['.sysbtn[data-key="approach"] .lbl', 'Approach', 'Arbeitsweise'],
   ['.sysbtn[data-key="stack"] .lbl', 'Stack', 'Stack'],
   ['.sysbtn[data-key="contact"] .lbl', 'Contact', 'Kontakt'],
   ['.sysbar-cta .lbl', 'Request Interview →', 'Interview anfragen →'],
-  ['.mobile-nav-item[data-key="manifesto"] .lbl', 'Manifesto', 'Manifest'],
+  ['.mobile-nav-item[data-key="the-way"] .lbl', 'The Way', 'Der Weg'],
   ['.mobile-nav-item[data-key="ledger"] .lbl', 'Ledger', 'Register'],
   ['.mobile-nav-item[data-key="systems"] .lbl', 'Systems', 'Systeme'],
-  ['.mobile-nav-item[data-key="approach"] .lbl', 'Approach', 'Ansatz'],
+  ['.mobile-nav-item[data-key="approach"] .lbl', 'Approach', 'Arbeitsweise'],
   ['.mobile-nav-item[data-key="stack"] .lbl', 'Stack', 'Stack'],
   ['.mobile-nav-item[data-key="contact"] .lbl', 'Contact', 'Kontakt'],
   ['.mobile-cta .lbl', 'Request Interview →', 'Interview anfragen →'],
 
-  // hero
-  ['.hero-marker .left', '№ 2026 / FOLIO', 'NR. 2026 / FOLIO'],
-  ['.hero-marker .right', 'Available now', 'Sofort verfügbar'],
-  ['.agent-handshake span:last-child', 'handshake authenticated · session opened · greeting human',
-                                       'Handshake authentifiziert · Sitzung offen · begrüße Mensch'],
-  ['.hero-tagline', 'Agentic AI engineer · multi-agent orchestration.<br>\n      <em>Production AI systems</em>, built & operated.',
-                    'Agentic AI Engineer · Multi-Agenten-Orchestrierung.<br>\n      <em>Produktive KI-Systeme</em>, gebaut & betrieben.'],
+  // ── HERO SECTION ──
+  ['[data-i18n="hero.marker.left"]', '№ 2026 / FOLIO · AGENTIC AI ARCHITECTURE', 'NR. 2026 / FOLIO · AGENTIC AI ARCHITEKTUR'],
+  ['[data-i18n="hero.marker.right"]', 'AVAILABLE FOR HIRE (SEED–SERIES C)', 'VERFÜGBAR ZUR EINSTELLUNG (SEED–SERIES C)'],
+  ['[data-i18n="hero.tagline"]',
+    'Agentic AI engineer · Creator of <em>Orchestra</em> (Mixture-of-Agents) and <em>4take</em> (Multi-Model AI Code Review Council). Five production AI systems designed &amp; operated solo · 5,400+ automated tests.',
+    'Agentic AI Engineer · Entwickler von <em>Orchestra</em> (Mixture-of-Agents) und <em>4take</em> (Multi-Modell-KI-Code-Review-Rat). Fünf produktive KI-Systeme solo entworfen &amp; betrieben · 5.400+ automatisierte Tests.'],
+  ['[data-i18n="hero.pill1"]', 'Orchestra MoA (4,100+ tests)', 'Orchestra MoA (4.100+ Tests)'],
+  ['[data-i18n="hero.pill2"]', '4take FastMCP Council (Pytest)', '4take FastMCP Rat (Pytest)'],
+  ['[data-i18n="hero.pill3"]', '5 Production Systems Live', '5 Produktionssysteme live'],
+  ['[data-i18n="hero.pill4"]', 'Hof / Saale, Germany', 'Hof / Saale, Deutschland'],
+  ['[data-i18n="hero.interview"]', 'Request an interview', 'Interview anfragen'],
+  ['[data-i18n="hero.explore"]', 'Explore systems →', 'Systeme erkunden →'],
+  ['[data-i18n="hero.cv"]', 'Download CV', 'Lebenslauf herunterladen'],
+  ['[data-i18n="hero.foot.loc.lbl"]', 'Location', 'Standort'],
+  ['[data-i18n="hero.foot.loc.val"]', 'Hof / Saale, Bavaria, Germany · EU Citizen · Remote', 'Hof / Saale, Bayern, Deutschland · EU-Bürger · Remote'],
+  ['[data-i18n="hero.foot.cred.lbl"]', 'Credentials', 'Zertifizierung'],
+  ['[data-i18n="hero.foot.cred.val"]', 'DEKRA №2023337 · Tel-Ran Berlin (960h)', 'DEKRA №2023337 · Tel-Ran Berlin (960 Std.)'],
+  ['[data-i18n="hero.foot.stack.lbl"]', 'Core Stack', 'Kern-Stack'],
+  ['[data-i18n="hero.foot.stack.val"]', 'TypeScript · Python 3.12 · FastMCP · MoA · Cloudflare Workers', 'TypeScript · Python 3.12 · FastMCP · MoA · Cloudflare Workers'],
 
-  // hero foot — meta-col has two .lbl/.val pairs separated by <br><br>;
-  // use :nth-of-type on span to dodge the line-break siblings.
-  ['.hero-foot .meta-col:nth-child(1) span:nth-of-type(1)', 'Based', 'Standort'],
-  ['.hero-foot .meta-col:nth-child(1) span:nth-of-type(3)', 'Status', 'Status'],
-  ['.hero-foot .meta-col:nth-child(1) span:nth-of-type(4)', 'EU citizen · remote-first', 'EU-Bürger · remote-first'],
-  ['.hero-foot .meta-col:nth-child(2) .lbl', 'Credentials', 'Qualifikation'],
-  ['.hero-foot .meta-col:nth-child(3) .lbl', 'Stack', 'Stack'],
-  ['.hero-foot .hero-actions .btn-primary', 'View work <span class="arrow">→</span>',
-                                            'Projekte <span class="arrow">→</span>'],
-  ['.hero-foot .hero-actions .btn-ghost', 'CV', 'Lebenslauf'],
+  // ── TICKER ──
+  ['.ticker-track span:first-child',
+    '<span class="key">MIXTURE-OF-AGENTS</span> <span class="dot">●</span> FASTMCP COUNCIL PROTOCOL <span class="dot">●</span> <span class="key">TYPESCRIPT · PYTHON 3.12</span> <span class="dot">●</span> <span class="key">CLOUDFLARE WORKERS</span> <span class="dot">●</span> <span class="key">WHISPER · LLAMA 3.3 · GEMINI 2.5</span> <span class="dot">●</span> 5,400+ AUTOMATED TESTS <span class="dot">●</span> <span class="key">DOCKER · SYSTEMD</span> <span class="dot">●</span> HMAC-SHA256 <span class="dot">●</span> OLLAMA · LOCAL LLM <span class="dot">●</span> <span class="key">N8N AGENTS</span> <span class="dot">●</span> SUPABASE · FIREBASE <span class="dot">●</span>',
+    '<span class="key">MIXTURE-OF-AGENTS</span> <span class="dot">●</span> FASTMCP-RAT-PROTOKOLL <span class="dot">●</span> <span class="key">TYPESCRIPT · PYTHON 3.12</span> <span class="dot">●</span> <span class="key">CLOUDFLARE WORKERS</span> <span class="dot">●</span> <span class="key">WHISPER · LLAMA 3.3 · GEMINI 2.5</span> <span class="dot">●</span> 5.400+ AUTOMATISIERTE TESTS <span class="dot">●</span> <span class="key">DOCKER · SYSTEMD</span> <span class="dot">●</span> HMAC-SHA256 <span class="dot">●</span> OLLAMA · LOKALE LLMS <span class="dot">●</span> <span class="key">N8N AGENTEN</span> <span class="dot">●</span> SUPABASE · FIREBASE <span class="dot">●</span>'],
 
-  // section heads
-  // ── METRICS (§ I) ───────────────────────────────────────────
+  // ── SECTION § I: AT A GLANCE (#index) ──
   ['#index .eyebrow', '§ I — At a glance', '§ I — Auf einen Blick'],
-  ['#index .section-title', 'A short ledger of <em>what shipped</em>.', 'Eine kurze Bilanz <em>der Lieferungen</em>.'],
-  ['#index .section-sub', 'Every figure points to live infrastructure — production-grade systems I engineered, built, and deployed end-to-end under my own name.',
-                          'Jede Zahl steht für Live-Infrastruktur — produktionsreife Systeme, die ich selbst entwickelt, gebaut und End-to-End deployt habe.'],
+  ['#index .section-title', 'A short ledger of <em>what shipped</em>.', 'Eine kurze Bilanz <em>gelieferter Systeme</em>.'],
+  ['#index .section-sub',
+    'Every figure points to live infrastructure — production-grade systems I engineered, built, and deployed end-to-end under my own name.',
+    'Jede Zahl steht für Live-Infrastruktur — produktionsreife Systeme, die ich selbst entwickelt, gebaut und End-to-End unter eigenem Namen deployt habe.'],
   ['#index .metric:nth-child(1) .lbl', 'Production systems', 'Produktionssysteme'],
-  ['#index .metric:nth-child(1) .det', 'All deployed & live', 'Alle deployt & live'],
+  ['#index .metric:nth-child(1) .det', 'All deployed &amp; live solo', 'Alle solo deployt &amp; live'],
   ['#index .metric:nth-child(2) .lbl', 'Automated tests', 'Automatisierte Tests'],
   ['#index .metric:nth-child(2) .det', 'Vitest · Playwright · Pytest', 'Vitest · Playwright · Pytest'],
   ['#index .metric:nth-child(3) .lbl', 'Zero to five live', 'Von null auf fünf live'],
   ['#index .metric:nth-child(3) .det', 'Solo delivery, since 07/2025', 'Solo geliefert, seit 07/2025'],
   ['#index .metric:nth-child(4) .lbl', 'Languages spoken', 'Gesprochene Sprachen'],
+  ['#index .metric:nth-child(4) .det', 'RU · LV · EN · DE', 'RU · LV · EN · DE'],
 
-  // ── STORY (§ II) ────────────────────────────────────────────
-  ['#story .eyebrow', '§ II — The route', '§ II — Der Weg'],
+  // ── SECTION § II: THE WAY (#story) ──
+  ['#story .eyebrow', '§ II — The Way', '§ II — Der Weg'],
   ['#story .section-title', 'Fourteen years in logistics.<br>Now I build <em>AI systems for production</em>.',
-                            'Vierzehn Jahre Logistik.<br>Jetzt entwickle ich <em>KI-Systeme für die Produktion</em>.'],
+                            'Vierzehn Jahre in der Logistik.<br>Jetzt entwickle ich <em>KI-Systeme für die Produktion</em>.'],
+  ['[data-i18n="story.badge"]', 'ALEKSEJS BUSS · AGENTIC AI ENGINEER', 'ALEKSEJS BUSS · AGENTIC AI ENGINEER'],
   ['#story .story-left .lede', "I didn't take the conventional route. I took the <em>self-disciplined</em> one.",
                                 'Ich nahm nicht den konventionellen Weg. Ich nahm den <em>disziplinierten</em>.'],
-  // Bio paragraphs the user explicitly flagged as untranslated.
   ['#story .story-left p:nth-of-type(2)',
     'Fourteen years in multicultural logistics — Tesco Carlisle, long-haul freight across the UK and Europe — taught me systems, processes, and how to <strong>deliver under pressure</strong>.',
     'Vierzehn Jahre in multikultureller Logistik — Tesco Carlisle, Fernverkehr durch Großbritannien und Europa — haben mich Systeme, Prozesse und das <strong>Liefern unter Druck</strong> gelehrt.'],
@@ -81,9 +86,10 @@ const DICT: Array<[string, string, string]> = [
   ['#story .story-left p:nth-of-type(4)',
     "From mid-2025, <strong>I've been shipping</strong>. Not learning. Real systems, real infrastructure, built end-to-end — under my own name.",
     'Seit Mitte 2025 <strong>liefere ich</strong>. Nicht mehr lerne. Echte Systeme, echte Infrastruktur, End-to-End gebaut — unter meinem eigenen Namen.'],
-  ['.story-pull', 'Self-discipline is the skill that transfers. Everything else I learn fast — and I have.',
-                  'Selbstdisziplin ist die Fähigkeit, die übertragbar ist. Alles andere lerne ich schnell — und habe es bewiesen.'],
-  // Timeline (5 rows)
+  ['.story-pull',
+    '“Self-discipline is the skill that transfers. Everything else I learn fast — and I have.”',
+    '„Selbstdisziplin ist die Fähigkeit, die übertragbar ist. Alles andere lerne ich schnell — und habe es bewiesen.“'],
+  // Timeline rows
   ['#story .tl-row:nth-child(1) .ttl', 'Logistics, UK &amp; Germany', 'Logistik, UK &amp; Deutschland'],
   ['#story .tl-row:nth-child(1) .desc',
     'Tesco Carlisle (WMS, planograms), long-haul freight. Process, resilience, multicultural teams.',
@@ -105,60 +111,59 @@ const DICT: Array<[string, string, string]> = [
     'Immediate availability. Germany-based, EU citizen. Remote or on-site.',
     'Sofort verfügbar. Standort Deutschland, EU-Bürger. Remote oder vor Ort.'],
 
-  // ── VALUES (§ III) ──────────────────────────────────────────
+  // ── SECTION § III: APPROACH (#values) ──
   ['#values .eyebrow', '§ III — Approach', '§ III — Arbeitsweise'],
   ['#values .section-title', 'What I build<br>— and <em>why it works</em>.',
                              'Was ich entwickle<br>— und <em>warum es funktioniert</em>.'],
   ['#values .section-sub',
     'I design AI systems from first principles — agent topology, provider failover, latency budgets, cost routing — then build and operate them end-to-end. Six things I bring on day one.',
     'Ich entwerfe KI-Systeme von Grund auf — Agenten-Topologie, Provider-Failover, Latenz-Budgets, Kosten-Routing — und baue und betreibe sie End-to-End. Sechs Dinge, die ich vom ersten Tag an mitbringe.'],
-  ['#values .value:nth-child(1) .vix', 'i. Ship rate', 'i. Liefer-Tempo'],
+  ['#values .value:nth-child(1) .vix', '01. Ship rate', '01. Liefer-Tempo'],
   ['#values .value:nth-child(1) h3', 'Founder-grade <em>ownership</em>.', 'Gründer-niveau <em>Verantwortung</em>.'],
   ['#values .value:nth-child(1) p',
     'Spec → architecture → code → deploy → monitor → iterate. No hand-offs, no "not my job". Five systems shipped solo since mid-2025. The cadence your runway needs.',
     'Spec → Architektur → Code → Deploy → Monitor → Iteration. Keine Übergaben, kein „nicht mein Bier". Fünf Systeme solo geliefert seit Mitte 2025. Die Kadenz, die Ihre Runway braucht.'],
-  ['#values .value:nth-child(2) .vix', 'ii. Full stack', 'ii. Voller Stack'],
+  ['#values .value:nth-child(2) .vix', '02. Full stack', '02. Voller Stack'],
   ['#values .value:nth-child(2) h3', 'AI, backend &amp; <em>infra</em> in one.', 'KI, Backend &amp; <em>Infra</em> in einem.'],
   ['#values .value:nth-child(2) p',
     'TypeScript/Next.js, LLM pipelines, multi-agent orchestration, FastAPI/Python, Cloudflare edge, Docker/systemd. One headcount, full stack — your seed runway stretches further.',
     'TypeScript/Next.js, LLM-Pipelines, Multi-Agenten-Orchestrierung, FastAPI/Python, Cloudflare Edge, Docker/systemd. Eine Person, voller Stack — Ihre Seed-Runway reicht weiter.'],
-  ['#values .value:nth-child(3) .vix', 'iii. AI-native', 'iii. KI-nativ'],
+  ['#values .value:nth-child(3) .vix', '03. AI-native', '03. KI-nativ'],
   ['#values .value:nth-child(3) h3', 'LLM is native, <em>not a bolt-on</em>.', 'LLM ist nativ, <em>kein Add-on</em>.'],
   ['#values .value:nth-child(3) p',
     'I build agent systems, not wrappers: Mixture-of-Agents pipelines, disagreement detection, reflection loops. Multi-provider failover (OpenAI / Gemini / Groq / Ollama), structured outputs, voice pipelines. Designed with latency, cost &amp; failure modes in mind.',
     'Ich baue Agentensysteme, keine Wrapper: Mixture-of-Agents-Pipelines, Disagreement Detection, Reflexionsschleifen. Multi-Provider-Failover (OpenAI / Gemini / Groq / Ollama), strukturierte Outputs, Voice-Pipelines. Entworfen mit Latenz, Kosten &amp; Fehlermodi im Blick.'],
-  ['#values .value:nth-child(4) .vix', 'iv. Production hygiene', 'iv. Produktions-Hygiene'],
+  ['#values .value:nth-child(4) .vix', '04. Production hygiene', '04. Produktions-Hygiene'],
   ['#values .value:nth-child(4) h3', 'Defaults, <em>not afterthoughts</em>.', 'Standards, <em>kein Nachgedanke</em>.'],
   ['#values .value:nth-child(4) p',
     'HMAC-SHA256, zero-secrets architecture, rate limiting, systemd auto-restart, health checks, webhook verification, secrets via env. Built in from day one.',
     'HMAC-SHA256, Zero-Secrets-Architektur, Rate Limiting, systemd Auto-Restart, Health Checks, Webhook-Verifizierung, Secrets via Env. Vom ersten Tag an eingebaut.'],
-  ['#values .value:nth-child(5) .vix', 'v. Late-career grit', 'v. Späte-Karriere-Biss'],
+  ['#values .value:nth-child(5) .vix', '05. Late-career grit', '05. Späte-Karriere-Biss'],
   ['#values .value:nth-child(5) h3', 'Self-driven, <em>under pressure</em>.', 'Eigenmotiviert, <em>unter Druck</em>.'],
   ['#values .value:nth-child(5) p',
     "Career-switched at 35+ and shipped five systems solo while moving from part-time driving into full-time engineering. Not talent — discipline. I don't need reminders to unblock myself.",
     'Mit 35+ den Beruf gewechselt und fünf Systeme solo geliefert — beim Übergang vom Teilzeit-Fahren zur Vollzeit-Entwicklung. Kein Talent — Disziplin. Ich brauche keine Erinnerungen, um mich selbst zu entblockieren.'],
-  ['#values .value:nth-child(6) .vix', 'vi. Full product', 'vi. Gesamtes Produkt'],
+  ['#values .value:nth-child(6) .vix', '06. Full product', '06. Gesamtes Produkt'],
   ['#values .value:nth-child(6) h3', 'Beyond the <em>backend</em>.', 'Über das <em>Backend</em> hinaus.'],
   ['#values .value:nth-child(6) p',
     'I can design, implement, and launch an AI product end to end — voice, visual generation (ComfyUI, Stable Diffusion), UI, copy, deployment. Useful when your team is three people and a deadline.',
     'Ich kann ein KI-Produkt von Anfang bis Ende entwerfen, umsetzen und launchen — Voice, Bildgenerierung (ComfyUI, Stable Diffusion), UI, Texte, Deployment. Nützlich, wenn Ihr Team aus drei Leuten und einer Deadline besteht.'],
 
-  // ── PROJECTS (§ IV) ─────────────────────────────────────────
-  ['#projects .eyebrow', '§ IV — Work · Selected', '§ IV — Projekte · Auswahl'],
+  // ── SECTION § IV: SYSTEMS (#projects) ──
+  ['#projects .eyebrow', '§ IV — Systems · Selected', '§ IV — Systeme · Auswahl'],
   ['#projects .section-title', 'Production systems,<br>shipped <em>solo</em>.',
                                'Produktive Systeme,<br>solo <em>geliefert</em>.'],
   ['#projects .section-sub',
     'A selection from five production systems below — each deployed on infrastructure I own and operate, engineered and built end-to-end to production standards.',
     'Eine Auswahl aus fünf Produktionssystemen unten — jedes auf Infrastruktur deployt, die ich besitze und betreibe, End-to-End auf Produktionsniveau gebaut.'],
 
-  
   // Project 01 — Orchestra
-  ['.proj:nth-child(1) .proj-meta .date:nth-child(3)', 'Flagship', 'Flaggschiff'],
+  ['.proj:nth-child(1) .proj-meta .badge', 'Flagship System', 'Flaggschiff-System'],
   ['.proj:nth-child(1) .tagline', 'Mixture-of-Agents pipeline · code-guaranteed Skeptic · live cost telemetry.',
                                   'Mixture-of-Agents-Pipeline · code-garantierter Skeptiker · Live-Kosten-Telemetrie.'],
   ['.proj:nth-child(1) .desc',
-    'Self-hosted AI workspace that runs 3–5 specialised expert agents in parallel on every substantive turn. Embedding-based disagreement detection surfaces expert conflict instead of smoothing it away; a reflection critic revises the final answer. 4,100+ tests, 70+ documented post-mortems, CI — engineering-led, MIT-licensed.',
-    'Selbst gehosteter KI-Workspace, der bei jedem substanziellen Turn 3–5 spezialisierte Experten-Agenten parallel ausführt. Embedding-basierte Disagreement Detection macht Expertenkonflikte sichtbar, statt sie zu glätten; ein Reflexions-Kritiker überarbeitet die finale Antwort. 4.100+ Tests, 70+ dokumentierte Post-Mortems, CI — engineering-geführt, MIT-lizenziert.'],
+    'Self-hosted AI workspace running 3–5 specialized agents in parallel per turn. Disagreement detection surfaces expert conflict; reflection critic revises the final answer. 4,100+ tests, 70+ documented post-mortems, CI/CD — MIT licensed.',
+    'Selbst gehosteter KI-Workspace, der 3–5 spezialisierte Agenten parallel ausführt. Disagreement Detection macht Expertenkonflikte sichtbar; ein Reflexions-Kritiker überarbeitet die finale Antwort. 4.100+ Tests, 70+ Post-Mortems, CI/CD — MIT-lizenziert.'],
   ['.proj:nth-child(1) .proj-cta', 'Read case study →', 'Fallstudie lesen →'],
   ['.proj:nth-child(1) .proj-stat:nth-child(1) .l', 'tests', 'Tests'],
   ['.proj:nth-child(1) .proj-stat:nth-child(2) .l', 'post-mortems', 'Post-Mortems'],
@@ -166,7 +171,7 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(1) .proj-stat:nth-child(4) .l', 'open source', 'Open Source'],
 
   // Project 02 — 4take
-  ['.proj:nth-child(2) .proj-meta .date:nth-child(3)', 'Flagship', 'Flaggschiff'],
+  ['.proj:nth-child(2) .proj-meta .badge', 'Flagship Protocol', 'Flaggschiff-Protokoll'],
   ['.proj:nth-child(2) .tagline', 'FastMCP &amp; CLI council · 4-model consensus protocol · adversarial synthesis.',
                                   'FastMCP- &amp; CLI-Rat · 4-Modell-Konsens-Protokoll · adversarielle Synthese.'],
   ['.proj:nth-child(2) .desc',
@@ -179,7 +184,7 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(2) .proj-stat:nth-child(4) .l', 'open source', 'Open Source'],
 
   // Project 03 — AI Dictaphone
-  ['.proj:nth-child(3) .proj-meta .date:nth-child(3)', 'Production', 'Produktion'],
+  ['.proj:nth-child(3) .proj-meta .badge', 'Production App', 'Produktions-App'],
   ['.proj:nth-child(3) .tagline', 'Edge voice pipeline · Whisper → LLM · sub-second latency.',
                                   'Edge-Voice-Pipeline · Whisper → LLM · Sub-Sekunden-Latenz.'],
   ['.proj:nth-child(3) .desc',
@@ -192,80 +197,76 @@ const DICT: Array<[string, string, string]> = [
   ['.proj:nth-child(3) .proj-stat:nth-child(4) .l', 'global', 'global'],
 
   // Project 04 — AI Moderation Bot
-  ['.proj:nth-child(4) .tagline', 'n8n workflow · dual-AI failover · auto-escalation.',
-                                  'n8n-Workflow · Dual-KI-Failover · Auto-Eskalation.'],
+  ['.proj:nth-child(4) .proj-meta .badge', 'Production Bot', 'Produktions-Bot'],
+  ['.proj:nth-child(4) .tagline', 'LLM moderation pipeline with n8n orchestrator &amp; multi-turn context memory.',
+                                  'LLM-Moderations-Pipeline mit n8n-Orchestrator &amp; Multi-Turn-Kontextspeicher.'],
   ['.proj:nth-child(4) .desc',
-    'Production AI agent workflow for Telegram moderation. 15+ node n8n pipeline classifies every message with structured JSON outputs, routes to action, escalates sanctions. 1,000+ tests across bot, API, and mini-app.',
-    'KI-Agent-Workflow für Telegram-Moderation in Produktion. Eine n8n-Pipeline mit 15+ Knoten klassifiziert jede Nachricht mit structured JSON-Outputs, leitet weiter und eskaliert Sanktionen. 1.000+ Tests über Bot, API und Mini-App.'],
+    'Autonomous Telegram community moderation bot operating on zero-downtime n8n workflows with LLaMA 3.3 and Gemini fallbacks. Detects spam, scams, toxic intent, and multi-turn manipulation patterns in real-time. 1,000+ tests across bot, API, and mini-app.',
+    'Autonomer Telegram-Community-Moderationsbot auf ausfallsicheren n8n-Workflows mit LLaMA 3.3 und Gemini-Fallback. Erkennt Spam, Betrug und Manipulation in Echtzeit. 1.000+ Tests über Bot, API und Mini-App.'],
   ['.proj:nth-child(4) .proj-cta', 'Read case study →', 'Fallstudie lesen →'],
   ['.proj:nth-child(4) .proj-stat:nth-child(1) .l', 'tests', 'Tests'],
-  ['.proj:nth-child(4) .proj-stat:nth-child(2) .l', 'AI providers', 'KI-Anbieter'],
-  ['.proj:nth-child(4) .proj-stat:nth-child(3) .l', 'sanctions', 'Sanktionen'],
-  ['.proj:nth-child(4) .proj-stat:nth-child(4) .l', 'structured', 'strukturiert'],
+  ['.proj:nth-child(4) .proj-stat:nth-child(2) .l', 'active', 'aktiv'],
+  ['.proj:nth-child(4) .proj-stat:nth-child(3) .l', 'orchestrator', 'Orchestrator'],
+  ['.proj:nth-child(4) .proj-stat:nth-child(4) .l', 'memory', 'Speicher'],
 
   // Project 05 — AI Psychology Bot
-  ['.proj:nth-child(5) .proj-meta .date:nth-child(3)', 'SaaS product', 'SaaS-Produkt'],
-  ['.proj:nth-child(5) .tagline', 'Full SaaS · payments · crisis support · CBT exercises.',
-                                  'Komplettes SaaS · Zahlungen · Krisenhilfe · CBT-Übungen.'],
+  ['.proj:nth-child(5) .proj-meta .badge', 'Commercial SaaS', 'Kommerzielles SaaS'],
+  ['.proj:nth-child(5) .tagline', 'Therapeutic reflection loops with Telegram Stars native monetization.',
+                                  'Therapeutische Reflexionsschleifen mit nativer Telegram-Stars-Monetarisierung.'],
   ['.proj:nth-child(5) .desc',
-    'End-to-end SaaS built solo to prove out full payment-system integration: distributed serverless backend + auth + Telegram Stars payments + atomic credits + referral program + AI failover. The hard parts wired cleanly, end to end.',
-    'End-to-End-SaaS solo gebaut, um die komplette Zahlungssystem-Integration zu zeigen: verteiltes Serverless-Backend + Auth + Telegram-Stars-Zahlungen + atomare Credits + Referral-Programm + KI-Failover. Die schwierigen Teile sauber verdrahtet, End-to-End.'],
+    'Commercial AI psychological assistant featuring safe reflective listening techniques, personalized state tracking, and integrated Telegram Stars payments for subscription tiers.',
+    'Kommerzieller psychologischer KI-Assistent mit reflektierenden Gesprächstechniken, personalisierter Zustandserfassung und integrierten Telegram-Stars-Zahlungen für Abonnements.'],
   ['.proj:nth-child(5) .proj-cta', 'Read case study →', 'Fallstudie lesen →'],
-  ['.proj:nth-child(5) .proj-stat:nth-child(1) .l', 'protocol', 'Protokoll'],
-  ['.proj:nth-child(5) .proj-stat:nth-child(2) .l', 'payments', 'Zahlungen'],
-  ['.proj:nth-child(5) .proj-stat:nth-child(3) .l', 'credit ops', 'Kredit-Ops'],
-  ['.proj:nth-child(5) .proj-stat:nth-child(4) .l', 'deployed', 'deployt'],
+  ['.proj:nth-child(5) .proj-stat:nth-child(1) .l', 'monetized', 'monetarisiert'],
+  ['.proj:nth-child(5) .proj-stat:nth-child(2) .l', 'private', 'privat'],
+  ['.proj:nth-child(5) .proj-stat:nth-child(3) .l', 'guardrails', 'Sicherheitsfilter'],
+  ['.proj:nth-child(5) .proj-stat:nth-child(4) .l', 'SaaS', 'SaaS'],
 
-  // "Explore all repos" CTA at bottom of projects
-  ['#projects > .reveal:last-child .btn-ghost', 'Explore all repositories on GitHub <span class="arrow">→</span>',
-                                                'Alle Repositories auf GitHub erkunden <span class="arrow">→</span>'],
+  // Explore all repos CTA
+  ['#projects > .reveal:last-child .btn-ghost',
+    'Explore all repositories on GitHub <span class="arrow">→</span>',
+    'Alle Repositories auf GitHub erkunden <span class="arrow">→</span>'],
 
-  // ── STACK (§ V) ─────────────────────────────────────────────
-  ['#stack .eyebrow', '§ V — Toolkit', '§ V — Werkzeuge'],
-  ['#stack .section-title', 'AI systems engineering,<br>design to <em>operations</em>.',
-                            'KI-System-Engineering,<br>vom Design bis zum <em>Betrieb</em>.'],
+  // ── SECTION § V: TOOLKIT & STACK (#stack) ──
+  ['#stack .eyebrow', '§ V — Toolkit &amp; Stack', '§ V — Werkzeuge &amp; Stack'],
+  ['#stack .section-title', 'Production stack<br>— <em>tools I ship with</em>.',
+                            'Produktions-Stack<br>— <em>Werkzeuge, mit denen ich liefere</em>.'],
   ['#stack .section-sub',
-    "From edge serverless to local LLM on Android — every tool here I've used in production.",
-    'Von Edge-Serverless bis lokales LLM auf Android — jedes Werkzeug hier habe ich in Produktion eingesetzt.'],
+    "Tools I've used in production — tested, debugged under pressure, and operated on live infrastructure.",
+    'Werkzeuge, die ich in Produktion eingesetzt habe — getestet, unter Druck debuggt und auf Live-Infrastruktur betrieben.'],
   ['#stack .stack-row:nth-child(1) .ttl', '<em>AI</em> · LLM · Agents', '<em>KI</em> · LLM · Agenten'],
-  ['#stack .stack-row:nth-child(2) .ttl', '<em>Automation</em> &amp; Workflows', '<em>Automatisierung</em> &amp; Workflows'],
-  ['#stack .stack-row:nth-child(3) .ttl', '<em>Programming</em> &amp; Testing', '<em>Programmierung</em> &amp; Testing'],
-  ['#stack .stack-row:nth-child(4) .ttl', '<em>Cloud</em> &amp; Serverless', '<em>Cloud</em> &amp; Serverless'],
-  ['#stack .stack-row:nth-child(5) .ttl', '<em>Production</em> &amp; Ops', '<em>Produktion</em> &amp; Ops'],
-  ['#stack .stack-row:nth-child(6) .ttl', '<em>Security</em> &amp; Protocols', '<em>Sicherheit</em> &amp; Protokolle'],
-  // Languages
+  ['#stack .stack-row:nth-child(2) .ttl', '<em>Programming</em> &amp; Testing', '<em>Programmierung</em> &amp; Testing'],
+  ['#stack .stack-row:nth-child(3) .ttl', '<em>Automation</em> &amp; Workflows', '<em>Automatisierung</em> &amp; Workflows'],
+  ['#stack .stack-row:nth-child(4) .ttl', '<em>Security</em> &amp; Protocols', '<em>Sicherheit</em> &amp; Protokolle'],
+
+  // Spoken languages table
   ['.langs .lang:nth-child(1) .name', 'Russian', 'Russisch'],
-  ['.langs .lang:nth-child(1) .lvl',  'Native', 'Muttersprache'],
+  ['.langs .lang:nth-child(1) .lvl',  'Native fluency', 'Muttersprache'],
   ['.langs .lang:nth-child(2) .name', 'Latvian', 'Lettisch'],
-  ['.langs .lang:nth-child(2) .lvl',  'C2 · Fluent', 'C2 · fließend'],
+  ['.langs .lang:nth-child(2) .lvl',  'Native fluency', 'Muttersprache / Zweitsprache'],
   ['.langs .lang:nth-child(3) .name', 'English', 'Englisch'],
-  ['.langs .lang:nth-child(3) .lvl',  'C1 · Business', 'C1 · Business'],
+  ['.langs .lang:nth-child(3) .lvl',  'C1 Professional working proficiency', 'C1 Fließend verhandlungssicher'],
   ['.langs .lang:nth-child(4) .name', 'German', 'Deutsch'],
-  ['.langs .lang:nth-child(4) .lvl',  'B1', 'B1'],
+  ['.langs .lang:nth-child(4) .lvl',  'B1 Independent user', 'B1 Selbstständige Sprachverwendung'],
 
-  // ── CONTACT (§ VI) ──────────────────────────────────────────
-  ['.contact-eye', '§ VI — Now hiring myself out', '§ VI — Verfügbar zur Einstellung'],
-  ['.contact-h', "Let's turn your backlog<br>into <em>shipped software</em>.",
-                 'Verwandeln wir Ihr Backlog<br>in <em>ausgelieferte Software</em>.'],
+  // ── SECTION § VI: CONTACT (#contact) ──
+  ['.contact-eye', '§ VI — Connect &amp; Hire', '§ VI — Kontakt &amp; Engagement'],
+  ['.contact-h', "Let's build something <em>impossible</em>.", 'Bauen wir etwas, das <em>begeistert</em>.'],
   ['.contact-lede',
-    "I'm looking for Agentic AI Engineer, AI Platform, or Founding Engineer roles at early-stage startups (Seed–Series C). I build multi-agent systems, make architecture decisions, own features end-to-end, and deliver production-grade AI. EU citizen, based in Germany, available immediately.",
-    'Ich suche eine Stelle als Agentic AI Engineer, AI Platform oder Founding Engineer bei Early-Stage-Startups (Seed–Series C). Ich baue Multi-Agenten-Systeme, treffe Architekturentscheidungen, übernehme Features end-to-end und liefere produktionsreife KI. EU-Bürger, in Deutschland, sofort verfügbar.'],
-  ['.contact-actions .btn-primary', 'Request an interview <span class="arrow">→</span>',
-                                    'Interview anfragen <span class="arrow">→</span>'],
-  ['.contact-actions .btn-ghost:nth-of-type(2)', 'See the code', 'Code ansehen'],
-  ['.contact-actions .btn-ghost:nth-of-type(3)', 'Download CV', 'Lebenslauf herunterladen'],
-  ['.contact-cell:nth-child(1) .lbl', 'Email', 'E-Mail'],
-  ['.contact-cell:nth-child(2) .lbl', 'GitHub', 'GitHub'],
-  ['.contact-cell:nth-child(3) .lbl', 'LinkedIn', 'LinkedIn'],
-  ['.contact-cell:nth-child(4) .lbl', 'Location', 'Standort'],
+    "I'm currently considering full-time Agentic AI Engineer and Founding Engineer roles (Seed to Series C). Remote-first or based in Germany.",
+    'Ich bin derzeit offen für Vollzeitstellen als Agentic AI Engineer und Founding Engineer (Seed bis Series C). Remote-first oder mit Standort in Deutschland.'],
+  ['.contact-cell:nth-child(1) .lbl', 'Direct Email', 'Direkte E-Mail'],
+  ['.contact-cell:nth-child(2) .lbl', 'Telegram', 'Telegram'],
+  ['.contact-cell:nth-child(3) .lbl', 'GitHub', 'GitHub'],
+  ['.contact-cell:nth-child(4) .lbl', 'LinkedIn', 'LinkedIn'],
 
-  // ── FOOTER ──────────────────────────────────────────────────
-  ['footer div:nth-child(1)', '<span class="live">●</span> &nbsp;aleksejs-portfolio.pages.dev — all systems operational',
-                              '<span class="live">●</span> &nbsp;aleksejs-portfolio.pages.dev — alle Systeme betriebsbereit'],
-  ['footer div:nth-child(2)', '© Aleksejs Buss · 2026 · Set in Fraunces, Geist &amp; JetBrains Mono<br><span style="font-size:0.8em;color:var(--ink-3);display:inline-block;margin-top:1rem;"><a href="Impressum.html" style="color:inherit;text-decoration:none">Impressum</a> | <a href="Datenschutz.html" style="color:inherit;text-decoration:none">Datenschutz</a></span>',
-                              '© Aleksejs Buss · 2026 · Gesetzt in Fraunces, Geist &amp; JetBrains Mono<br><span style="font-size:0.8em;color:var(--ink-3);display:inline-block;margin-top:1rem;"><a href="Impressum.html" style="color:inherit;text-decoration:none">Impressum</a> | <a href="Datenschutz.html" style="color:inherit;text-decoration:none">Datenschutz</a></span>'],
+  // ── FOOTER ──
+  ['footer div:nth-child(1)', '© 2026 Aleksejs Buss · Agentic AI Architecture', '© 2026 Aleksejs Buss · Agentic AI Architektur'],
+  ['footer div:nth-child(2)',
+    '<span class="live">●</span> ALL 5 SYSTEMS OPERATIONAL · 5,400+ TESTS PASSING',
+    '<span class="live">●</span> ALLE 5 SYSTEME BETRIEBSBEREIT · 5.400+ TESTS ERFOLGREICH'],
 
-  // ── CMD-DOCK ────────────────────────────────────────────────
+  // ── CMD-DOCK & AGENT PANEL ──
   ['.cmd-dock .placeholder span:first-child', 'Ask the agent —', 'Frag den Agenten —'],
   ['.cmd-dock .placeholder em', 'show me your stack', 'zeig mir deinen Stack'],
   ['.cmd-suggestions .cmd-sug:nth-child(1)', 'Show projects', 'Projekte zeigen'],
@@ -275,8 +276,6 @@ const DICT: Array<[string, string, string]> = [
 ];
 
 export function initI18n(): void {
-  // Cache EN HTML on first run (resilient to refresh / theme toggles)
-  cacheEn();
   const saved = (localStorage.getItem(KEY) as Lang | null) ?? 'en';
   apply(saved);
 
@@ -290,31 +289,43 @@ export function initI18n(): void {
   }
 }
 
-function currentLang(): Lang {
+export function currentLang(): Lang {
   return (document.documentElement.lang as Lang) || 'en';
 }
 
-function cacheEn(): void {
-  for (const [sel, en] of DICT) {
-    const el = $(sel);
-    if (el && !el.dataset.enHtml) el.dataset.enHtml = en;
-  }
-}
-
-function apply(lang: Lang): void {
+export function apply(lang: Lang): void {
   document.documentElement.lang = lang;
+
+  // 1. Synchronize Hero dynamic typing headline
+  updateHeroHeadlineLang(lang);
+
+  // 2. Synchronize case-study modals
+  refreshOpenModalLang(lang);
+
+  // 3. Apply DOM translations from dictionary
   for (const [sel, en, de] of DICT) {
     const el = $(sel);
     if (!el) continue;
     el.innerHTML = lang === 'en' ? en : de;
   }
+
+  // 4. Update language toggle button label
   const btn = $('#langBtn');
   if (btn) {
     const lbl = btn.querySelector('.lbl');
     if (lbl) lbl.textContent = lang === 'en' ? 'DE' : 'EN';
   }
-  // Swap CV download hrefs to match the active language (ATS-optimised versions)
-  const cvLinks = document.querySelectorAll<HTMLAnchorElement>('a[href*="CV-Standard"]');
+
+  // 5. Update agent input placeholder
+  const input = $<HTMLInputElement>('#cmdInput');
+  if (input) {
+    input.placeholder = lang === 'en'
+      ? 'Ask about systems, stack, architecture...'
+      : 'Frage zu Systemen, Stack, Architektur...';
+  }
+
+  // 6. Swap CV download hrefs to match the active language (ATS-optimised versions)
+  const cvLinks = document.querySelectorAll<HTMLAnchorElement>('a[href*="CV-Standard"], a[href*="CV-EN-Standard"]');
   for (const a of cvLinks) {
     a.href = lang === 'en' ? 'CV-EN-Standard.html' : 'CV-Standard.html';
   }

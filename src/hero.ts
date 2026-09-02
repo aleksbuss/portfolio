@@ -8,6 +8,35 @@ const TOKEN_LINES = [
   '> available immediately · EU citizen · Hof / Saale, DE',
 ];
 
+export const HEADLINE_STRINGS = {
+  en: {
+    first: 'Autonomous AI systems,',
+    last: 'engineered for production.',
+  },
+  de: {
+    first: 'Autonome KI-Systeme,',
+    last: 'für die Produktion entwickelt.',
+  },
+};
+
+export function updateHeroHeadlineLang(lang: 'en' | 'de'): void {
+  const heroNameEl = $('#heroName');
+  if (!heroNameEl) return;
+  const first = heroNameEl.querySelector<HTMLElement>('.first .typed-name');
+  const last = heroNameEl.querySelector<HTMLElement>('.last .typed-name');
+  if (!first || !last) return;
+
+  const target = HEADLINE_STRINGS[lang] ?? HEADLINE_STRINGS.en;
+  first.dataset.type = target.first;
+  last.dataset.type = target.last;
+
+  // If already finished typing or if reduced motion, update text immediately
+  if (heroNameEl.classList.contains('done') || isReducedMotion()) {
+    first.textContent = target.first;
+    last.textContent = target.last;
+  }
+}
+
 export function startHeroSequence(): void {
   const heroNameEl = $('#heroName');
   if (!heroNameEl) return;

@@ -8,7 +8,7 @@ describe('i18n basic switching', () => {
       <button id="langBtn"><span class="lbl">DE</span></button>
       <span class="hero-tagline">Agentic AI engineer for early-stage teams.<br>
       <em>Production AI systems</em>, built & operated.</span>
-      <span class="contact-eye">§ VI — Now hiring myself out</span>
+      <span class="contact-eye">§ VI — Connect &amp; Hire</span>
     `;
     localStorage.clear();
     document.documentElement.lang = 'en';
@@ -33,7 +33,7 @@ describe('i18n basic switching', () => {
     const btn = document.getElementById('langBtn') as HTMLButtonElement;
     btn.click();
     expect(document.documentElement.lang).toBe('de');
-    expect(document.querySelector('.contact-eye')?.innerHTML).toContain('Verfügbar');
+    expect(document.querySelector('.contact-eye')?.innerHTML).toContain('Kontakt');
   });
 
   it('translates full index.html body elements without errors', async () => {

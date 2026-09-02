@@ -13,7 +13,7 @@ interface CaseStudy {
   link?: { href: string; label: string };
 }
 
-const STUDIES: Record<string, CaseStudy> = {
+const STUDIES_EN: Record<string, CaseStudy> = {
   '01': {
     num: '01',
     title: 'Orchestra — Multi-Agent AI Workspace',
@@ -95,7 +95,109 @@ const STUDIES: Record<string, CaseStudy> = {
   },
 };
 
+const STUDIES_DE: Record<string, CaseStudy> = {
+  '01': {
+    num: '01',
+    title: 'Orchestra — Multi-Agenten-KI-Workspace',
+    tagline: 'Mixture-of-Agents-Pipeline · code-garantierter Skeptiker · Live-Kosten-Telemetrie.',
+    problem: 'Single-LLM-Assistenten antworten selbst bei Fehlern selbstsicher, und Wrapper erben diesen blinden Fleck. Prompt-basierte Leitplanken sind unzuverlässig — schwache Modelle verwerfen Instruktionen stillschweigend.',
+    solution: 'Echte Mixture-of-Agents-Pipeline: Ein Router erzeugt 3–5 spezialisierte Experten-Personas parallel, mit einem per Code injizierten Skeptiker — nicht per Prompt. Embedding-basierte Konflikterkennung deckt Meinungsverschiedenheiten auf; ein Reflexions-Kritiker überarbeitet die finale Antwort. Volle Kosten-Telemetrie pro Chat. BYOK oder komplett lokal via Ollama.',
+    architecture: 'Router (DPG) → 3–5 parallele Experten + code-garantierter Skeptiker → Disagreement-Detektor (Embedding-Distanz) → Aggregator → Reflexions-Kritiker/Revisor → Antwort + Kosten-Banner.',
+    highlights: [
+      'Skeptiker per Code garantiert, nicht per Prompt (PM #37)',
+      'Konflikterkennung: Experten-Widersprüche werden offengelegt, nie geglättet',
+      '4.100+ Tests (Vitest + Playwright) · 70+ dokumentierte Post-Mortems · CI',
+      'Live-Kosten-Telemetrie (Tokens + USD) · BYOK oder komplett lokal via Ollama',
+    ],
+    stack: ['TypeScript (strict)', 'Next.js 15', 'Vitest', 'Playwright', 'Docker', 'Ollama'],
+    link: { href: 'https://github.com/aleksbuss/orchestra', label: 'Auf GitHub ansehen →' },
+  },
+  '02': {
+    num: '02',
+    title: '4take — Multi-Modell-KI-Code-Review-Rat',
+    tagline: 'FastMCP- & CLI-Rat · 4-Modell-Konsens-Protokoll · adversarielle Synthese.',
+    problem: 'Single-LLM-Reviews leiden unter hohen Halluzinationsraten und übersehen Sicherheitslücken. Ein einzelnes Modell ist ein Single Point of Failure in CI/CD-Quality-Gates.',
+    solution: '4take befragt 4 unabhängige LLM-Provider parallel (OpenAI, Anthropic, Gemini, Groq, Ollama) über ein Konsens-Synthese-Protokoll. Es bewertet Konfidenz, erkennt Konsenspunkte und deckt kritische Regressionen mit Diffs vor dem Merge auf. Schnelle CLI + FastMCP Server ohne externe Abhängigkeiten.',
+    architecture: 'CLI / FastMCP → Discovery & Rate Limiter → Paralleler Provider-Pool (4 LLMs) → Tokenizer & Sanitizer → Synthese-Engine → Multi-Axis Review Matrix.',
+    highlights: [
+      'Paralleler Multi-Modell-Rat mit FastMCP-Server ohne externe Abhängigkeiten',
+      'Adversarieller Konsens-Synthesizer trennt echte Bugs von Stilrauschen',
+      'Pytest-Testsuite über Unit-, Integrations- und FastMCP-Suiten',
+      'Volle lokale LLM-Fallback-Unterstützung (Ollama / vLLM / OpenRouter)',
+    ],
+    stack: ['Python 3.12+', 'FastMCP', 'Pydantic v2', 'HTTPX', 'Pytest', 'Click'],
+    link: { href: 'https://github.com/aleksbuss/4take', label: 'Auf GitHub ansehen →' },
+  },
+  '03': {
+    num: '03',
+    title: 'AI Dictaphone v7.0',
+    tagline: 'Edge-Voice-Pipeline · Whisper → LLM · Sub-Sekunden-Latenz.',
+    problem: 'Sprachnachrichten in Telegram sind schwer zu durchsuchen und zusammenzufassen. Jedes Produkt muss sich nativ in Telegram anfühlen.',
+    solution: 'Serverlose Pipeline vollständig auf der Cloudflare Edge: Sprachnachricht → Groq Whisper Transkription → LLaMA 3.3 70B Zusammenfassung → Mini-App-UI. Null Cold-Start, keine Secrets im Client, HMAC-verifizierte Webhooks.',
+    architecture: 'Telegram Mini-App → Cloudflare Workers → Groq Whisper → LLaMA 3.3 70B → Mini-App-Antwort.',
+    highlights: [
+      '0 ms Cold-Start (Cloudflare Workers global)',
+      'HMAC-SHA256 Webhook-Authentifizierung bei jedem Request',
+      'Streaming-Zusammenfassungen für sofortige Vorschau',
+      'Keine persistente Speicherung von Sprachdaten (Privacy by Design)',
+    ],
+    stack: ['Cloudflare Workers', 'Groq Whisper-large-v3', 'LLaMA 3.3 70B', 'JS ESM', 'Telegram Mini-Apps'],
+    link: { href: 'https://github.com/aleksbuss/trascribatorV2', label: 'Auf GitHub ansehen →' },
+  },
+  '04': {
+    num: '04',
+    title: 'AI Moderations-Bot',
+    tagline: 'n8n-Workflow · Dual-KI-Failover · Auto-Eskalation.',
+    problem: 'Keyword-basierte Moderation erzeugt viele Fehlalarme. Große Communities benötigen kontextuelle KI, aber einzelne APIs fallen gelegentlich aus.',
+    solution: 'n8n-Pipeline mit 15+ Knoten klassifiziert Nachrichten mit strukturiertem JSON, leitet Aktionen ein und eskaliert Sanktionen in drei Stufen. Dual-Provider-Failover (Nemotron primär, GPT-4.1 Fallback).',
+    architecture: 'Telegram-Nachricht → Filter → Nemotron-Klassifikator → Fallback GPT-4.1 → Router → Aktion (Warnen/Muten/Bannen) → Telegram.',
+    highlights: [
+      '1.000+ Tests über Bot, API und Mini-App-Pakete',
+      '15+ n8n-Knoten, vollständig visualisierte Pipeline',
+      'Ausschließlich strukturierte JSON-Ausgaben',
+      'Dual-KI-Failover: Umschaltung in <2s bei Ausfall des primären Anbieters',
+    ],
+    stack: ['n8n', 'OpenRouter', 'GPT-4.1-mini', 'Nemotron', 'Telegram Bot API'],
+  },
+  '05': {
+    num: '05',
+    title: 'AI Psychology Bot — Mystic Mini-App',
+    tagline: 'Komplettes SaaS · Zahlungen · Konversations-Agent.',
+    problem: 'Ein monetarisiertes KI-Produkt erfordert Authentifizierung, Zahlungen, Retention-Loops und Fehlerbehandlung. Solo-Entwickler scheitern oft an der sauberen Verknüpfung.',
+    solution: 'End-to-End-SaaS solo gebaut: HMAC-SHA256 Auth → verteiltes Backend → Firebase Realtime DB → Gemini 2.5 + TTS-Pipeline. Telegram Stars für In-App-Käufe, atomare Credit-Operationen, Referral-Programm.',
+    architecture: 'Telegram Mini-App → HMAC-SHA256 → Google Apps Script → Firebase RTDB → Gemini 2.5 + TTS.',
+    highlights: [
+      'Telegram Stars Zahlungen — erstklassiger nativer Checkout',
+      'Atomare Credit-Operationen (kein Double-Spending bei Parallelität)',
+      'Multi-Persona-System mit themenbezogenen System-Prompts',
+      'Solo End-to-End gebaut — ohne Team, ohne externes Funding',
+    ],
+    stack: ['Gemini 2.5', 'Telegram Stars', 'Firebase RTDB', 'Apps Script', 'HMAC-SHA256'],
+    link: { href: 'https://github.com/aleksbuss/ai-psycho-bot', label: 'Auf GitHub ansehen →' },
+  },
+};
+
+const LABELS = {
+  en: {
+    problem: 'Problem',
+    solution: 'Solution',
+    architecture: 'Architecture',
+    highlights: 'Highlights',
+    stack: 'Stack',
+    close: 'Close case study',
+  },
+  de: {
+    problem: 'Problemstellung',
+    solution: 'Lösung',
+    architecture: 'Architektur',
+    highlights: 'Kernpunkte',
+    stack: 'Technologie-Stack',
+    close: 'Fallstudie schließen',
+  },
+};
+
 let modal: HTMLDialogElement | null = null;
+let currentStudyNum: string | null = null;
 
 export function initModals(): void {
   modal = $<HTMLDialogElement>('#caseModal');
@@ -105,13 +207,13 @@ export function initModals(): void {
     const proj = cta.closest('.proj') as HTMLElement | null;
     if (!proj) return;
     const num = proj.querySelector('.proj-meta .num')?.textContent?.trim();
-    if (!num || !STUDIES[num]) return;
+    if (!num || (!STUDIES_EN[num] && !STUDIES_DE[num])) return;
     cta.addEventListener('click', e => {
-      // External links (github, live apps) — let them through normally
       const href = (cta as HTMLAnchorElement).getAttribute('href');
       if (href && href !== '#' && !href.startsWith('javascript')) return;
       e.preventDefault();
-      open(STUDIES[num]);
+      currentStudyNum = num;
+      open(num);
     });
   });
 
@@ -124,11 +226,16 @@ export function initModals(): void {
   });
 }
 
-function open(study: CaseStudy): void {
+function getStudy(num: string, lang: 'en' | 'de'): CaseStudy {
+  const dict = lang === 'de' ? STUDIES_DE : STUDIES_EN;
+  return dict[num] ?? STUDIES_EN[num];
+}
+
+function open(num: string): void {
   if (!modal) return;
-  fillModal(study);
+  const lang = (document.documentElement.lang as 'en' | 'de') || 'en';
+  fillModal(getStudy(num, lang), lang);
   const run = () => modal!.showModal();
-  // View Transitions API for a smooth open
   if (document.startViewTransition) {
     document.startViewTransition(run);
   } else {
@@ -146,35 +253,42 @@ function close(): void {
   }
 }
 
-function fillModal(s: CaseStudy): void {
+export function refreshOpenModalLang(lang: 'en' | 'de'): void {
+  if (modal?.open && currentStudyNum) {
+    fillModal(getStudy(currentStudyNum, lang), lang);
+  }
+}
+
+function fillModal(s: CaseStudy, lang: 'en' | 'de'): void {
   if (!modal) return;
+  const labels = LABELS[lang] ?? LABELS.en;
   const html = `
-    <button id="caseModalClose" class="case-close" aria-label="Close case study">×</button>
+    <button id="caseModalClose" class="case-close" aria-label="${labels.close}">×</button>
     <header class="case-head">
       <span class="case-num">${s.num}</span>
       <h2 class="case-title">${s.title}</h2>
       <p class="case-tagline">${s.tagline}</p>
     </header>
     <section class="case-section">
-      <span class="case-eyebrow">Problem</span>
+      <span class="case-eyebrow">${labels.problem}</span>
       <p>${s.problem}</p>
     </section>
     <section class="case-section">
-      <span class="case-eyebrow">Solution</span>
+      <span class="case-eyebrow">${labels.solution}</span>
       <p>${s.solution}</p>
     </section>
     <section class="case-section">
-      <span class="case-eyebrow">Architecture</span>
+      <span class="case-eyebrow">${labels.architecture}</span>
       <pre class="case-arch">${s.architecture}</pre>
     </section>
     <section class="case-section">
-      <span class="case-eyebrow">Highlights</span>
+      <span class="case-eyebrow">${labels.highlights}</span>
       <ul class="case-highlights">
         ${s.highlights.map(h => `<li>${h}</li>`).join('')}
       </ul>
     </section>
     <section class="case-section">
-      <span class="case-eyebrow">Stack</span>
+      <span class="case-eyebrow">${labels.stack}</span>
       <div class="case-stack">
         ${s.stack.map(t => `<span class="tag p">${t}</span>`).join('')}
       </div>
@@ -182,6 +296,5 @@ function fillModal(s: CaseStudy): void {
     ${s.link ? `<a class="case-cta" href="${s.link.href}" target="_blank" rel="noopener">${s.link.label}</a>` : ''}
   `;
   modal.innerHTML = html;
-  // re-bind close (innerHTML wipes the previous handler)
   modal.querySelector<HTMLButtonElement>('#caseModalClose')?.addEventListener('click', close);
 }
