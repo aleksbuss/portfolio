@@ -1,4 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
+import fs from 'node:fs';
+import path from 'node:path';
 
 describe('i18n basic switching', () => {
   beforeEach(() => {
@@ -32,5 +34,25 @@ describe('i18n basic switching', () => {
     btn.click();
     expect(document.documentElement.lang).toBe('de');
     expect(document.querySelector('.contact-eye')?.innerHTML).toContain('Verfügbar');
+  });
+
+  it('translates full index.html body elements without errors', async () => {
+    const htmlPath = path.resolve(__dirname, '../../index.html');
+    const rawHtml = fs.readFileSync(htmlPath, 'utf-8');
+    const sanitized = rawHtml.replace(/<script[\s\S]*?<\/script>/gi, '');
+    const bodyMatch = sanitized.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    document.body.innerHTML = bodyMatch ? bodyMatch[1] : sanitized;
+
+    const { initI18n } = await import('../../src/i18n');
+    initI18n();
+
+    const btn = document.getElementById('langBtn') as HTMLButtonElement;
+    expect(btn).toBeTruthy();
+
+    btn.click();
+    expect(document.documentElement.lang).toBe('de');
+
+    btn.click();
+    expect(document.documentElement.lang).toBe('en');
   });
 });

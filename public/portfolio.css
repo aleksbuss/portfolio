@@ -39,7 +39,7 @@ body {
   font-feature-settings: "ss01", "cv11";
   line-height: 1.5;
   overflow-x: hidden;
-  cursor: none;
+  cursor: default;
   min-height: 100vh;
 }
 ::selection { background: var(--accent); color: var(--bg); }
@@ -407,7 +407,7 @@ body.click-target .cursor-ring { width: 70px; height: 70px; border-color: var(--
   padding: 0.95rem 1.35rem;
   border-radius: 3px;
   text-decoration: none;
-  cursor: none;
+  cursor: pointer;
   display: inline-flex; align-items: center; gap: 0.6rem;
   transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
   border: 1px solid transparent;
@@ -494,7 +494,7 @@ body.click-target .cursor-ring { width: 70px; height: 70px; border-color: var(--
   padding: 0.35rem 0.65rem;
   background: var(--accent); color: var(--bg);
   border: none; border-radius: 4px;
-  cursor: none; letter-spacing: 0.06em;
+  cursor: pointer; letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .cmd-dock.open .send { display: inline-flex; }
@@ -551,7 +551,7 @@ body.click-target .cursor-ring { width: 70px; height: 70px; border-color: var(--
   border-radius: 999px;
   color: var(--ink-2);
   background: transparent;
-  cursor: none;
+  cursor: pointer;
   transition: all 0.2s;
 }
 .cmd-sug:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
@@ -926,7 +926,7 @@ section.s {
   background: rgba(255,255,255,0.02);
   color: var(--ink-2); border: 1px solid var(--rule);
   transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
-  cursor: none;
+  cursor: pointer;
 }
 .stack-pill.primary { color: var(--ink); border-color: var(--rule-2); background: rgba(255,255,255,0.05); }
 .stack-pill:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); background: rgba(255,106,26,0.06); }

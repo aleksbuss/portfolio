@@ -24,7 +24,7 @@ const STUDIES: Record<string, CaseStudy> = {
     highlights: [
       'Skeptic guaranteed by code, not by prompt (PM #37)',
       'Disagreement detection: expert conflict is surfaced, never smoothed away',
-      '2,600+ tests (Vitest + Playwright) · 70+ documented post-mortems · CI',
+      '4,100+ tests (Vitest + Playwright) · 70+ documented post-mortems · CI',
       'Live per-chat cost telemetry (tokens + USD) · BYOK or fully local',
     ],
     stack: ['TypeScript (strict)', 'Next.js 15', 'Vitest', 'Playwright', 'Docker', 'Ollama'],
@@ -32,6 +32,22 @@ const STUDIES: Record<string, CaseStudy> = {
   },
   '02': {
     num: '02',
+    title: '4take — Multi-Model AI Code Review Council',
+    tagline: 'FastMCP & CLI council · 4-model consensus protocol · adversarial synthesis.',
+    problem: 'Single LLM code reviews suffer from high hallucination rates, bias toward specific patterns, and missed security vulnerabilities or logic regressions. Relying on one model creates a single point of failure in CI/CD quality gates.',
+    solution: '4take queries 4 independent LLM providers in parallel (OpenAI, Anthropic, Gemini, Groq, Ollama) via an adversarial synthesizer protocol. It scores confidence, discovers points of consensus, and surfaces critical regressions with actionable diffs before code merges. Exposes both a high-speed CLI and a zero-dependency FastMCP server.',
+    architecture: 'CLI / FastMCP → Discovery & Rate Limiter → Parallel Provider Pool (4 LLMs) → Tokenizer & Sanitizer → Synthesizer Engine → Multi-Axis Review Matrix.',
+    highlights: [
+      'Parallel multi-model council with zero-dependency FastMCP server',
+      'Adversarial consensus synthesizer that isolates true bugs from stylistic noise',
+      'Pytest automated test suite covering unit, integration, token-bucket & FastMCP suites',
+      'Full local LLM fallback support (Ollama / vLLM / OpenRouter)',
+    ],
+    stack: ['Python 3.12+', 'FastMCP', 'Pydantic v2', 'HTTPX', 'Pytest', 'Click'],
+    link: { href: 'https://github.com/aleksbuss/4take', label: 'View on GitHub →' },
+  },
+  '03': {
+    num: '03',
     title: 'AI Dictaphone v7.0',
     tagline: 'Edge voice pipeline · Whisper → LLM · sub-second latency.',
     problem: 'Voice notes inside Telegram are hard to triage at scale — re-listening is slow, transcripts and summaries live in different tools, and any voice-to-text product the user touches has to feel native to Telegram.',
@@ -46,23 +62,23 @@ const STUDIES: Record<string, CaseStudy> = {
     stack: ['Cloudflare Workers', 'Groq Whisper-large-v3', 'LLaMA 3.3 70B', 'JS ESM', 'Telegram Mini-Apps'],
     link: { href: 'https://github.com/aleksbuss/trascribatorV2', label: 'View on GitHub →' },
   },
-  '03': {
-    num: '03',
+  '04': {
+    num: '04',
     title: 'AI Moderation Bot',
     tagline: 'n8n workflow · dual-AI failover · auto-escalation.',
     problem: 'Telegram chat moderation with regex/keyword bots produces both false positives (banned for innocent words) and false negatives (cleverly worded scams pass through). Big communities need contextual AI, but a single LLM provider is a single point of failure.',
     solution: '15+ node n8n pipeline classifies every message with structured JSON outputs, routes to action, escalates sanctions across three tiers. Dual-provider failover (Nemotron primary, GPT-4.1 fallback) keeps moderation alive when any single LLM API is down.',
     architecture: 'Telegram message → Filter → Nemotron classifier → fallback GPT-4.1 → Router → action (warn/mute/ban) → Telegram.',
     highlights: [
+      '1,000+ tests across bot, API, and mini-app packages',
       '15+ n8n nodes, fully visualised pipeline',
       'Structured JSON outputs only — zero parsing of free-form text',
-      '3-tier sanction system: warn → mute → ban',
       'Dual-AI failover: switches in <2s when primary fails',
     ],
     stack: ['n8n', 'OpenRouter', 'GPT-4.1-mini', 'Nemotron', 'Telegram Bot API'],
   },
-  '04': {
-    num: '04',
+  '05': {
+    num: '05',
     title: 'AI Psychology Bot — Mystic Mini-App',
     tagline: 'Full SaaS · payments · conversational agent.',
     problem: 'A monetized AI product needs all the moving pieces: auth, payments, retention loops, AI failover, real-user error handling. Most solo builders get stuck wiring auth + payments + AI together cleanly.',
@@ -76,53 +92,6 @@ const STUDIES: Record<string, CaseStudy> = {
     ],
     stack: ['Gemini 2.5', 'Telegram Stars', 'Firebase RTDB', 'Apps Script', 'HMAC-SHA256'],
     link: { href: 'https://github.com/aleksbuss/ai-psycho-bot', label: 'View on GitHub →' },
-  },
-  '05': {
-    num: '05',
-    title: 'Bushmark — Secure Clipboard',
-    tagline: 'Self-hosted · cookie auth · one-click install.',
-    problem: 'Transferring text between servers and devices means USB sticks, third-party pastebins, or copy/paste hops through chat apps. None are private, none are simple.',
-    solution: 'Self-hosted clipboard at bushmark.cc: three persistent slots, 24h history, auto-rotation, Tailwind UI. Install with one bash line on any Ubuntu VPS — script handles Nginx + FastAPI + systemd setup automatically.',
-    architecture: 'Browser client → Nginx reverse proxy → FastAPI (systemd-managed) → disk + 30-day log rotation.',
-    highlights: [
-      'One-line bash install (`curl … | bash`)',
-      'Cookie-based auth (no third-party identity)',
-      '3 persistent slots + 24h rolling history',
-      'Auto log rotation, systemd auto-restart',
-    ],
-    stack: ['FastAPI', 'Nginx', 'systemd', 'Tailwind', 'Ubuntu 24.04'],
-    link: { href: 'https://bushmark.cc', label: 'Visit bushmark.cc →' },
-  },
-  '06': {
-    num: '06',
-    title: 'CyberDed Ultra + ComfyUI',
-    tagline: 'Local AI infra · one-click installer · Android + Linux.',
-    problem: 'Local AI means dependency hell — CUDA versions, Python venvs, Docker compose files, ComfyUI custom nodes, NVIDIA Container Toolkit setup. Most "easy" installers skip half of it and break two weeks later.',
-    solution: 'Bash installer that lays the entire stack: Ollama for LLM inference, ComfyUI for image generation, NVIDIA Container Toolkit auto-config, Flask backend with Server-Sent Events streaming chat, real-time system monitoring. Works on both Linux and Android (Termux).',
-    architecture: 'Bash installer → Ollama + ComfyUI Docker → Flask SSE backend → NVIDIA Container Toolkit.',
-    highlights: [
-      'SSE streaming chat (real-time tokens, no polling)',
-      'GPU auto-detection (NVIDIA / AMD / CPU fallback)',
-      'Real-time system monitoring (CPU / GPU / RAM)',
-      'Two OS targets: Ubuntu Linux + Termux Android',
-    ],
-    stack: ['Docker', 'Ollama', 'Flask', 'ComfyUI', 'NVIDIA Container Toolkit'],
-  },
-  '07': {
-    num: '07',
-    title: 'Termux AI Dictaphone',
-    tagline: 'Android as offline AI server · zero cloud cost.',
-    problem: 'Cloud LLM calls cost money, leak data, and stop working without signal. Most "local AI" projects need a beefy GPU desktop. What if your phone could be the entire stack?',
-    solution: 'Complete offline AI on any modern Android: Whisper transcription via faster-whisper / whisper.cpp, LLaMA / Gemma inference via Ollama, all running on-device through Termux. Zero cloud cost, full privacy. Published OSS.',
-    architecture: 'Termux (Android) → faster-whisper / whisper.cpp → Ollama (LLaMA 3.2 / Gemma 2).',
-    highlights: [
-      '100% offline (airplane-mode capable)',
-      '$0 API cost (no provider keys)',
-      'Dual-mode: live mic OR uploaded audio',
-      'On-device privacy — voice never leaves the phone',
-    ],
-    stack: ['Termux', 'faster-whisper', 'whisper.cpp', 'Ollama', 'Python'],
-    link: { href: 'https://github.com/aleksbuss/Termux-SelfHosted-STT---TTS', label: 'View on GitHub →' },
   },
 };
 
@@ -138,7 +107,7 @@ export function initModals(): void {
     const num = proj.querySelector('.proj-meta .num')?.textContent?.trim();
     if (!num || !STUDIES[num]) return;
     cta.addEventListener('click', e => {
-      // External links (bushmark, github) — let them through normally
+      // External links (github, live apps) — let them through normally
       const href = (cta as HTMLAnchorElement).getAttribute('href');
       if (href && href !== '#' && !href.startsWith('javascript')) return;
       e.preventDefault();

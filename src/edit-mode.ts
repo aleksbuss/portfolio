@@ -8,18 +8,34 @@ interface EditState {
   showTicker: boolean;
 }
 
+export function isAllowedOrigin(origin: string): boolean {
+  if (!origin) return false;
+  if (typeof window !== 'undefined' && origin === window.location.origin) return true;
+  // Local development
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  // Production and staging domains
+  if (/^https:\/\/([a-z0-9-]+\.)*(aleksbuss\.dev|aleksbuss\.de|aleksejsbuss\.com)$/.test(origin)) return true;
+  return false;
+}
+
 export function initEditMode(): void {
   const st: EditState = {
-    accent: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff6a1a',
+    accent: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8052ff',
     showCursor: true,
-    showAurora: true,
+    showAurora: false,
     showTicker: true,
   };
   let panel: HTMLDivElement | null = null;
 
   const apply = (t: EditState): void => {
     if (t.accent) document.documentElement.style.setProperty('--accent', t.accent);
-    document.body.style.cursor = t.showCursor ? 'none' : 'auto';
+    document.body.style.cursor = 'default';
+    const cdot = $('#cdot');
+    const cring = $('#cring');
+    if (cdot && cring) {
+      cdot.style.display = t.showCursor ? 'block' : 'none';
+      cring.style.display = t.showCursor ? 'block' : 'none';
+    }
     const aurora = $('.aurora');
     if (aurora) aurora.style.display = t.showAurora ? 'block' : 'none';
     const ticker = $('.ticker');
@@ -28,14 +44,14 @@ export function initEditMode(): void {
 
   const build = (): HTMLDivElement => {
     const p = document.createElement('div');
-    p.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9000;background:#0a0c12;color:#f3efe5;border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:1.4rem;width:260px;font-family:Geist,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,0.5);display:none';
+    p.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;z-index:9000;background:#000000;color:#ffffff;border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:1.4rem;width:260px;font-family:Geist,sans-serif;box-shadow:0 24px 60px rgba(0,0,0,0.9);display:none';
     p.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-        <span style="font-family:Fraunces,serif;font-style:italic;font-size:1.1rem">Tweaks</span>
-        <button id="ct" style="background:none;border:none;color:#837e6f;cursor:pointer;font-size:1.3rem;line-height:1">×</button>
+        <span style="font-size:1.1rem;font-weight:600">Tweaks</span>
+        <button id="ct" style="background:none;border:none;color:#9a9a9a;cursor:pointer;font-size:1.3rem;line-height:1">×</button>
       </div>
       <label style="display:block;margin-bottom:0.9rem">
-        <span style="font-size:0.7rem;color:#837e6f;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.4rem">Accent</span>
+        <span style="font-size:0.7rem;color:#9a9a9a;letter-spacing:0.1em;text-transform:uppercase;display:block;margin-bottom:0.4rem">Accent</span>
         <input type="color" id="ta" value="${st.accent}" style="width:100%;height:34px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);background:transparent;cursor:pointer">
       </label>
       <label style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;cursor:pointer">
@@ -79,6 +95,7 @@ export function initEditMode(): void {
   };
 
   window.addEventListener('message', (e: MessageEvent) => {
+    if (!isAllowedOrigin(e.origin)) return;
     if (e.data?.type === '__activate_edit_mode') {
       if (!panel) panel = build();
       panel.style.display = 'block';
@@ -90,3 +107,7 @@ export function initEditMode(): void {
   window.parent.postMessage({ type: '__edit_mode_available' }, '*');
   apply(st);
 }
+
+export const __test = {
+  isAllowedOrigin,
+};

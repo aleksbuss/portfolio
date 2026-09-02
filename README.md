@@ -1,6 +1,6 @@
-# [aleksbuss.dev](https://aleksejs-portfolio.pages.dev/ — Portfolio
+# [aleksejs-portfolio.pages.dev](https://aleksejs-portfolio.pages.dev/) — Portfolio
 
-Source for my personal portfolio: **(https://aleksejs-portfolio.pages.dev/)**
+Source for my personal portfolio: **https://aleksejs-portfolio.pages.dev/**
 
 A hand-built, dependency-light site that doubles as a code sample — no UI framework, no template, every interaction written from scratch in TypeScript.
 

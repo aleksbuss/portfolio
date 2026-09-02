@@ -17,23 +17,59 @@ const ENDPOINT_KEY = 'agent_endpoint';
 const MAX_HISTORY = 30;
 const DEFAULT_ENDPOINT = 'https://aleksejs-agent-proxy.aleksbuss.workers.dev/chat';
 
+export function isAllowedEndpoint(urlStr: string): boolean {
+  if (!urlStr || typeof urlStr !== 'string') return false;
+  const trimmed = urlStr.trim();
+  if (!trimmed) return false;
+  try {
+    const url = new URL(trimmed);
+    if (url.protocol === 'https:') {
+      const h = url.hostname.toLowerCase();
+      if (
+        h === 'aleksejs-agent-proxy.aleksbuss.workers.dev' ||
+        h.endsWith('.aleksbuss.workers.dev') ||
+        h === 'aleksbuss.dev' ||
+        h.endsWith('.aleksbuss.dev') ||
+        h === 'aleksbuss.de' ||
+        h.endsWith('.aleksbuss.de') ||
+        h === 'aleksejsbuss.com' ||
+        h.endsWith('.aleksejsbuss.com')
+      ) {
+        return true;
+      }
+    }
+    if (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      (url.hostname === 'localhost' || url.hostname === '127.0.0.1')
+    ) {
+      return true;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
 const FALLBACK: Array<{ keys: string[]; text: string }> = [
-  { keys: ['project', 'work', 'shipped', 'show me'],
-    text: 'Eight systems built & deployed solo. Flagship: Orchestra — open-source Mixture-of-Agents platform (TypeScript/Next.js, 2,600+ tests, 70+ post-mortems). Plus: AI Dictaphone (Whisper → LLM on Cloudflare edge), AI moderation bot (n8n, dual-AI failover), AI Psychology Bot (Telegram Stars SaaS), bushmark.cc (FastAPI/Nginx), CyberDed Ultra (Ollama + ComfyUI), Termux Dictaphone (offline AI on Android). Scroll to §IV.' },
-  { keys: ['stack', 'tech', 'tool', 'use'],
-    text: 'AI: OpenAI · Gemini · Groq · Ollama. Edge: Cloudflare Workers · Apps Script. Backend: Python (FastAPI/Flask) · JS (ESM). Ops: Docker · systemd · Nginx · Ubuntu VPS. Auth: HMAC-SHA256 · Telegram Bot API. §V has the full toolkit.' },
-  { keys: ['hire', 'why', 'recruit'],
-    text: 'Founder-grade ownership: spec → architecture → code → deploy → monitor — solo. Eight systems shipped solo since mid-2025, zero hand-holding. Late-career switch (35+) means disciplined under pressure. Full-stack means one headcount stretches a seed runway further.' },
-  { keys: ['process', 'role', 'looking', 'available', 'interview'], text: 'Looking for Agentic AI Engineer / Founding Engineer roles at Seed–Series C. Available immediately, Germany-based, EU citizen, remote or on-site. Drop a note: aleksbuss@gmail.com.' },
-  { keys: ['who', 'about'], text: 'Aleksejs Buss · Agentic AI Engineer in Hof, Germany. 14 years in logistics → Frontend at Tel-Ran Berlin (DEKRA, 960h) → solo production AI since mid-2025.' },
-  { keys: ['contact', 'email', 'reach'],
-    text: 'Email: aleksbuss@gmail.com. Phone: +49 176 73503486. GitHub: /aleksbuss. Or use the HIRE → button in the top status bar.' },
+  { keys: ['привет', 'здравствуй', 'hello', 'hi', 'hallo', 'guten tag', 'hey'],
+    text: 'Привет! I am Aleksejs Buss\'s AI proxy. I can answer questions about his 5 production AI systems (Orchestra MoA, 4take FastMCP, AI Dictaphone, AI Moderation Bot, AI Psychology SaaS), architecture decisions, 5,400+ automated tests, or tech stack. What would you like to know?' },
+  { keys: ['project', 'work', 'shipped', 'show me', 'проект', 'системи', 'работы', 'projekte'],
+    text: 'Five production systems built & deployed solo (5,400+ automated tests). Flagships: Orchestra (open-source Mixture-of-Agents platform, TypeScript/Next.js, 4,100+ tests) and 4take (multi-model AI code review council CLI & FastMCP server, Python/FastMCP, Pytest). Plus: AI Dictaphone (Whisper → LLM on Cloudflare edge), AI Moderation Bot (n8n dual-AI failover, 1,000+ tests), and AI Psychology Bot (Telegram Stars SaaS). Scroll to §IV.' },
+  { keys: ['stack', 'tech', 'tool', 'use', 'стек', 'технологии', 'инструмент', 'werkzeuge', 'sprachen'],
+    text: 'AI & Multi-Agent: Orchestra MoA · 4take FastMCP Council · OpenAI · Anthropic · Gemini · Groq · Ollama. Edge & Cloud: Cloudflare Workers · Apps Script · Firebase. Backend: Python (FastAPI/FastMCP/Pydantic) · TypeScript/Next.js 15. Testing: Vitest · Playwright · Pytest (5,400+ tests). §V has the full toolkit.' },
+  { keys: ['hire', 'why', 'recruit', 'нанять', 'почему', 'warum', 'einstellen', 'зарплата', 'работа', 'ваканс'],
+    text: 'Founder-grade ownership: spec → architecture → code → deploy → monitor — solo. Five systems shipped solo since mid-2025 (5,400+ tests), zero hand-holding. Late-career switch (35+) means disciplined under pressure. Full-stack means one headcount stretches a seed runway further.' },
+  { keys: ['process', 'role', 'looking', 'available', 'interview', 'процесс', 'роль', 'интервью', 'verfügbar'], text: 'Looking for Agentic AI Engineer / Founding Engineer roles at Seed–Series C. Available immediately, Germany-based, EU citizen, remote or on-site. Drop a note: aleksbuss@gmail.com.' },
+  { keys: ['who', 'about', 'кто', 'о себе', 'wer', 'experience', 'опыт'], text: 'Aleksejs Buss · Agentic AI Engineer in Hof, Germany. 14 years in logistics → Frontend at Tel-Ran Berlin (DEKRA, 960h) → solo production AI systems since mid-2025.' },
+  { keys: ['contact', 'email', 'reach', 'контакт', 'почта', 'связь', 'kontakt', 'telegram'],
+    text: 'Email: aleksbuss@gmail.com. Telegram: @aleksbuss. GitHub: https://github.com/aleksbuss. LinkedIn: https://www.linkedin.com/in/aleksejs-buss. Or use the Request Interview button in the top bar.' },
 ];
-const FALLBACK_DEFAULT = 'Outside my response cache for this build (the live agent endpoint is unreachable). Direct line: aleksbuss@gmail.com.';
+const FALLBACK_DEFAULT = 'I am Aleksejs Buss\'s AI proxy. I can answer any questions regarding his 5 production AI systems (Orchestra MoA, 4take FastMCP, etc.), architecture decisions, 5,400+ automated tests, or tech stack. You can also reach Aleksejs directly at aleksbuss@gmail.com or via Telegram @aleksbuss.';
 
 let dock: HTMLElement | null = null;
 let panel: HTMLElement | null = null;
 let input: HTMLInputElement | null = null;
+let form: HTMLFormElement | null = null;
 let msgsEl: HTMLElement | null = null;
 let suggestions: HTMLElement | null = null;
 let closeBtn: HTMLButtonElement | null = null;
@@ -45,6 +81,7 @@ export function initAgent(): void {
   dock = $('#cmdDock');
   panel = $('#cmdPanel');
   input = $<HTMLInputElement>('#cmdInput');
+  form = $<HTMLFormElement>('#cmdForm');
   msgsEl = $('#cmdMsgs');
   suggestions = $('#cmdSuggestions');
   closeBtn = $<HTMLButtonElement>('#cmdClose');
@@ -64,8 +101,18 @@ export function initAgent(): void {
   if (closeBtn) closeBtn.addEventListener('click', e => { e.stopPropagation(); close(); });
   if (sendBtn) sendBtn.addEventListener('click', e => { e.stopPropagation(); send(); });
 
+  if (form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      send();
+    });
+  }
+
   input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); send(); }
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
   });
 
   document.addEventListener('keydown', e => {
@@ -124,15 +171,20 @@ async function send(): Promise<void> {
 
   try {
     const reply = await streamAgent(history, chunk => {
-      assistantEl.classList.remove('cmd-thinking');
-      assistantEl.textContent = chunk;
-      scrollPanel();
+      if (chunk && chunk.trim().length > 0) {
+        assistantEl.classList.remove('cmd-thinking');
+        assistantEl.textContent = chunk;
+        scrollPanel();
+      }
     });
-    if (!reply) throw new Error('empty');
-    history.push({ role: 'assistant', content: reply });
+    const finalReply = reply?.trim();
+    if (!finalReply) throw new Error('empty');
+    assistantEl.classList.remove('cmd-thinking');
+    assistantEl.textContent = finalReply;
+    history.push({ role: 'assistant', content: finalReply });
     saveHistory();
   } catch (err) {
-    // Network / endpoint failure → canned fallback so the user gets *something*.
+    // Network / endpoint failure or timeout → friendly rich fallback
     const fallback = pickFallback(text);
     assistantEl.classList.remove('cmd-thinking');
     streamLocalText(assistantEl, fallback);
@@ -143,45 +195,62 @@ async function send(): Promise<void> {
 
 /** Hits the worker, parses OpenAI-style SSE. Resolves with full text. Calls onChunk on every delta. */
 async function streamAgent(messages: Msg[], onChunk: (acc: string) => void): Promise<string> {
-  const endpoint = localStorage.getItem(ENDPOINT_KEY) || DEFAULT_ENDPOINT;
+  const rawEndpoint = localStorage.getItem(ENDPOINT_KEY);
+  const endpoint = rawEndpoint && isAllowedEndpoint(rawEndpoint) ? rawEndpoint : DEFAULT_ENDPOINT;
   abortCtrl = new AbortController();
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: messages.slice(-12) }),
-    signal: abortCtrl.signal,
-  });
-  if (!res.ok || !res.body) throw new Error(`status_${res.status}`);
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buf = '';
-  let acc = '';
+  // 14-second client timeout before falling back to local engine
+  const timeoutId = setTimeout(() => {
+    if (abortCtrl) abortCtrl.abort();
+  }, 14000);
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buf += decoder.decode(value, { stream: true });
-    const events = buf.split('\n\n');
-    buf = events.pop() ?? '';
-    for (const ev of events) {
-      const line = ev.split('\n').find(l => l.startsWith('data:'));
-      if (!line) continue;
-      const data = line.slice(5).trim();
-      if (data === '[DONE]') return acc;
-      try {
-        const parsed = JSON.parse(data);
-        const delta = parsed?.choices?.[0]?.delta?.content;
-        if (typeof delta === 'string') {
-          acc += delta;
-          onChunk(acc);
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: messages.slice(-12) }),
+      signal: abortCtrl.signal,
+    });
+    if (!res.ok || !res.body) throw new Error(`status_${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+    let acc = '';
+    let reasoningAcc = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+      const events = buf.split('\n\n');
+      buf = events.pop() ?? '';
+      for (const ev of events) {
+        const line = ev.split('\n').find(l => l.startsWith('data:'));
+        if (!line) continue;
+        const data = line.slice(5).trim();
+        if (data === '[DONE]') return acc || reasoningAcc;
+        try {
+          const parsed = JSON.parse(data);
+          const delta = parsed?.choices?.[0]?.delta?.content;
+          if (typeof delta === 'string' && delta.length > 0) {
+            acc += delta;
+            onChunk(acc);
+          } else {
+            const reasoning = parsed?.choices?.[0]?.delta?.reasoning || parsed?.choices?.[0]?.delta?.reasoning_content;
+            if (typeof reasoning === 'string' && reasoning.length > 0) {
+              reasoningAcc += reasoning;
+            }
+          }
+        } catch {
+          // ignore keep-alive comments / malformed lines
         }
-      } catch {
-        // ignore keep-alive comments / malformed lines
       }
     }
+    return acc || reasoningAcc;
+  } finally {
+    clearTimeout(timeoutId);
   }
-  return acc;
 }
 
 function pickFallback(query: string): string {
@@ -274,6 +343,7 @@ function renderHistory(): void {
 export const __test = {
   pickFallback,
   isValidMsg,
+  isAllowedEndpoint,
   loadHistory,
   saveHistory: (msgs: Msg[]) => { history = msgs; saveHistory(); },
   resetHistory: () => { history = []; localStorage.removeItem(HISTORY_KEY); },

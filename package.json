@@ -17,7 +17,7 @@
     "og:build": "node scripts/build-og-image.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^25.6.0",
     "@vitest/ui": "^4.1.5",
     "happy-dom": "^20.9.0",
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@types/three": "^0.184.0",
-    "playwright": "^1.61.1",
     "three": "^0.184.0"
   }
 }

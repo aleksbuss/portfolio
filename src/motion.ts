@@ -26,6 +26,9 @@ let cring: HTMLElement | null = null;
 let blobs: HTMLElement[] = [];
 let gridBg: HTMLElement | null = null;
 let running = false;
+let rafId = 0;
+
+const REST_THRESHOLD = 0.05;
 
 export function initMotion(): void {
   const reduced = isReducedMotion();
@@ -35,6 +38,8 @@ export function initMotion(): void {
   cring = $('#cring');
   blobs = ['#blob1', '#blob2', '#blob3'].map(s => $(s)).filter((b): b is HTMLElement => !!b);
   gridBg = $('#gridBg');
+
+  document.body.style.cursor = 'default';
 
   if (!coarse && cdot && cring) {
     state.mx = window.innerWidth / 2;
@@ -46,7 +51,7 @@ export function initMotion(): void {
   } else if (cdot && cring) {
     cdot.style.display = 'none';
     cring.style.display = 'none';
-    document.body.style.cursor = 'auto';
+    document.body.style.cursor = 'default';
   }
 
   if (!reduced && !coarse) {
@@ -56,9 +61,15 @@ export function initMotion(): void {
   startLoop();
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) running = false;
-    else if (!running) startLoop();
+    if (document.hidden) stopLoop();
+    else wakeLoop();
   });
+
+  window.addEventListener('resize', () => {
+    state.pmx = (state.mx / window.innerWidth - 0.5) * 2;
+    state.pmy = (state.my / window.innerHeight - 0.5) * 2;
+    wakeLoop();
+  }, { passive: true });
 }
 
 function onMouseMove(e: MouseEvent): void {
@@ -66,22 +77,49 @@ function onMouseMove(e: MouseEvent): void {
   state.my = e.clientY;
   state.pmx = (e.clientX / window.innerWidth - 0.5) * 2;
   state.pmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  wakeLoop();
+}
+
+function wakeLoop(): void {
+  if (running || document.hidden) return;
+  startLoop();
+}
+
+function stopLoop(): void {
+  running = false;
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
 }
 
 function startLoop(): void {
+  if (running) return;
   running = true;
   const reduced = isReducedMotion();
   const coarse = isCoarsePointer();
 
   const frame = () => {
     if (!running) return;
+
+    let isMoving = false;
+
     // cursor smoothing
     if (cdot && cring && !coarse) {
-      state.rx += (state.mx - state.rx) * 0.18;
-      state.ry += (state.my - state.ry) * 0.18;
+      const dx = state.mx - state.rx;
+      const dy = state.my - state.ry;
+      if (Math.abs(dx) > REST_THRESHOLD || Math.abs(dy) > REST_THRESHOLD) {
+        state.rx += dx * 0.18;
+        state.ry += dy * 0.18;
+        isMoving = true;
+      } else {
+        state.rx = state.mx;
+        state.ry = state.my;
+      }
       cdot.style.transform = `translate3d(${state.mx}px, ${state.my}px, 0) translate(-50%, -50%)`;
       cring.style.transform = `translate3d(${state.rx}px, ${state.ry}px, 0) translate(-50%, -50%)`;
     }
+
     // parallax blobs (skip for reduced motion)
     if (!reduced && !coarse) {
       if (blobs[0]) blobs[0].style.transform = `translate3d(${state.pmx * 40}px, ${state.pmy * 30}px, 0)`;
@@ -89,14 +127,23 @@ function startLoop(): void {
       if (blobs[2]) blobs[2].style.transform = `translate3d(${state.pmx * 25}px, ${state.pmy * -20}px, 0)`;
       if (gridBg) gridBg.style.transform = `translate3d(${state.pmx * 12}px, ${state.pmy * 12}px, 0)`;
     }
-    requestAnimationFrame(frame);
+
+    // If motion has settled to rest, halt the loop until next interaction
+    if (!isMoving) {
+      running = false;
+      rafId = 0;
+      return;
+    }
+
+    rafId = requestAnimationFrame(frame);
   };
-  requestAnimationFrame(frame);
+
+  rafId = requestAnimationFrame(frame);
 }
 
 function bindHoverHints(): void {
   // Use event delegation rather than per-element listeners — saves dozens of bindings.
-  const SELECTOR = 'a, button, .stack-pill, .tag, .metric, .value, .proj, .tl-row, .cmd-sug';
+  const SELECTOR = 'a, button, input, [role="button"], .stack-pill, .tag, .metric, .value, .proj, .tl-row, .cmd-sug, .sysbtn, .btn, .btn-primary, .btn-ghost';
   document.addEventListener('mouseover', e => {
     const t = (e.target as HTMLElement).closest(SELECTOR);
     if (t) document.body.classList.add('hov');
@@ -125,8 +172,13 @@ function attachTilt(el: HTMLElement, mag: number, scale: number): void {
   el.style.transformStyle = 'preserve-3d';
   let raf = 0;
   let cx = 0, cy = 0;
+  let r: DOMRect | null = null;
+  const updateRect = () => {
+    r = el.getBoundingClientRect();
+  };
   const handler = (e: MouseEvent) => {
-    const r = el.getBoundingClientRect();
+    if (!r) r = el.getBoundingClientRect();
+    if (!r.width || !r.height) return;
     cx = (e.clientX - r.left) / r.width;
     cy = (e.clientY - r.top) / r.height;
     if (raf) return;
@@ -139,8 +191,10 @@ function attachTilt(el: HTMLElement, mag: number, scale: number): void {
   };
   const reset = () => {
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    r = null;
     el.style.transform = '';
   };
+  el.addEventListener('mouseenter', updateRect, { passive: true });
   el.addEventListener('mousemove', handler, { passive: true });
   el.addEventListener('mouseleave', reset, { passive: true });
 }

@@ -85,10 +85,17 @@ function corsHeaders(origin: string, env: Env): Record<string, string> {
     'Access-Control-Max-Age': '86400',
     'Vary': 'Origin',
   };
-  if (allowed.includes(origin)) {
+
+  const isAllowed =
+    allowed.includes(origin) ||
+    allowed.includes('*') ||
+    /^https?:\/\/localhost(:\d+)?$/.test(origin) ||
+    /^https?:\/\/127\.0\.0\.1(:\d+)?$/.test(origin) ||
+    /^https:\/\/[a-z0-9-]+\.aleksejs-portfolio\.pages\.dev$/.test(origin) ||
+    /^https:\/\/(www\.)?(aleksbuss\.dev|aleksbuss\.de|aleksejsbuss\.com)$/.test(origin);
+
+  if (isAllowed) {
     headers['Access-Control-Allow-Origin'] = origin;
-  } else if (allowed.includes('*')) {
-    headers['Access-Control-Allow-Origin'] = '*';
   }
   return headers;
 }
@@ -138,6 +145,13 @@ async function streamFromOpenRouter(
   messages: ChatMessage[],
   cors: Record<string, string>
 ): Promise<Response> {
+  // OpenRouter requires 'models' array to have 3 items or fewer
+  const modelList = [
+    'google/gemma-4-26b-a4b-it:free',
+    'google/gemma-4-31b-it:free',
+    env.MODEL || 'openrouter/free',
+  ];
+
   const upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -147,10 +161,12 @@ async function streamFromOpenRouter(
       'X-Title': 'aleksbuss.dev portfolio agent',
     },
     body: JSON.stringify({
-      model: env.MODEL,
+      models: modelList,
       stream: true,
-      max_tokens: 600,
-      temperature: 0.5,
+      max_tokens: 1200,
+      temperature: 0.4,
+      include_reasoning: false,
+      reasoning: { max_tokens: 0 },
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
     }),
   });
@@ -159,7 +175,7 @@ async function streamFromOpenRouter(
     const errText = await upstream.text().catch(() => '');
     console.error(JSON.stringify({ event: 'upstream_error', status: upstream.status, body: errText.slice(0, 500) }));
     return jsonResponse(
-      { error: 'upstream_failed', status: upstream.status },
+      { error: 'upstream_failed', status: upstream.status, details: errText.slice(0, 500) },
       cors,
       502
     );

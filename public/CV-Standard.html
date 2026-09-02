@@ -65,12 +65,12 @@ a { color: #000; text-decoration: none; }
 <h2>Profil</h2>
 <p>
   Agentic AI Engineer mit Schwerpunkt Multi-Agenten-LLM-Systeme. Schöpfer von Orchestra — einem
-  Open-Source-Mixture-of-Agents-Workspace (TypeScript / Next.js 15) mit 2.600+ Tests und 70+
-  dokumentierten Post-Mortems: parallele Experten-Agenten, ein code-garantierter Skeptiker,
-  Embedding-basierte Disagreement Detection. Seit Mitte 2025 habe ich acht produktionsreife
-  KI-Systeme End-to-End entworfen und deployt — Cloudflare Workers (Edge), Telegram Mini-Apps,
-  Multi-Provider-LLM-Pipelines, skalierbare Backend-Infrastruktur, Zahlungssysteme und Zero-Trust
-  Security. Enterprise-Grade Engineering mit unternehmerischer Verantwortung.
+  Open-Source-Mixture-of-Agents-Workspace (TypeScript / Next.js 15, 2.600+ Tests) — und 4take — einem
+  autonomen Multi-Modell-KI-Code-Review-Rat (Python / FastMCP, 1.420+ Tests). Insgesamt 4.020+
+  automatisierte Tests. Seit Mitte 2025 habe ich fünf produktionsreife KI-Systeme End-to-End entworfen
+  und deployt — Cloudflare Workers (Edge), Telegram Mini-Apps, Multi-Provider-LLM-Pipelines, FastMCP-Server,
+  skalierbare Backend-Infrastruktur, Stars-Zahlungssysteme und Zero-Trust Security. Enterprise-Grade
+  Engineering mit unternehmerischer Verantwortung.
 </p>
 
 <!-- ═══ TECHNISCHE FÄHIGKEITEN ═══ -->
@@ -79,6 +79,7 @@ a { color: #000; text-decoration: none; }
 <span class="skill-cat">Agenten-Systeme:</span>
 <ul class="skills-list">
   <li>Mixture-of-Agents-(MoA)-Orchestrierung</li>
+  <li>FastMCP Council Protocol</li>
   <li>Dynamische Persona-Generierung</li>
   <li>Embedding-basierte Disagreement Detection</li>
   <li>Reflexionsschleifen (Generator-Critic-Revisor)</li>
@@ -91,14 +92,15 @@ a { color: #000; text-decoration: none; }
 <ul class="skills-list">
   <li>OpenAI GPT-4 / 4.1 / TTS</li>
   <li>Google Gemini 2.5</li>
+  <li>Anthropic Claude 3.5</li>
   <li>Groq Whisper-large-v3</li>
-  <li>Ollama (LLaMA, Gemma)</li>
+  <li>Ollama (LLaMA 3.3, Gemma 2)</li>
   <li>faster-whisper</li>
   <li>whisper.cpp</li>
   <li>OpenRouter</li>
   <li>Nemotron</li>
   <li>Multi-Provider-Failover</li>
-  <li>Structured Outputs</li>
+  <li>Structured Outputs (Pydantic)</li>
   <li>Prompt Engineering</li>
   <li>RAG-ready Patterns</li>
 </ul>
@@ -106,12 +108,11 @@ a { color: #000; text-decoration: none; }
 <span class="skill-cat">Programmiersprachen &amp; Frameworks:</span>
 <ul class="skills-list">
   <li>TypeScript (strict)</li>
-  <li>Next.js 15 / React</li>
+  <li>Python 3.12+ (FastMCP, FastAPI, Pydantic v2)</li>
+  <li>Next.js 15 / React 19</li>
   <li>JavaScript (ESM, async)</li>
-  <li>Python (FastAPI, Flask)</li>
   <li>Bash</li>
-  <li>HTML5</li>
-  <li>CSS3</li>
+  <li>HTML5 / CSS3</li>
   <li>SQL</li>
   <li>Streaming-APIs (SSE)</li>
 </ul>
@@ -232,13 +233,14 @@ a { color: #000; text-decoration: none; }
 
 <div class="entry">
   <div class="entry-head">
-    <h3>Bushmark — Self-hosted Secure Clipboard</h3>
-    <span class="dates">02/2025 — heute</span>
+    <h3>4take — Multi-Modell-KI-Code-Review-Rat (Flaggschiff, Open Source)</h3>
+    <span class="dates">08/2026 — heute</span>
   </div>
-  <div class="where">bushmark.cc · Stack: FastAPI, Nginx, systemd, Tailwind, Ubuntu 24.04</div>
+  <div class="where">github.com/aleksbuss/4take · Stack: Python 3.12+, FastMCP, Pydantic v2, Pytest, GitHub Actions</div>
   <ul>
-    <li>Selbst gehostete sichere Zwischenablage mit drei persistenten Slots, 24h-Verlauf, Auto-Rotation.</li>
-    <li>Ein-Zeilen-Bash-Installation auf jedem Ubuntu-VPS: Nginx + FastAPI + systemd automatisch konfiguriert.</li>
+    <li>Autonomer Multi-Modell-KI-Code-Review-Rat, der 4 unabhängige LLMs parallel abfragt (Claude 3.5, GPT-4.1, Gemini 2.5, DeepSeek/LLaMA).</li>
+    <li>Zero-Dependency FastMCP-Server + High-Speed-CLI: analysiert Git-Diffs, bewertet Konfidenz und erkennt Konsens sowie kritische Code-Regressionen vor dem Merge.</li>
+    <li>1.420+ automatisierte Tests (Pytest), vollständige CI-Pipeline. MIT-lizenziert.</li>
   </ul>
 </div>
 

@@ -54,10 +54,10 @@ test.describe('portfolio · smoke', () => {
     await expect(page.locator('.cmd-dock')).toBeVisible();
   });
 
-  test('hero name typing produces "Aleksejs Buss"', async ({ page }) => {
+  test('hero headline typing produces expected text', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#heroName .first .typed-name')).toHaveText('Aleksejs', { timeout: 12000 });
-    await expect(page.locator('#heroName .last .typed-name')).toHaveText('Buss', { timeout: 12000 });
+    await expect(page.locator('#heroName .first .typed-name')).toHaveText('Autonomous AI systems,', { timeout: 12000 });
+    await expect(page.locator('#heroName .last .typed-name')).toHaveText('engineered for production.', { timeout: 12000 });
   });
 
   test('email links use mailto, no Cloudflare obfuscation', async ({ page }) => {
@@ -74,7 +74,7 @@ test.describe('portfolio · cmd-dock (Ask the Agent)', () => {
     // Stub the worker so we don't depend on a deployed CF Worker in CI.
     await page.route('**/chat', async route => {
       const sse = [
-        'data: {"choices":[{"delta":{"content":"Aleksejs ships seven production systems "}}]}\n\n',
+        'data: {"choices":[{"delta":{"content":"Aleksejs ships five production systems "}}]}\n\n',
         'data: {"choices":[{"delta":{"content":"solo."}}]}\n\n',
         'data: [DONE]\n\n',
       ].join('');
@@ -172,7 +172,7 @@ test.describe('portfolio · case-study modals', () => {
     await cta.click();
     await expect(page.locator('#caseModal')).toBeVisible();
     await expect(page.locator('.case-title')).toContainText('Orchestra');
-    await page.locator('.case-close').click();
+    await page.locator('#caseModalClose').click();
     await expect(page.locator('#caseModal')).not.toBeVisible();
   });
 });

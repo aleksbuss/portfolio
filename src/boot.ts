@@ -8,13 +8,11 @@ const BOOT_LINES: string[] = [
   '<span class="ts">[00:00.211]</span> <span class="key">init</span> gemini-2.5-pro · groq-llama-3.3-70b <span class="ok">✓</span>',
   '<span class="ts">[00:00.298]</span> <span class="key">verify</span> HMAC-SHA256 webhook auth <span class="ok">✓</span>',
   '<span class="ts">[00:00.342]</span> <span class="key">scan</span> discover production services...',
-  '<span class="ts">[00:00.398]</span>   <span class="arrow">↳</span> ai-dictaphone-v7   <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.451]</span>   <span class="arrow">↳</span> ai-moderator-bot   <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.502]</span>   <span class="arrow">↳</span> mystic-mini-app    <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.567]</span>   <span class="arrow">↳</span> bushmark.cc        <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.621]</span>   <span class="arrow">↳</span> cyberded-ultra     <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.689]</span>   <span class="arrow">↳</span> ai-psycho-bot      <span class="arrow">→</span> <span class="ok">online</span>',
-  '<span class="ts">[00:00.748]</span>   <span class="arrow">↳</span> termux-dictaphone  <span class="arrow">→</span> <span class="ok">online</span>',
+  '<span class="ts">[00:00.398]</span>   <span class="arrow">↳</span> orchestra-moa      <span class="arrow">→</span> <span class="ok">online (4,100+ tests)</span>',
+  '<span class="ts">[00:00.451]</span>   <span class="arrow">↳</span> 4take-fastmcp      <span class="arrow">→</span> <span class="ok">online (FastMCP Council)</span>',
+  '<span class="ts">[00:00.502]</span>   <span class="arrow">↳</span> ai-dictaphone-v7   <span class="arrow">→</span> <span class="ok">online (edge)</span>',
+  '<span class="ts">[00:00.567]</span>   <span class="arrow">↳</span> ai-moderator-bot   <span class="arrow">→</span> <span class="ok">online (1,000+ tests)</span>',
+  '<span class="ts">[00:00.621]</span>   <span class="arrow">↳</span> ai-psycho-bot      <span class="arrow">→</span> <span class="ok">online (Stars SaaS)</span>',
   '<span class="ts">[00:00.812]</span> <span class="key">auth</span> handshake aleksejs.buss <span class="ok">✓</span>',
 ];
 
@@ -44,7 +42,7 @@ export function startBoot(onDone: () => void): void {
   }
 
   let idx = 0;
-  const stepDelay = () => 65 + Math.random() * 80;
+  const stepDelay = () => 35 + Math.random() * 30;
 
   const append = (html: string) => {
     const line = document.createElement('div');
@@ -61,9 +59,9 @@ export function startBoot(onDone: () => void): void {
         setTimeout(() => {
           boot.classList.add('gone');
           document.body.style.overflow = '';
-          setTimeout(() => boot.remove(), 1000);
+          setTimeout(() => boot.remove(), 850);
           onDone();
-        }, 600);
+        }, 400);
       });
       return;
     }
@@ -74,7 +72,7 @@ export function startBoot(onDone: () => void): void {
     idx++;
     setTimeout(step, stepDelay());
   };
-  setTimeout(step, 280);
+  setTimeout(step, 150);
 }
 
 function typeBootName(el: HTMLElement, target: string, done: () => void): void {
