@@ -287,8 +287,11 @@ function setStoredLang(lang: Lang): void {
   }
 }
 
+let activeLang: Lang = 'en';
+
 export function initI18n(): void {
   const saved = getStoredLang();
+  activeLang = saved;
   apply(saved);
 
   const btn = $<HTMLButtonElement>('#langBtn');
@@ -302,11 +305,18 @@ export function initI18n(): void {
 }
 
 export function currentLang(): Lang {
-  return (document.documentElement.lang as Lang) || 'en';
+  return activeLang;
 }
 
 export function apply(lang: Lang): void {
+  activeLang = lang;
   document.documentElement.lang = lang;
+  document.documentElement.setAttribute('translate', 'no');
+  document.documentElement.classList.add('notranslate');
+  if (document.body) {
+    document.body.setAttribute('translate', 'no');
+    document.body.classList.add('notranslate');
+  }
 
   // 1. Synchronize Hero dynamic typing headline
   updateHeroHeadlineLang(lang);
