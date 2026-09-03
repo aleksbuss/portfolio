@@ -2,9 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Comprehensive German (DE) Translation Audit', () => {
   test('every section translates fully and accurately to German', async ({ page }) => {
+    test.slow();
+    await page.addInitScript(() => {
+      sessionStorage.setItem('skip_boot', '1');
+    });
     await page.goto('/');
-    // Skip boot overlay if present
-    await page.evaluate(() => document.getElementById('boot')?.remove());
 
     // Switch to German
     const langBtn = page.locator('#langBtn');

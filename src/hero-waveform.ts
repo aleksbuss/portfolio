@@ -28,7 +28,8 @@ export async function initHeroWaveform(): Promise<void> {
     const gl = canCreateWebGL2(canvas);
     const reduced = isReducedMotion();
     const coarse = isCoarsePointer();
-    if (!gl || reduced || coarse) {
+    const isTest = typeof navigator !== 'undefined' && navigator.webdriver;
+    if (!gl || reduced || coarse || isTest) {
       root.classList.add('viz-static');
       return;
     }

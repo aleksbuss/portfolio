@@ -13,7 +13,13 @@ test.describe('Visual & Functional Verification: New Navbar and AI Agent', () =>
       document.body.style.overflow = '';
     });
 
-    const artifactDir = '/Users/aleksejsbuss/.gemini/antigravity-ide/brain/7c7dd86f-585c-4c0d-9034-533d383c442b';
+    await page.route('**/api/**', route => route.fulfill({
+      status: 200,
+      contentType: 'text/plain; charset=utf-8',
+      body: 'Алексей создал 5 систем: Orchestra, 4take, Dictaphone, Moderator и Psycho.',
+    }));
+
+    const artifactDir = '/Users/aleksejsbuss/.gemini/antigravity-ide/brain/b6644e0e-c9a3-4b5b-90af-c1ca2bb860a0';
 
     // 2. Verify desktop navbar exists, is visible and floating
     const sysbar = page.locator('#sysbar');

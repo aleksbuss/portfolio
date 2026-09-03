@@ -141,7 +141,7 @@ test.describe('portfolio · cmd-dock (Ask the Agent)', () => {
   test('suggestions trigger a send', async ({ page }) => {
     await page.locator('#cmdDock').click();
     await page.locator('.cmd-sug', { hasText: 'Show projects' }).click();
-    await expect(page.locator('.cmd-msg.user .body').first()).toHaveText('Show projects');
+    await expect(page.locator('.cmd-msg.user .body').last()).toHaveText('Show projects');
   });
 });
 

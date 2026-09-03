@@ -21,6 +21,12 @@ function mount(): void {
   // Boot sequence holds back hero animations until it finishes.
   startBoot(() => {
     startHeroSequence();
+
+    // Hero waveform is heavy (Three.js). Mount after boot clears and DOM is stable,
+    // so it never competes for GPU/layout resources during initial paint.
+    requestAnimationFrame(() => {
+      import('./hero-waveform').then(m => m.initHeroWaveform()).catch(() => {});
+    });
   });
 
   initSysbar();
@@ -33,14 +39,6 @@ function mount(): void {
   initGithubLive();
   initViewTransitions();
   initEditMode();
-
-  // Hero waveform is heavy (Three.js). Defer until after first paint so it
-  // never delays LCP, and let the module itself decide whether to download
-  // three at all (capability-gated). Fire-and-forget — failures are visible
-  // through the SVG fallback already in the DOM.
-  requestAnimationFrame(() => {
-    import('./hero-waveform').then(m => m.initHeroWaveform()).catch(() => {});
-  });
 }
 
 if (document.readyState === 'loading') {

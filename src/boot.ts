@@ -33,8 +33,15 @@ export function startBoot(onDone: () => void): void {
 
   document.body.style.overflow = 'hidden';
 
-  // Reduced-motion: skip the whole sequence.
-  if (isReducedMotion()) {
+  // Reduced-motion or test skip_boot flag: skip the whole sequence.
+  let shouldSkip = isReducedMotion();
+  try {
+    if (sessionStorage.getItem('skip_boot') === '1') {
+      shouldSkip = true;
+    }
+  } catch {}
+
+  if (shouldSkip) {
     boot.remove();
     document.body.style.overflow = '';
     onDone();
@@ -53,15 +60,26 @@ export function startBoot(onDone: () => void): void {
 
   const step = () => {
     if (idx >= BOOT_LINES.length) {
-      typeBootName(nameEl, 'Aleksejs Buss', () => {
+      typeBootName(nameEl, 'Aleksejs Buss', async () => {
         pctEl.textContent = '100';
         barEl.style.setProperty('--p', '100%');
+
+        // Font gate: ensure webfonts (Geist) are loaded before lifting boot curtain
+        if ('fonts' in document) {
+          try {
+            await Promise.race([
+              document.fonts.ready,
+              new Promise(res => setTimeout(res, 1200))
+            ]);
+          } catch {}
+        }
+
         setTimeout(() => {
           boot.classList.add('gone');
           document.body.style.overflow = '';
           setTimeout(() => boot.remove(), 850);
           onDone();
-        }, 400);
+        }, 300);
       });
       return;
     }
